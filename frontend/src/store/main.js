@@ -3,6 +3,7 @@ import {observable,computed,action,decorate} from 'mobx'
 export default class MainStore{
     isLoged = false
     descriptiopnModal = false
+    commentModal = false
     constructor(user){
         if(user){
             this.isLoged = true
@@ -14,6 +15,9 @@ export default class MainStore{
     setModal(value){
         this.descriptiopnModal = value
     }
+    setCommentModal(value){
+        this.commentModal = value
+    }
     get getLogStatus(){
         return this.isLoged
     }
@@ -21,7 +25,9 @@ export default class MainStore{
 decorate(MainStore,{
     isLoged:observable,
     descriptiopnModal:observable,
+    commentModal:observable,
     setLogged:action,
     getLogStatus:computed,
-    setModal: action
+    setModal: action,
+    setCommentModal:action,
 })

@@ -14,11 +14,17 @@ import { useHistory } from "react-router-dom";
 import { getUserInfo } from "../../api/userApi";
 import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
+import CommentModal from './commentModal'
 
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
   const [modalOpen, setModalOpen] = useState(false);
+  const [postComment,setPropsComment] = useState({})
+  const commentHandle = (post)=>{
+    setPropsComment(post)
+    props.mainStore.setCommentModal(true)
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -108,7 +114,7 @@ function User(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <Container style={{ marginTop:"1rem",border:"2px solid red",marginRight:"auto",marginLeft:"auto"}}>
+        <Container style={{ marginTop:"1rem",marginRight:"auto",marginLeft:"auto"}}>
           {user.posts.map((post) => (
             <Card style={{marginRight:"auto",marginLeft:"auto",width:"100%"}}>
               <Card.Content>
@@ -123,11 +129,20 @@ function User(props) {
                   <Icon name="comment"/>
                   {post.comments.length}
                 </a>
+                <Button 
+                style={{marginLeft:"1.5rem"}}
+                basic
+                color="blue"
+                onClick={()=>commentHandle(post)}
+                >
+                  Add comment
+                </Button>
               </Card.Content>
             </Card>
           ))}
         </Container>
       )}
+      <CommentModal post={postComment}/>
     </div>
   );
 }
