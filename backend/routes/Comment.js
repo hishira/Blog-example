@@ -52,6 +52,15 @@ app.post("/comment", checkIfLogin, async (req, res) => {
     return res.status(404).json({ message: "Problem with post finding" }).end();
   }
 });
+app.post('/commentforpost',checkIfLogin, async(req,res)=>{
+  try{
+    console.log(req.body)
+    const comments = await commentModel.find({post:req.body.postID})
+    return res.status(200).json(comments).end()
+  }catch(err){
+    return res.status(500).send("Problem").end()
+  }
+})
 app.delete("/comment/:id", checkIfLogin, async (req, res) => {
   try {
     const comment = await commentModel.findByIdAndDelete(req.params.id);

@@ -15,15 +15,22 @@ import { getUserInfo } from "../../api/userApi";
 import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
 import CommentModal from './commentModal'
+import PostComments from './commentsForPost'
 
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
   const [modalOpen, setModalOpen] = useState(false);
   const [postComment,setPropsComment] = useState({})
+  const [commentsForPost,setCommentsForPost] = useState([])
   const commentHandle = (post)=>{
     setPropsComment(post)
     props.mainStore.setCommentModal(true)
+  }
+  const commentForPostHandle = (postid)=>{
+    console.log(postid)
+    setCommentsForPost(postid)
+    props.mainStore.setCommentsForPost(true)
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -125,7 +132,7 @@ function User(props) {
               </Card.Content>
               
               <Card.Content extra>
-                <a>
+                <a onClick={()=>commentForPostHandle(post._id)}>
                   <Icon name="comment"/>
                   {post.comments.length}
                 </a>
@@ -142,7 +149,8 @@ function User(props) {
           ))}
         </Container>
       )}
-      <CommentModal post={postComment}/>
+      <CommentModal post={postComment} />
+      <PostComments postid={commentsForPost} />
     </div>
   );
 }
