@@ -52,7 +52,7 @@ function User(props) {
   }, []);
   const history = useHistory();
   return (
-    <div style={{ margin: ".5rem",border:"2px solid red" }}>
+    <div style={{ margin: ".5rem"}}>
       <Grid stackable columns={2}>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -121,7 +121,7 @@ function User(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <Container style={{ marginTop:"1rem",marginRight:"auto",marginLeft:"auto"}}>
+        <Container style={{ marginTop:"1rem"}}>
           {user.posts.map((post) => (
             <Card style={{marginRight:"auto",marginLeft:"auto",width:"100%"}}>
               <Card.Content>

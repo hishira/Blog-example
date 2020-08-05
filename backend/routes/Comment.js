@@ -56,7 +56,13 @@ app.post('/commentforpost',checkIfLogin, async(req,res)=>{
   try{
     console.log(req.body)
     const comments = await commentModel.find({post:req.body.postID})
-    return res.status(200).json(comments).end()
+    let arr = []
+    for (let i of comments){
+      let k = await i.populate("user").execPopulate()
+      arr.push(k)
+    }
+    const commentswithuser = arr
+    return res.status(200).json(commentswithuser).end()
   }catch(err){
     return res.status(500).send("Problem").end()
   }
