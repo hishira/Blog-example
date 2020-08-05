@@ -65,11 +65,13 @@ describe("Users", () => {
     let u  = await User.create({
       _id:"5f22c61adb3d593427e8a98a",
       email:"123@123.com",
+      username:"123",
       password:"123456"
     })
     let k  = await User.create({
       _id:"5f23026c1ebf13da73c64712",
       email:"1234@1234.com",
+      username:"1234",
       password:"123456"
     })
     await k.save()
@@ -210,6 +212,7 @@ describe("Users", () => {
     it("We can create user with good email and password",(done) =>{
       let user = {
         email:"test@test.com",
+        username:"test",
         password:"123456"
       }
       chai.request(server).post('/auth/register').send(user).end((err, res) => {

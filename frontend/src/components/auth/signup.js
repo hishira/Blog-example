@@ -7,6 +7,7 @@ import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
 export default function SignUp(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username,setUsername] = useState("")
   const [open, setOpen] = useState(false);
   const [message,setMessage] = useState("")
   const history = useHistory();
@@ -14,7 +15,8 @@ export default function SignUp(props) {
   const signUp = async () => {
     console.log(email);
     console.log(password);
-    if (email === "" || password === ""){
+    console.log(username);
+    if (email === "" || password === "" || username === ""){
       setMessage("Please fill fields below")
       setOpen(true)
       setTimeout(() => {
@@ -22,7 +24,7 @@ export default function SignUp(props) {
       }, 1500);
       return
     }
-    let obj = { email: email, password: password };
+    let obj = { email: email,username: username, password: password };
     await register(obj).then(request=>{
       console.log(request)
       if(request.status === 200){
@@ -65,6 +67,13 @@ export default function SignUp(props) {
                 iconPosition="left"
                 placeholder="E-mail address"
                 onChange={(e) => setEmail(e.target.value)}
+              />
+              <Form.Input
+                fluid
+                icon="male"
+                iconPosition="left"
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
               />
               <Form.Input
                 fluid

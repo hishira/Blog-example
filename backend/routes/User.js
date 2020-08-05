@@ -28,6 +28,7 @@ app.get("/userinfo", checkIfLogin, async (req, res) => {
         .status(200)
         .json({
           email: user.email,
+          username:user.username,
           role: user.role,
           description: user.description,
           posts: user.posts,

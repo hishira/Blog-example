@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
                 throw new Error("Errror with email")
         }
     },
+    username:{
+        type:String,
+        required:true,
+        trim:true
+    },
     password:{
         type:String,
         required:true,
