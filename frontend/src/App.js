@@ -12,6 +12,7 @@ import User from "./components/user/user";
 import PostCreate from "./components/user/postcreate";
 import EmailChange from "./components/user/emailchange";
 import PasswordChange from './components/user/passwordchange'
+import UserFind from './components/user/userFind'
 function App() {
   let user = Cookies.getJSON("user");
   let stores = {
@@ -23,6 +24,7 @@ function App() {
         <AppBar />
         <Route component={Login} path="/login" />
         <Route component={SignUp} path="/signup" />
+        <Route component={UserFind} path="/userfind/:user"/>
         <PrivateRoute component={User} path="/user" />
         <PrivateRoute component={PostCreate} path="/postcreate" />
         <PrivateRoute component={EmailChange} path="/emailchange" />

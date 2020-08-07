@@ -28,7 +28,7 @@ app.get("/userinfo", checkIfLogin, async (req, res) => {
         .status(200)
         .json({
           email: user.email,
-          username:user.username,
+          username: user.username,
           role: user.role,
           description: user.description,
           posts: user.posts,
@@ -135,6 +135,16 @@ app.put("/passwordchange", checkIfLogin, async (req, res) => {
     });
   } catch (err) {
     res.status(500).send("Server error");
+  }
+});
+app.post("/userfind", checkIfLogin, async (req, res) => {
+  try {
+    let users = await userModel.find({
+      username: { $regex: req.body.username, $options: "i" },
+    });
+    res.status(200).json(users).end()
+  } catch (err) {
+    res.status(500).json(err).end();
   }
 });
 module.exports = app;

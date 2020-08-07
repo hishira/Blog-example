@@ -54,7 +54,7 @@ function PostComments(props) {
             <Comment.Group>
               <Header as="h3">Comments</Header>
               {comments.map((comment) => (
-                <Comment>
+                <Comment style={{position:"relative",left:".5rem",padding:".5rem"}}>
                   <Comment.Content>
                     <Comment.Author>{comment.user.email}</Comment.Author>
                     <Comment.Metadata>

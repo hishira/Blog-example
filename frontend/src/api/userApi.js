@@ -16,5 +16,9 @@ async function passwordChange(obj){
     let url = getApiLink('users/passwordchange')
     return await fetch(url,getFetchPutObject(obj))
 }
+async function userFind(obj){
+    let url = getApiLink("users/userfind")
+    return await fetch(url,getFetchPostObject(obj))
+}
 
-export {getUserInfo,addUserDescription,emailChange,passwordChange}
+export {getUserInfo,addUserDescription,emailChange,passwordChange,userFind}
