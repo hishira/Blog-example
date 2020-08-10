@@ -13,6 +13,7 @@ import PostCreate from "./components/user/postcreate";
 import EmailChange from "./components/user/emailchange";
 import PasswordChange from './components/user/passwordchange'
 import UserFind from './components/user/userFind'
+import PublicUserProfile from './components/user/userPublicProfile'
 function App() {
   let user = Cookies.getJSON("user");
   let stores = {
@@ -29,6 +30,7 @@ function App() {
         <PrivateRoute component={PostCreate} path="/postcreate" />
         <PrivateRoute component={EmailChange} path="/emailchange" />
         <PrivateRoute component={PasswordChange} path="/passwordchange"/>
+        <Route component={PublicUserProfile} path="/userprofile/:id"/>
       </div>
     </Provider>
   );

@@ -137,14 +137,23 @@ app.put("/passwordchange", checkIfLogin, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-app.post("/userfind", checkIfLogin, async (req, res) => {
+app.post("/userfind", async (req, res) => {
   try {
     let users = await userModel.find({
       username: { $regex: req.body.username, $options: "i" },
     });
-    res.status(200).json(users).end()
+    res.status(200).json(users).end();
   } catch (err) {
     res.status(500).json(err).end();
+  }
+});
+app.get("/userpublicprofile/:id", async (req, res) => {
+  try {
+    let user = await userModel.findById(req.params.id);
+    if (!user) return res.status(404).send("UserNotFound").end();
+    return res.status(200).json(user).end();
+  } catch (err) {
+    return res.status(500).send("Server erroor");
   }
 });
 module.exports = app;
