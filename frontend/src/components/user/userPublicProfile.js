@@ -73,6 +73,33 @@ export default function PublicUserProfile(props) {
                   </Card.Content>
                 </Card>
                 </Grid.Column>
+                <Grid.Column width={12}>
+                  {userInfo.posts.map(post=>(
+                    <Card
+                    style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
+                  >
+                    <Card.Content>
+                      <Card.Header>{post.title}</Card.Header>
+                      <Card.Description>{post.content}</Card.Description>
+                    </Card.Content>
+      
+                    <Card.Content extra>
+                      <a>
+                        <Icon name="comment" />
+                        {post.comments.length}
+                      </a>
+                      <Button
+                        style={{ marginLeft: "1.5rem" }}
+                        basic
+                        color="blue"
+                        
+                      >
+                        Add comment
+                      </Button>
+                    </Card.Content>
+                  </Card>
+                  ))}
+                </Grid.Column>
             </Grid>
         </div>
       )}

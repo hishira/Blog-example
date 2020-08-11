@@ -78,7 +78,7 @@ function User(props) {
                       style={{ marginTop: "1rem", fontSize: "1.1rem" }}
                     >
                       Username: {user.username}
-                      <br/>
+                      <br />
                       Email: {user.email}
                     </Card.Header>
                     {user.description !== "" ? (
@@ -129,7 +129,15 @@ function User(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <Container style={{ border: "2px solid red", marginTop: "2.5rem" }}>
+        <div
+          style={{
+            border: "2px solid red",
+            marginTop: "2.5rem",
+            maxWidth: "80rem",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
           {user.posts.map((post) => (
             <Card
               style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
@@ -155,7 +163,7 @@ function User(props) {
               </Card.Content>
             </Card>
           ))}
-        </Container>
+        </div>
       )}
       <CommentModal post={postComment} />
       <PostComments postid={commentsForPost} />

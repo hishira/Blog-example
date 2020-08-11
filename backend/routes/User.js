@@ -150,6 +150,7 @@ app.post("/userfind", async (req, res) => {
 app.get("/userpublicprofile/:id", async (req, res) => {
   try {
     let user = await userModel.findById(req.params.id);
+    await user.populate({path:"posts",match:{ postType:"PUBLIC"}}).execPopulate()
     if (!user) return res.status(404).send("UserNotFound").end();
     return res.status(200).json(user).end();
   } catch (err) {
