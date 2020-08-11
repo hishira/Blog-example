@@ -4,9 +4,13 @@ async function createComment(obj){
     let url = getApiLink('comment/comment')
     return await fetch(url,getFetchPostObject(obj))
 }
+async function createAnonymousComment(obj){
+    let url = getApiLink("comment/annonymousCommment")
+    return await fetch(url,getFetchPostObject(obj))
+}
 async function getCommentsByPost(obj){
     let url = getApiLink('comment/commentforpost')
     return await fetch(url,getFetchPostObject(obj))
 }
 
-export {createComment,getCommentsByPost}
+export {createComment,getCommentsByPost,createAnonymousComment}

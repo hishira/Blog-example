@@ -10,9 +10,24 @@ import {
   Icon
 } from "semantic-ui-react";
 import { getPublicUserInfo } from "../../api/userApi";
-export default function PublicUserProfile(props) {
+import { inject, observer } from "mobx-react";
+import CommentModal from "./commentModal";
+import PostComments from "./commentsForPost";
+
+function PublicUserProfile(props) {
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState("false");
+  const [postComment, setPropsComment] = useState({});
+  const [commentsForPost, setCommentsForPost] = useState([]);
+  const commentHandle = (post) => {
+    setPropsComment(post);
+    props.mainStore.setCommentModal(true);
+  };
+  const commentForPostHandle = (postid) => {
+    console.log(postid);
+    setCommentsForPost(postid);
+    props.mainStore.setCommentsForPost(true);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,7 +99,7 @@ export default function PublicUserProfile(props) {
                     </Card.Content>
       
                     <Card.Content extra>
-                      <a>
+                      <a onClick={() => commentForPostHandle(post._id)}>
                         <Icon name="comment" />
                         {post.comments.length}
                       </a>
@@ -92,7 +107,7 @@ export default function PublicUserProfile(props) {
                         style={{ marginLeft: "1.5rem" }}
                         basic
                         color="blue"
-                        
+                        onClick={() => commentHandle(post)}
                       >
                         Add comment
                       </Button>
@@ -101,8 +116,14 @@ export default function PublicUserProfile(props) {
                   ))}
                 </Grid.Column>
             </Grid>
+            <CommentModal post={postComment} />
+            <PostComments postid={commentsForPost} />
         </div>
+        
       )}
     </div>
   );
 }
+export default inject((stores) => ({
+  mainStore: stores.mainStore,
+}))(observer(PublicUserProfile));

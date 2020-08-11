@@ -21,6 +21,28 @@ app.get("/comments", checkIfAdmin, async (req, res) => {
 /*
     Create comment to blog post
 */
+app.post("/annonymousCommment", async (req, res) => {
+  try {
+    const post = await postModel.findById(req.body.postID);
+    if (!post) {
+      return res.status(404).json({ message: "Post do not exists" });
+    } else {
+      try {
+        console.log(req.body)
+        const newComment = new commentModel({
+          content: req.body.content,
+          post: req.body.postID,
+        });
+        await newComment.save();
+        return res.status(200).json(newComment);
+      } catch (err) {
+        return res.status(404).json({ message: "Error with post adding" });
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Problem with post finding" }).end();
+  }
+});
 app.post("/comment", checkIfLogin, async (req, res) => {
   try {
     const post = await postModel.findById(req.body.postID);
@@ -52,21 +74,21 @@ app.post("/comment", checkIfLogin, async (req, res) => {
     return res.status(404).json({ message: "Problem with post finding" }).end();
   }
 });
-app.post('/commentforpost',checkIfLogin, async(req,res)=>{
-  try{
-    console.log(req.body)
-    const comments = await commentModel.find({post:req.body.postID})
-    let arr = []
-    for (let i of comments){
-      let k = await i.populate("user").execPopulate()
-      arr.push(k)
+app.post("/commentforpost", async (req, res) => {
+  try {
+    console.log(req.body);
+    const comments = await commentModel.find({ post: req.body.postID });
+    let arr = [];
+    for (let i of comments) {
+      let k = await i.populate("user").execPopulate();
+      arr.push(k);
     }
-    const commentswithuser = arr
-    return res.status(200).json(commentswithuser).end()
-  }catch(err){
-    return res.status(500).send("Problem").end()
+    const commentswithuser = arr;
+    return res.status(200).json(commentswithuser).end();
+  } catch (err) {
+    return res.status(500).send("Problem").end();
   }
-})
+});
 app.delete("/comment/:id", checkIfLogin, async (req, res) => {
   try {
     const comment = await commentModel.findByIdAndDelete(req.params.id);
@@ -94,10 +116,14 @@ app.put("/comment/:id", checkIfLogin, async (req, res) => {
       },
       (err, model) => {
         if (err) {
-          return res.status(404).json({ message: "Erorro with comment updating" });
+          return res
+            .status(404)
+            .json({ message: "Erorro with comment updating" });
         } else {
-          if(model === null){
-            return res.status(404).json({ message: "Erorro with comment updating" });
+          if (model === null) {
+            return res
+              .status(404)
+              .json({ message: "Erorro with comment updating" });
           }
           return res.status(200).json(model);
         }

@@ -56,10 +56,23 @@ function PostComments(props) {
               {comments.map((comment) => (
                 <Comment style={{position:"relative",left:".5rem",padding:".5rem"}}>
                   <Comment.Content>
+                  {
+                    comment.user?(
+                      <div>
                     <Comment.Author>{comment.user.email}</Comment.Author>
                     <Comment.Metadata>
                       <div>{comment.createDate.split('T')[0]}</div>
                     </Comment.Metadata>
+                    </div>
+                    ):(
+                      <div>
+                      <Comment.Author>Anonymous</Comment.Author>
+                      <Comment.Metadata>
+                      <div>{comment.createDate.split('T')[0]}</div>
+                      </Comment.Metadata>
+                      </div>
+                    )
+                  }
                     <Comment.Text>{comment.content}</Comment.Text>
                   </Comment.Content>
                 </Comment>
