@@ -17,6 +17,8 @@ import { inject, observer } from "mobx-react";
 import CommentModal from "./commentModal";
 import PostComments from "./commentsForPost";
 import EditPostModal from "./editPostModal"
+import DeletePostModal from "./deletePostModal"
+
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -24,6 +26,7 @@ function User(props) {
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
   const [editPost,setEditPost] = useState({})
+  const [postIdToDelete,setPostIdToDelete] = useState({});
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -37,6 +40,10 @@ function User(props) {
     setEditPost(post)
     props.mainStore.setEditPostModal(true)
 
+  }
+  const deletePosthandle = (post)=>{
+    setPostIdToDelete(post._id)
+    props.mainStore.setDeletePostModal(true)
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -152,7 +159,7 @@ function User(props) {
                 <Button.Group style={{position:"absolute",top:".5rem",right:".5rem"}}>
                   <Button onClick={() =>editPostHandle(post)}>Edit post</Button>
                   <Button.Or/>
-                  <Button>Delete</Button>
+                  <Button onClick={()=>deletePosthandle(post)}>Delete</Button>
                 </Button.Group></Card.Header>
                 <Card.Description style={{marginTop:"2rem"}}>{post.content}</Card.Description>
               </Card.Content>
@@ -179,6 +186,7 @@ function User(props) {
       <CommentModal post={postComment} />
       <PostComments postid={commentsForPost} />
       <EditPostModal post={editPost}/>
+      <DeletePostModal id={postIdToDelete} />
     </div>
   );
 }

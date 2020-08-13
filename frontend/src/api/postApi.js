@@ -1,4 +1,4 @@
-import {getFetchPostObject,getApiLink, fetchObject,getFetchPutObject} from './configApi.js'
+import {getFetchPostObject,getApiLink, fetchObject,getFetchPutObject,fetchDeleteObject} from './configApi.js'
 
 async function createPost(obj){
     let url = getApiLink('post/post')
@@ -8,4 +8,8 @@ async function editPost(id,obj){
     let url = getApiLink(`post/post/${id}`)
     return await fetch(url,getFetchPutObject(obj))
 }
-export {createPost,editPost}
+async function deletePost(id){
+    let url = getApiLink(`post/post/${id}`)
+    return await fetch(url,fetchDeleteObject)
+}
+export {createPost,editPost,deletePost}
