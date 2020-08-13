@@ -16,13 +16,14 @@ import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
 import CommentModal from "./commentModal";
 import PostComments from "./commentsForPost";
-
+import EditPostModal from "./editPostModal"
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
   const [modalOpen, setModalOpen] = useState(false);
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
+  const [editPost,setEditPost] = useState({})
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -32,6 +33,11 @@ function User(props) {
     setCommentsForPost(postid);
     props.mainStore.setCommentsForPost(true);
   };
+  const editPostHandle = (post)=>{
+    setEditPost(post)
+    props.mainStore.setEditPostModal(true)
+
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -131,7 +137,6 @@ function User(props) {
       ) : (
         <div
           style={{
-            border: "2px solid red",
             marginTop: "2.5rem",
             maxWidth: "80rem",
             marginRight: "auto",
@@ -143,8 +148,13 @@ function User(props) {
               style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
             >
               <Card.Content>
-                <Card.Header>{post.title}</Card.Header>
-                <Card.Description>{post.content}</Card.Description>
+                <Card.Header>{post.title}
+                <Button.Group style={{position:"absolute",top:".5rem",right:".5rem"}}>
+                  <Button onClick={() =>editPostHandle(post)}>Edit post</Button>
+                  <Button.Or/>
+                  <Button>Delete</Button>
+                </Button.Group></Card.Header>
+                <Card.Description style={{marginTop:"2rem"}}>{post.content}</Card.Description>
               </Card.Content>
 
               <Card.Content extra>
@@ -160,6 +170,7 @@ function User(props) {
                 >
                   Add comment
                 </Button>
+                
               </Card.Content>
             </Card>
           ))}
@@ -167,6 +178,7 @@ function User(props) {
       )}
       <CommentModal post={postComment} />
       <PostComments postid={commentsForPost} />
+      <EditPostModal post={editPost}/>
     </div>
   );
 }

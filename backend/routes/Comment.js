@@ -34,6 +34,8 @@ app.post("/annonymousCommment", async (req, res) => {
           post: req.body.postID,
         });
         await newComment.save();
+        post.comments.push(newComment);
+        await post.save();
         return res.status(200).json(newComment);
       } catch (err) {
         return res.status(404).json({ message: "Error with post adding" });

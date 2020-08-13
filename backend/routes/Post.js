@@ -115,10 +115,12 @@ app.put("/post/:id",checkifLogin, async (req, res) => {
       {new:true},
       (err, model) => {
         if (err) {
-          res.status(404).json({ message: "Erorro with post updating" }).end();
+          return res.status(404).json({ message: "Erorro with post updating" }).end();
         } 
+        if(model === null)
+          return res.status(404).json({ message: "Erorro with post updating" }).end();
         else {
-          res.status(200).json(model).end();
+          return res.status(200).json(model).end();
         }
       }
     );

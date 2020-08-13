@@ -13,4 +13,5 @@ async function getCommentsByPost(obj){
     return await fetch(url,getFetchPostObject(obj))
 }
 
+
 export {createComment,getCommentsByPost,createAnonymousComment}
