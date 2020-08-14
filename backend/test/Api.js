@@ -30,13 +30,13 @@ describe("Users", () => {
     })
     await agent3.post("/auth/login").send({
       email: "xyz@xyz.com",
-      password: "123456qazwsx"
+      password: "123456"
     })
     await Post.create({
       _id:mongoose.Types.ObjectId("5f170ecc76fdda09dce2a0fd"),
       title:"test2",
       content:"test2",
-      user:"5f1f04cbf608e7b47083eaba"
+      user:"5f1f04cbf608e7b47083eaba",
     })
     await Post.create({
       _id:mongoose.Types.ObjectId("5f170ecd76fdda09dce2a0fd"),
@@ -311,7 +311,8 @@ describe("Users", () => {
     it("Only logged user can add post",(done)=>{
       let post = {
         title: "Test",
-        content: "Test"
+        content: "Test",
+        postPrivate:false
       }
       agent2.post('/post/post').send(post).end((err,res)=>{
         res.should.have.status(200)
@@ -324,7 +325,7 @@ describe("Users", () => {
     it("Not logged user cannot edit post",(done)=>{
       let updatePost = {
         title: "Test",
-        content: "Test content"
+        content: "Test content",
       }
       agent.put("/post/post/5f170ecd76fdda09dce2a0fd").send(updatePost).end((err, res) => {
         res.should.have.status(400)

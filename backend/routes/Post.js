@@ -85,6 +85,7 @@ app.post("/post", checkifLogin, async (req, res) => {
       title: req.body.title,
       content: req.body.content,
       user: req.user._id,
+      postType: (req.body.postPrivate)? "PRIVATE":"PUBLIC"
     });
     try {
       await newPost.save();
