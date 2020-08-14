@@ -118,7 +118,7 @@ function User(props) {
               )}
             </Grid.Column>
             <Grid.Column width={13}>
-              <Button.Group widths="3">
+              <Button.Group widths="4">
                 <Button onClick={() => history.push("/emailchange")} animated>
                   <Button.Content visible>Email</Button.Content>
                   <Button.Content hidden>Change Email</Button.Content>
@@ -133,6 +133,13 @@ function User(props) {
                 >
                   <Button.Content visible>Password</Button.Content>
                   <Button.Content hidden>Password Change</Button.Content>
+                </Button>
+                <Button
+                  onClick={() => history.push("/descriptionchange")}
+                  animated
+                >
+                  <Button.Content visible>Description</Button.Content>
+                  <Button.Content hidden>Description Change</Button.Content>
                 </Button>
               </Button.Group>
             </Grid.Column>
