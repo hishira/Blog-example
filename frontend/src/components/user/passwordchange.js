@@ -51,7 +51,7 @@ export default function EmailChange(props) {
         style={{ marginTop: "2rem", marginBottom: "2rem" }}
         as="h1"
       >
-        <Header.Content>Email change</Header.Content>
+        <Header.Content>Password change</Header.Content>
       </Header>
       <Divider />
       <Form size="large">

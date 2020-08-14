@@ -7,6 +7,7 @@ export default class MainStore{
     postComments = false
     editPostModal = false
     deletePostModal = false
+    editTypePostModal = false
     constructor(user){
         if(user){
             this.isLoged = true
@@ -30,6 +31,9 @@ export default class MainStore{
     setDeletePostModal(value){
         this.deletePostModal = value
     }
+    setEditTypePostModal(value){
+        this.editTypePostModal = value
+    }
     get getLogStatus(){
         return this.isLoged
     }
@@ -41,11 +45,13 @@ decorate(MainStore,{
     postComments: observable,
     editPostModal:observable,
     deletePostModal:observable,
+    editTypePostModal:observable,
     setLogged:action,
     getLogStatus:computed,
     setModal: action,
     setCommentModal:action,
     setCommentsForPost: action,
     setEditPostModal:action,
-    setDeletePostModal:action
+    setDeletePostModal:action,
+    setEditTypePostModal:action,
 })

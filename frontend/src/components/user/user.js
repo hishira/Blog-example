@@ -16,17 +16,19 @@ import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
 import CommentModal from "../comment/commentModal";
 import PostComments from "../comment/commentsForPost";
-import EditPostModal from "../post/editPostModal"
-import DeletePostModal from "../post/deletePostModal"
-
+import EditPostModal from "../post/editPostModal";
+import DeletePostModal from "../post/deletePostModal";
+import ChangePostTypeModal from "../post/changePostType";
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
   const [modalOpen, setModalOpen] = useState(false);
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
-  const [editPost,setEditPost] = useState({})
-  const [postIdToDelete,setPostIdToDelete] = useState({});
+  const [editPost, setEditPost] = useState({});
+  const [postIdToDelete, setPostIdToDelete] = useState({});
+  const [postIdToTypechange, setPostIdToTypeChange] = useState({});
+  const [postTypeRevert, setPostTypeRevert] = useState("");
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -36,15 +38,19 @@ function User(props) {
     setCommentsForPost(postid);
     props.mainStore.setCommentsForPost(true);
   };
-  const editPostHandle = (post)=>{
-    setEditPost(post)
-    props.mainStore.setEditPostModal(true)
-
-  }
-  const deletePosthandle = (post)=>{
-    setPostIdToDelete(post._id)
-    props.mainStore.setDeletePostModal(true)
-  }
+  const editPostHandle = (post) => {
+    setEditPost(post);
+    props.mainStore.setEditPostModal(true);
+  };
+  const deletePosthandle = (post) => {
+    setPostIdToDelete(post._id);
+    props.mainStore.setDeletePostModal(true);
+  };
+  const changePostTypeHandle = (post) => {
+    setPostIdToTypeChange(post._id);
+    setPostTypeRevert(post.postType === "PUBLIC" ? "private" : "public");
+    props.mainStore.setEditTypePostModal(true);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,6 +60,7 @@ function User(props) {
         });
         if (userFromRequest === null) throw new Error("Err");
         setUser(userFromRequest);
+
         setLoading("true");
         console.log(userFromRequest);
       } catch (err) {
@@ -155,13 +162,38 @@ function User(props) {
               style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
             >
               <Card.Content>
-                <Card.Header>{post.title}
-                <Button.Group style={{position:"absolute",top:".5rem",right:".5rem"}}>
-                  <Button onClick={() =>editPostHandle(post)}>Edit post</Button>
-                  <Button.Or/>
-                  <Button onClick={()=>deletePosthandle(post)}>Delete</Button>
-                </Button.Group></Card.Header>
-                <Card.Description style={{marginTop:"2rem"}}>{post.content}</Card.Description>
+                <Card.Header>
+                  <div>{post.title}</div>
+                  <br />
+                  <Button.Group>
+                    <Button size="tiny" onClick={() => editPostHandle(post)}>
+                      Edit post
+                    </Button>
+                    <Button.Or size="tiny" />
+                    <Button size="tiny" onClick={() => deletePosthandle(post)}>
+                      Delete
+                    </Button>
+                    <Button.Or />
+                    {post.postType === "PUBLIC" ? (
+                      <Button
+                        onClick={() => changePostTypeHandle(post)}
+                        size="tiny"
+                      >
+                        Make post private
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => changePostTypeHandle(post)}
+                        size="tiny"
+                      >
+                        Make post public
+                      </Button>
+                    )}
+                  </Button.Group>
+                </Card.Header>
+                <Card.Description style={{ marginTop: "2rem" }}>
+                  {post.content}
+                </Card.Description>
               </Card.Content>
 
               <Card.Content extra>
@@ -177,7 +209,6 @@ function User(props) {
                 >
                   Add comment
                 </Button>
-                
               </Card.Content>
             </Card>
           ))}
@@ -185,8 +216,12 @@ function User(props) {
       )}
       <CommentModal post={postComment} />
       <PostComments postid={commentsForPost} />
-      <EditPostModal post={editPost}/>
+      <EditPostModal post={editPost} />
       <DeletePostModal id={postIdToDelete} />
+      <ChangePostTypeModal
+        id={postIdToTypechange}
+        typeToChange={postTypeRevert}
+      />
     </div>
   );
 }
