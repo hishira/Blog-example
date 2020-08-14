@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import MainStore from "./store/main";
 import PrivateRoute from "./components/shared/privateRoute";
 import User from "./components/user/user";
-import PostCreate from "./components/user/postcreate";
+import PostCreate from "./components/post/postcreate";
 import EmailChange from "./components/user/emailchange";
 import PasswordChange from './components/user/passwordchange'
 import UserFind from './components/user/userFind'

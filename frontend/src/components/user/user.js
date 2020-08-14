@@ -14,10 +14,10 @@ import { useHistory } from "react-router-dom";
 import { getUserInfo } from "../../api/userApi";
 import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
-import CommentModal from "./commentModal";
-import PostComments from "./commentsForPost";
-import EditPostModal from "./editPostModal"
-import DeletePostModal from "./deletePostModal"
+import CommentModal from "../comment/commentModal";
+import PostComments from "../comment/commentsForPost";
+import EditPostModal from "../post/editPostModal"
+import DeletePostModal from "../post/deletePostModal"
 
 function User(props) {
   const [user, setUser] = useState({});

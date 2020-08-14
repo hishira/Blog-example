@@ -11,8 +11,8 @@ import {
 } from "semantic-ui-react";
 import { getPublicUserInfo } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
-import CommentModal from "./commentModal";
-import PostComments from "./commentsForPost";
+import CommentModal from "../comment/commentModal";
+import PostComments from "../comment/commentsForPost";
 
 function PublicUserProfile(props) {
   const [userInfo, setUserInfo] = useState({});
