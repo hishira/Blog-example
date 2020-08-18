@@ -34,6 +34,7 @@ app.get("/userinfo", checkIfLogin, async (req, res) => {
           posts: user.posts,
           comments: user.comments,
           watched: user.watched,
+          _id:user._id
         })
         .end();
     } catch (err) {

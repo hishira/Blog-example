@@ -19,6 +19,8 @@ import PostComments from "../comment/commentsForPost";
 import EditPostModal from "../post/editPostModal";
 import DeletePostModal from "../post/deletePostModal";
 import ChangePostTypeModal from "../post/changePostType";
+import { likePost, removeLikePost } from "../../api/postApi";
+
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -51,6 +53,40 @@ function User(props) {
     setPostTypeRevert(post.postType === "PUBLIC" ? "private" : "public");
     props.mainStore.setEditTypePostModal(true);
   };
+  const likePostHandle = async (post, u) => {
+    let obj = {userID:props.userStore.getLogedUser._id}
+    let res = await likePost(post._id,obj).then((response) => {
+      if (response.status === 200) return true;
+      else return false;
+    });
+    if (res) {
+      let newUser = props.userStore.getLogedUser;
+      for (let i in newUser.posts) {
+        if (newUser.posts[i]._id === post._id)
+          newUser.posts[i].likes.push(u._id);
+      }
+      props.userStore.setLogedUser(newUser)
+    }
+  };
+  const unlikePostHandle = async (post, u) => {
+    let obj = {userID:props.userStore.getLogedUser._id}
+    let res = await removeLikePost(post._id,obj).then((response) => {
+      if (response.status === 200) return true;
+      else return false;
+    });
+    if (res) {
+      let userRemove = props.userStore.getLogedUser;
+      for (let i in userRemove.posts) {
+        if (userRemove.posts[i]._id === post._id) {
+          let index = userRemove.posts[i].likes.indexOf(userRemove._id);
+          console.log(index)
+          if (index > -1) userRemove.posts[i].likes.splice(index, 1);
+        }
+      }
+      console.log(userRemove)
+      props.userStore.setLogedUser(userRemove)
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,8 +95,7 @@ function User(props) {
           else return null;
         });
         if (userFromRequest === null) throw new Error("Err");
-        setUser(userFromRequest);
-
+        props.userStore.setLogedUser(userFromRequest)
         setLoading("true");
         console.log(userFromRequest);
       } catch (err) {
@@ -68,7 +103,7 @@ function User(props) {
       }
     };
     fetchData();
-  }, []);
+  }, props.userStore.getLogedUser);
   const history = useHistory();
   return (
     <div style={{ margin: ".5rem" }}>
@@ -97,13 +132,13 @@ function User(props) {
                     <Card.Header
                       style={{ marginTop: "1rem", fontSize: "1.1rem" }}
                     >
-                      Username: {user.username}
+                      Username: {props.userStore.getLogedUser.username}
                       <br />
-                      Email: {user.email}
+                      Email: {props.userStore.getLogedUser.email}
                     </Card.Header>
-                    {user.description !== "" ? (
+                    {props.userStore.getLogedUser.description !== "" ? (
                       <Card.Description>
-                        Opis:{user.description}
+                        Opis:{props.userStore.getLogedUser.description}
                       </Card.Description>
                     ) : (
                       <Button
@@ -164,7 +199,7 @@ function User(props) {
             marginLeft: "auto",
           }}
         >
-          {user.posts.map((post) => (
+          {props.userStore.getLogedUser.posts.map((post) => (
             <Card
               style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
             >
@@ -204,10 +239,24 @@ function User(props) {
               </Card.Content>
 
               <Card.Content extra>
-                <a onClick={() => commentForPostHandle(post._id)}>
+                <a
+                  style={{ marginRight: ".5rem" }}
+                  onClick={() => commentForPostHandle(post._id)}
+                >
                   <Icon name="comment" />
                   {post.comments.length}
                 </a>
+                {post.likes.includes(props.userStore.getLogedUser._id) ? (
+                  <a onClick={() => unlikePostHandle(post, user)}>
+                    <Icon style={{ color: "red" }} name="like" />
+                    {post.likes.length}
+                  </a>
+                ) : (
+                  <a onClick={() => likePostHandle(post, user)}>
+                    <Icon name="like" />
+                    {post.likes.length}
+                  </a>
+                )}
                 <Button
                   style={{ marginLeft: "1.5rem" }}
                   basic
@@ -234,4 +283,5 @@ function User(props) {
 }
 export default inject((stores) => ({
   mainStore: stores.mainStore,
+  userStore: stores.userStore
 }))(observer(User));

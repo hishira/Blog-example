@@ -7,6 +7,7 @@ import { Route } from "react-router-dom";
 import { Provider } from "mobx-react";
 import Cookies from "js-cookie";
 import MainStore from "./store/main";
+import UserStore from './store/user'
 import PrivateRoute from "./components/shared/privateRoute";
 import User from "./components/user/user";
 import PostCreate from "./components/post/postcreate";
@@ -14,10 +15,12 @@ import EmailChange from "./components/user/emailchange";
 import PasswordChange from './components/user/passwordchange'
 import UserFind from './components/user/userFind'
 import PublicUserProfile from './components/user/userPublicProfile'
+
 function App() {
   let user = Cookies.getJSON("user");
   let stores = {
     mainStore: new MainStore(user ? user : null),
+    userStore: new UserStore()
   };
   return (
     <Provider {...stores}>

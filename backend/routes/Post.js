@@ -196,4 +196,38 @@ app.delete("/post/:id", checkifLogin, async (req, res) => {
     res.status(500).send(err);
   }
 });
+app.post("/post/likeadd/:id",checkifLogin,async(req,res)=>{
+  try{
+    const post = await postModel.findById(req.params.id)
+    if (!post){
+      return res.status(404).send("Post not found")
+    }else{
+      const user = await userModel.findById(req.user._id)
+      if(post.likes.includes(user._id))
+        return res.status(400).send("User like this post")
+      post.likes.push(user)
+      await post.save()
+      return res.status(200).send("Ok")
+    }
+  }catch (err) {
+    return res.status(500).send("Server error")
+  }
+})
+app.post("/post/likeremove/:id",checkifLogin,async(req,res)=>{
+  try{
+    const post = await postModel.findById(req.params.id)
+    if (!post){
+      return res.status(404).send("Post not found")
+    }else{
+      const user = await userModel.findById(req.user._id)
+      if(!post.likes.includes(user._id))
+        return res.status(400).send("User do not like this post")
+      await post.likes.remove(user)
+      await post.save()
+      res.status(200).send("Ok")
+    }
+  }catch (err) {
+    res.status(500).send("Server error")
+  }
+})
 module.exports = app;
