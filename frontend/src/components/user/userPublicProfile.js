@@ -15,13 +15,15 @@ import CommentModal from "../comment/commentModal";
 import PostComments from "../comment/commentsForPost";
 import { likePost, removeLikePost } from "../../api/postApi";
 import Cookies from "js-cookie";
-
+import Response from "../shared/response";
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState({});
   const [loading, setLoading] = useState("false");
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
-  
+  const [open, setOpen] = useState(false);
+  const [message,setMessage] = useState("")
+
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -32,6 +34,14 @@ function PublicUserProfile(props) {
     props.mainStore.setCommentsForPost(true);
   };
   const likePostHandle = async (post, u) => {
+    if(!props.mainStore.getLogStatus){
+      setMessage("Not logged persons cannot like posts")
+      setOpen(true)
+      setTimeout(() => {
+        setOpen(false)
+      }, 1500);
+      return
+    }
     console.log("Old Post");
     console.log(post);
     console.log(props.userStore.getLogedUser._id)
@@ -91,6 +101,7 @@ function PublicUserProfile(props) {
   }, [props.match.params.id]);
   return (
     <div style={{ marginTop: ".5rem" }}>
+      <Response open={open} message={message}/>
       {loading === "false" ? (
         <Segment>
           <Dimmer active inverted>
@@ -148,7 +159,7 @@ function PublicUserProfile(props) {
                       <Icon name="comment" />
                       {post.comments.length}
                     </a>
-                    {post.likes.includes(loggedUser._id) ? (
+                    {loggedUser && post.likes.includes(loggedUser._id) ? (
                       <a onClick={() => unlikePostHandle(post, loggedUser)}>
                         <Icon style={{ color: "red" }} name="like" />
                         {post.likes.length}
