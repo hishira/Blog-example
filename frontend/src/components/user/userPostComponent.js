@@ -7,6 +7,7 @@ function UserPostComponent(props) {
       <Card.Content>
         <Card.Header>
           <div>{props.post.title}</div>
+            <Card.Meta style={{marginTop:".5rem"}}>Create: {props.post.createDate.split("T")[0]}</Card.Meta>
           <br />
           <Button.Group>
             <Button size="tiny" onClick={() => props.editPostHandle(props.post)}>

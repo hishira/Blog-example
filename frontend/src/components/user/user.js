@@ -20,7 +20,7 @@ import PostComments from "../comment/commentsForPost";
 import EditPostModal from "../post/editPostModal";
 import DeletePostModal from "../post/deletePostModal";
 import ChangePostTypeModal from "../post/changePostType";
-import { likePost, removeLikePost } from "../../api/postApi";
+import { likePost, removeLikePost,sortPost } from "../../api/postApi";
 import UserPostComponent from "./userPostComponent"
 
 function User(props) {
@@ -98,8 +98,20 @@ function User(props) {
       props.userStore.setLogedUser(userRemove);
     }
   };
-  const sortHandle = () => {
+  const sortHandle = async () => {
     console.log(sortOption);
+    if(sortOption === "")
+      return
+    let obj = {userID:props.userStore.getLogedUser._id,sortOption:sortOption}
+    console.log(obj)
+    let res = await sortPost(obj).then(response=>{
+      if(response.status === 200)
+        return response.json()
+      return false
+    })
+    if(res !== false){
+      props.userStore.setLogedUserPost(res)
+    }
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -237,6 +249,7 @@ function User(props) {
             commentForPostHandle={commentForPostHandle}
             unlikePostHandle={unlikePostHandle}
             likePostHandle={likePostHandle}
+            commentHandle={commentHandle}
            
             />
           ))}

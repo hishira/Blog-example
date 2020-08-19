@@ -34,6 +34,10 @@ async function removeLikePost(id,obj) {
   let url = getApiLink(`post/post/likeremove/${id}`);
   return await fetch(url, getFetchPostObject(obj));
 }
+async function sortPost(obj){
+  let url = getApiLink('post/sortpost')
+  return await fetch(url, getFetchPostObject(obj))
+}
 export {
   createPost,
   editPost,
@@ -42,4 +46,5 @@ export {
   makePostPrivate,
   likePost,
   removeLikePost,
+  sortPost
 };

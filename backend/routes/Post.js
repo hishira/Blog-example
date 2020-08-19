@@ -230,4 +230,12 @@ app.post("/post/likeremove/:id",checkifLogin,async(req,res)=>{
     res.status(500).send("Server error")
   }
 })
+app.post("/sortpost",async (req,res)=>{
+  try{
+    const post = await postModel.find({user:req.body.userID}).sort({createDate:(req.body.sortOption === "date_descending")?'descending':'ascending'})
+    return res.status(200).json(post).end()
+  }catch (err) {
+    return res.status(500).send("Server problem")
+  }
+})
 module.exports = app;

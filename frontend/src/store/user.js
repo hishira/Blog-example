@@ -15,10 +15,16 @@ export default class UserStore{
     get getWatchedUser(){
         return toJS(this.watchedUser)
     }
+    setLogedUserPost(post){
+        this.logedUser.posts = post
+    }
 }
 decorate(UserStore,{
     logedUser:observable,
+    setLogedUser:action,
+    setWatchedUser:action,
     watchedUser:observable,
     getLogedUser:computed,
-    getWatchedUser:computed
+    getWatchedUser:computed,
+    setLogedUserPost:action,
 })
