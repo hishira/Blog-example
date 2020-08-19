@@ -8,22 +8,32 @@ import {
   Dimmer,
   Grid,
   Icon,
+  Select,
 } from "semantic-ui-react";
 import { getPublicUserInfo } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
 import CommentModal from "../comment/commentModal";
 import PostComments from "../comment/commentsForPost";
-import { likePost, removeLikePost } from "../../api/postApi";
+import { likePost, removeLikePost, sortPost } from "../../api/postApi";
 import Cookies from "js-cookie";
 import Response from "../shared/response";
+
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
   const [open, setOpen] = useState(false);
-  const [message,setMessage] = useState("")
-
+  const [message, setMessage] = useState("");
+  const [sortOption, setSortOption] = useState("");
+  const sortOptions = [
+    { key: "date_ascending", value: "date_ascending", text: "Ascending date" },
+    {
+      key: "date_descending",
+      value: "date_descending",
+      text: "Descending date",
+    },
+  ];
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -34,20 +44,20 @@ function PublicUserProfile(props) {
     props.mainStore.setCommentsForPost(true);
   };
   const likePostHandle = async (post, u) => {
-    if(!props.mainStore.getLogStatus){
-      setMessage("Not logged persons cannot like posts")
-      setOpen(true)
+    if (!props.mainStore.getLogStatus) {
+      setMessage("Not logged persons cannot like posts");
+      setOpen(true);
       setTimeout(() => {
-        setOpen(false)
+        setOpen(false);
       }, 1500);
-      return
+      return;
     }
     console.log("Old Post");
     console.log(post);
-    console.log(props.userStore.getLogedUser._id)
-    let obj = {userID:props.userStore.getLogedUser._id}
+    console.log(props.userStore.getLogedUser._id);
+    let obj = { userID: props.userStore.getLogedUser._id };
 
-    let res = await likePost(post._id,obj).then((response) => {
+    let res = await likePost(post._id, obj).then((response) => {
       if (response.status === 200) return true;
       else return false;
     });
@@ -61,9 +71,9 @@ function PublicUserProfile(props) {
     }
   };
   const unlikePostHandle = async (post, u) => {
-    let obj = {userID:props.userStore.getLogedUser._id}
+    let obj = { userID: props.userStore.getLogedUser._id };
 
-    let res = await removeLikePost(post._id,obj).then((response) => {
+    let res = await removeLikePost(post._id, obj).then((response) => {
       if (response.status === 200) return true;
       else return false;
     });
@@ -78,6 +88,22 @@ function PublicUserProfile(props) {
       props.userStore.setWatchedUser(userRemove);
     }
   };
+  const sortHandle = async () => {
+    console.log(sortOption);
+    if (sortOption === "") return;
+    let obj = {
+      userID: props.userStore.getWatchedUser._id,
+      sortOption: sortOption,
+    };
+    console.log(obj);
+    let res = await sortPost(obj).then((response) => {
+      if (response.status === 200) return response.json();
+      return false;
+    });
+    if (res !== false) {
+      props.userStore.setWatchedUserPost(res);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,20 +114,19 @@ function PublicUserProfile(props) {
           }
         );
         if (data === null) throw new Error("Problem");
-        props.userStore.setWatchedUser(data)
+        props.userStore.setWatchedUser(data);
         setLoading("true");
-   
       } catch (err) {
         setLoading("error");
         return;
       }
     };
-    setLoggedUser(Cookies.getJSON("user"))
+    setLoggedUser(Cookies.getJSON("user"));
     fetchData();
   }, [props.match.params.id]);
   return (
     <div style={{ marginTop: ".5rem" }}>
-      <Response open={open} message={message}/>
+      <Response open={open} message={message} />
       {loading === "false" ? (
         <Segment>
           <Dimmer active inverted>
@@ -140,7 +165,21 @@ function PublicUserProfile(props) {
                 </Card.Content>
               </Card>
             </Grid.Column>
+
             <Grid.Column width={12}>
+              <Container>
+                <Select
+                  placeholder="Sort by"
+                  options={sortOptions}
+                  onChange={(e, { value }) => setSortOption(value)}
+                />
+                <Button
+                  onClick={() => sortHandle()}
+                  style={{ marginLeft: "1.5rem" }}
+                >
+                  Sort posts
+                </Button>
+              </Container>
               {props.userStore.getWatchedUser.posts.map((post) => (
                 <Card
                   style={{
@@ -192,5 +231,5 @@ function PublicUserProfile(props) {
 }
 export default inject((stores) => ({
   mainStore: stores.mainStore,
-  userStore: stores.userStore
+  userStore: stores.userStore,
 }))(observer(PublicUserProfile));

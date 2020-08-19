@@ -18,6 +18,9 @@ export default class UserStore{
     setLogedUserPost(post){
         this.logedUser.posts = post
     }
+    setWatchedUserPost(post){
+        this.watchedUser.posts = post
+    }
 }
 decorate(UserStore,{
     logedUser:observable,
@@ -27,4 +30,5 @@ decorate(UserStore,{
     getLogedUser:computed,
     getWatchedUser:computed,
     setLogedUserPost:action,
+    setWatchedUserPost:action,
 })
