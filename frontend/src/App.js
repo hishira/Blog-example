@@ -15,6 +15,7 @@ import EmailChange from "./components/user/emailchange";
 import PasswordChange from './components/user/passwordchange'
 import UserFind from './components/user/userFind'
 import PublicUserProfile from './components/user/userPublicProfile'
+import DescriptionChange from './components/user/descriptionChange'
 
 function App() {
   let user = Cookies.getJSON("user");
@@ -34,6 +35,7 @@ function App() {
         <PrivateRoute component={EmailChange} path="/emailchange" />
         <PrivateRoute component={PasswordChange} path="/passwordchange"/>
         <Route component={PublicUserProfile} path="/userprofile/:id"/>
+        <PrivateRoute component={DescriptionChange} path="/descriptionchange"/>
       </div>
     </Provider>
   );

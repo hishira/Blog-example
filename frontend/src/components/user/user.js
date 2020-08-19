@@ -9,6 +9,7 @@ import {
   Dimmer,
   Icon,
   Container,
+  Select,
 } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { getUserInfo } from "../../api/userApi";
@@ -20,6 +21,7 @@ import EditPostModal from "../post/editPostModal";
 import DeletePostModal from "../post/deletePostModal";
 import ChangePostTypeModal from "../post/changePostType";
 import { likePost, removeLikePost } from "../../api/postApi";
+import UserPostComponent from "./userPostComponent"
 
 function User(props) {
   const [user, setUser] = useState({});
@@ -31,6 +33,15 @@ function User(props) {
   const [postIdToDelete, setPostIdToDelete] = useState({});
   const [postIdToTypechange, setPostIdToTypeChange] = useState({});
   const [postTypeRevert, setPostTypeRevert] = useState("");
+  const [sortOption, setSortOption] = useState("");
+  const sortOptions = [
+    { key: "date_ascending", value: "date_ascending", text: "Ascending date" },
+    {
+      key: "date_descending",
+      value: "date_descending",
+      text: "Descending date",
+    },
+  ];
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -54,8 +65,8 @@ function User(props) {
     props.mainStore.setEditTypePostModal(true);
   };
   const likePostHandle = async (post, u) => {
-    let obj = {userID:props.userStore.getLogedUser._id}
-    let res = await likePost(post._id,obj).then((response) => {
+    let obj = { userID: props.userStore.getLogedUser._id };
+    let res = await likePost(post._id, obj).then((response) => {
       if (response.status === 200) return true;
       else return false;
     });
@@ -65,12 +76,12 @@ function User(props) {
         if (newUser.posts[i]._id === post._id)
           newUser.posts[i].likes.push(u._id);
       }
-      props.userStore.setLogedUser(newUser)
+      props.userStore.setLogedUser(newUser);
     }
   };
   const unlikePostHandle = async (post, u) => {
-    let obj = {userID:props.userStore.getLogedUser._id}
-    let res = await removeLikePost(post._id,obj).then((response) => {
+    let obj = { userID: props.userStore.getLogedUser._id };
+    let res = await removeLikePost(post._id, obj).then((response) => {
       if (response.status === 200) return true;
       else return false;
     });
@@ -79,13 +90,16 @@ function User(props) {
       for (let i in userRemove.posts) {
         if (userRemove.posts[i]._id === post._id) {
           let index = userRemove.posts[i].likes.indexOf(userRemove._id);
-          console.log(index)
+          console.log(index);
           if (index > -1) userRemove.posts[i].likes.splice(index, 1);
         }
       }
-      console.log(userRemove)
-      props.userStore.setLogedUser(userRemove)
+      console.log(userRemove);
+      props.userStore.setLogedUser(userRemove);
     }
+  };
+  const sortHandle = () => {
+    console.log(sortOption);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -95,7 +109,7 @@ function User(props) {
           else return null;
         });
         if (userFromRequest === null) throw new Error("Err");
-        props.userStore.setLogedUser(userFromRequest)
+        props.userStore.setLogedUser(userFromRequest);
         setLoading("true");
         console.log(userFromRequest);
       } catch (err) {
@@ -199,74 +213,32 @@ function User(props) {
             marginLeft: "auto",
           }}
         >
-          {props.userStore.getLogedUser.posts.map((post) => (
-            <Card
-              style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
+          <Container>
+            <Select
+              placeholder="Sort by"
+              options={sortOptions}
+              onChange={(e,{value}) => 
+                setSortOption(value)
+              }
+            />
+            <Button
+              onClick={() => sortHandle()}
+              style={{ marginLeft: "1.5rem" }}
             >
-              <Card.Content>
-                <Card.Header>
-                  <div>{post.title}</div>
-                  <br />
-                  <Button.Group>
-                    <Button size="tiny" onClick={() => editPostHandle(post)}>
-                      Edit post
-                    </Button>
-                    <Button.Or size="tiny" />
-                    <Button size="tiny" onClick={() => deletePosthandle(post)}>
-                      Delete
-                    </Button>
-                    <Button.Or />
-                    {post.postType === "PUBLIC" ? (
-                      <Button
-                        onClick={() => changePostTypeHandle(post)}
-                        size="tiny"
-                      >
-                        Make post private
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={() => changePostTypeHandle(post)}
-                        size="tiny"
-                      >
-                        Make post public
-                      </Button>
-                    )}
-                  </Button.Group>
-                </Card.Header>
-                <Card.Description style={{ marginTop: "2rem" }}>
-                  {post.content}
-                </Card.Description>
-              </Card.Content>
-
-              <Card.Content extra>
-                <a
-                  style={{ marginRight: ".5rem" }}
-                  onClick={() => commentForPostHandle(post._id)}
-                >
-                  <Icon name="comment" />
-                  {post.comments.length}
-                </a>
-                {post.likes.includes(props.userStore.getLogedUser._id) ? (
-                  <a onClick={() => unlikePostHandle(post, user)}>
-                    <Icon style={{ color: "red" }} name="like" />
-                    {post.likes.length}
-                  </a>
-                ) : (
-                  <a onClick={() => likePostHandle(post, user)}>
-                    <Icon name="like" />
-                    {post.likes.length}
-                  </a>
-                )}
-                <Button
-                  style={{ marginLeft: "1.5rem" }}
-                  basic
-                  color="blue"
-                  onClick={() => commentHandle(post)}
-                >
-                  Add comment
-                </Button>
-              </Card.Content>
-            </Card>
+              Sort posts
+            </Button>
+          </Container>
+          {props.userStore.getLogedUser.posts.map((post) => (
+            <UserPostComponent 
+            post={post}
+            editPostHandle={editPostHandle}
+            deletePosthandle={deletePosthandle}
+            changePostTypeHandle={changePostTypeHandle}
+            commentForPostHandle={commentForPostHandle}
+            unlikePostHandle={unlikePostHandle}
+            likePostHandle={likePostHandle}
+           
+            />
           ))}
         </div>
       )}
@@ -283,5 +255,5 @@ function User(props) {
 }
 export default inject((stores) => ({
   mainStore: stores.mainStore,
-  userStore: stores.userStore
+  userStore: stores.userStore,
 }))(observer(User));

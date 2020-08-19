@@ -17,7 +17,7 @@ import { likePost, removeLikePost } from "../../api/postApi";
 import Cookies from "js-cookie";
 import Response from "../shared/response";
 function PublicUserProfile(props) {
-  const [loggedUser, setLoggedUser] = useState({});
+  const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
   const [postComment, setPropsComment] = useState({});
   const [commentsForPost, setCommentsForPost] = useState([]);
@@ -71,7 +71,7 @@ function PublicUserProfile(props) {
       let userRemove = props.userStore.getWatchedUser;
       for (let i in userRemove.posts) {
         if (userRemove.posts[i]._id === post._id) {
-          let index = userRemove.posts[i].likes.indexOf(props.userStore.getLogedUser._id);
+          let index = userRemove.posts[i].likes.indexOf(loggedUser._id);
           if (index > -1) userRemove.posts[i].likes.splice(index, 1);
         }
       }
