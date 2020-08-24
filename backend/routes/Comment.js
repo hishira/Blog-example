@@ -135,5 +135,19 @@ app.put("/comment/:id", checkIfLogin, async (req, res) => {
     return res.status(500).json({ message: err });
   }
 });
+app.post("/sortcomment",async(req,res)=>{
+  try{
+    const comment = await commentModel.find({post:req.body.postID}).sort({createDate:(req.body.sortOption === "date_descending")?"descending":"ascending"})
+    let arr = [] 
+    for(let i of comment){
+      let k = await i.populate("user").execPopulate()
+      arr.push(k)
+    }
+    
+    return res.status(200).json(arr)
+  }catch(err){
+    return res.status(500).send("Server error").end()
+  }
+})
 
 module.exports = app;

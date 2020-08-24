@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, TextArea } from "semantic-ui-react";
+import {
+  Button,
+  Modal,
+  Form,
+  TextArea,
+
+} from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
 import Response from "../shared/response";
-import { createComment,createAnonymousComment } from "../../api/commentApi";
+import { createComment, createAnonymousComment } from "../../api/commentApi";
 import { useHistory } from "react-router-dom";
 function CommentModal(props) {
   const [commentContent, setCommentContent] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
+ 
   const submitHandle = async (e) => {
     e.preventDefault();
     console.log(props.post._id);
@@ -54,11 +61,10 @@ function CommentModal(props) {
     }
     if (flag) {
       props.mainStore.setCommentModal(false);
-      if(props.mainStore.getLogStatus)
-        history.push("/user");
-      
+      if (props.mainStore.getLogStatus) history.push("/user");
     }
   };
+  
   return (
     <Modal
       dimmer="inverted"

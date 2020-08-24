@@ -12,6 +12,9 @@ async function getCommentsByPost(obj){
     let url = getApiLink('comment/commentforpost')
     return await fetch(url,getFetchPostObject(obj))
 }
+async function sortComments(obj){
+    let url = getApiLink("comment/sortcomment")
+    return await fetch(url,getFetchPostObject(obj))
+}
 
-
-export {createComment,getCommentsByPost,createAnonymousComment}
+export {createComment,getCommentsByPost,createAnonymousComment,sortComments}

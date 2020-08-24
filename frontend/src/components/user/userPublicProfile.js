@@ -138,7 +138,7 @@ function PublicUserProfile(props) {
       ) : (
         <div>
           <Grid stackable columns={2}>
-            <Grid.Column width={3}>
+            <Grid.Column style={{padding:"1.5rem"}} width={3}>
               <Card
                 style={{
                   widht: "20rem",
