@@ -17,7 +17,7 @@ import PostComments from "../comment/commentsForPost";
 import { likePost, removeLikePost, sortPost } from "../../api/postApi";
 import Cookies from "js-cookie";
 import Response from "../shared/response";
-
+import LoginModal from "../auth/loginModal" 
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
@@ -45,11 +45,7 @@ function PublicUserProfile(props) {
   };
   const likePostHandle = async (post, u) => {
     if (!props.mainStore.getLogStatus) {
-      setMessage("Not logged persons cannot like posts");
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-      }, 1500);
+      props.mainStore.setLoginModal(true)
       return;
     }
     console.log("Old Post");
@@ -167,7 +163,7 @@ function PublicUserProfile(props) {
             </Grid.Column>
 
             <Grid.Column width={12}>
-              <Container>
+              <Container style={{marginBottom:"3rem"}}>
                 <Select
                   placeholder="Sort by"
                   options={sortOptions}
@@ -224,6 +220,7 @@ function PublicUserProfile(props) {
           </Grid>
           <CommentModal post={postComment} />
           <PostComments postid={commentsForPost} />
+          <LoginModal />
         </div>
       )}
     </div>
