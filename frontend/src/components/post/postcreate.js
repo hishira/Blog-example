@@ -8,6 +8,7 @@ import {
   TextArea,
   Button,
   Checkbox,
+  Icon,
 } from "semantic-ui-react";
 import { createPost } from "../../api/postApi";
 import { useHistory } from "react-router-dom";
@@ -16,14 +17,25 @@ export default function CreatePost(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [makePostPrivate, setMakePostPrivate] = useState(false);
+  const [tag,setTag] = useState("")
+  const [tags,setTags] = useState([])
   const history = useHistory();
-
+  const setTagsHandle = ()=>{
+    if(tag === "" || tags.includes(tag))  return
+    if (tags.length === 10)
+      return
+    
+    setTags([...tags,tag.split(/(\s+)/).join("")])
+    console.log(tags)
+    setTag("")
+  }
   const createPostHandle = async (e) => {
     console.log(title, content);
     let obj = {
       title: title,
       content: content,
-      postPrivate:makePostPrivate
+      postPrivate:makePostPrivate,
+      tags:tags
     };
     let flag = false;
     await createPost(obj).then(response=>{
@@ -71,7 +83,20 @@ export default function CreatePost(props) {
           id="content"
           style={{ minHeight: 300, resize: "none" }}
         />
+        <Input>
+        <input onChange={(e)=>setTag(e.target.value)}/>
+        <Button onClick={()=>setTagsHandle()} size='small'>
+          <Icon name='tags'/>
+          Add
+          </Button>
+        </Input>
+        <br/>
+        <span style={{color:"coral"}}>Max 10 tag</span>
+        <br/>
+        Tags : {tags.join(", ")}
+        <br/>
         <Button
+        style={{marginTop:"2rem"}}
           color="facebook"
           type="submit"
           onClick={(e) => createPostHandle(e)}

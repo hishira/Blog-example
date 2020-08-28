@@ -1,6 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-import { Button, Card, Icon } from "semantic-ui-react";
+import { Button, Card, Icon,Label } from "semantic-ui-react";
 function UserPostComponent(props) {
   return (
     <Card style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}>
@@ -38,6 +38,14 @@ function UserPostComponent(props) {
         <Card.Description style={{ marginTop: "2rem" }}>
           {props.post.content}
         </Card.Description>
+          Tags: <br/>
+          {
+            props.post.tags.map((tag)=>
+              <Label>
+                {tag}
+              </Label>
+            )
+          }
       </Card.Content>
 
       <Card.Content extra>

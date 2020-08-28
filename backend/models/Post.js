@@ -40,6 +40,11 @@ const postSchema = new mongoose.Schema({
       type:mongoose.Schema.Types.ObjectId,
       ref:"User"
     }
+  ],
+  tags:[
+    {
+      type:String
+    }
   ]
 });
 const Post = mongoose.model("Post", postSchema);

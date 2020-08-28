@@ -81,11 +81,13 @@ app.get("/publicuserpost/:id", async (req, res) => {
 });
 app.post("/post", checkifLogin, async (req, res) => {
   try {
+    console.log(req.body)
     const newPost = new postModel({
       title: req.body.title,
       content: req.body.content,
       user: req.user._id,
-      postType: (req.body.postPrivate)? "PRIVATE":"PUBLIC"
+      postType: (req.body.postPrivate)? "PRIVATE":"PUBLIC",
+      tags:req.body.tags
     });
     try {
       await newPost.save();
