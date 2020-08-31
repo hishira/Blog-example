@@ -11,7 +11,7 @@ import {
   Select,
   Label
 } from "semantic-ui-react";
-import { getPublicUserInfo } from "../../api/userApi";
+import { getPublicUserInfo,watchUser } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
 import CommentModal from "../comment/commentModal";
 import PostComments from "../comment/commentsForPost";
@@ -109,6 +109,19 @@ function PublicUserProfile(props) {
     console.log(props.userStore.getLogedUser)
     return props.mainStore.getLogStatus && props.userStore.getLogedUser.watched.includes(props.userStore.getWatchedUser._id)
   }
+  const watchUserHandle = async ()=>{
+    let obj = {userID:props.userStore.getWatchedUser._id}
+    console.log(obj)
+    let req = await watchUser(obj).then(response =>{
+      if(response.status === 200)
+        return response.json()
+      return false
+    })
+    if(req !== false){
+      props.userStore.setLogedUser(req)
+    }
+
+  }
   useEffect(() => {
     const fetchData = async () => {
       if(props.mainStore.getLogStatus && props.userStore.getLogedUser._id === props.match.params.id){
@@ -180,7 +193,7 @@ function PublicUserProfile(props) {
                     size="small"
                     content="Unwatch"
                     icon='add user'
-                    onClick={() =>props.mainStore.setLoginModal(true)}
+                    
                   />
                   ):props.mainStore.getLogStatus?(<Button
                     color="blue"
@@ -188,6 +201,7 @@ function PublicUserProfile(props) {
                     size="small"
                     content="Watch"
                     icon='add user'
+                    onClick={()=>watchUserHandle()}
                     
                   />):(<Button
                     color="blue"

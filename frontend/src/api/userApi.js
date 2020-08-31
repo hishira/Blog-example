@@ -29,11 +29,16 @@ async function getPublicUserInfo(id) {
   let url = getApiLink(`users/userpublicprofile/${id}`);
   return await fetch(url, fetchObject);
 }
+async function watchUser(obj){
+  let url = getApiLink("users/watchUser")
+  return await fetch(url,getFetchPostObject(obj))
+}
 export {
   getUserInfo,
   addUserDescription,
   emailChange,
   passwordChange,
   userFind,
-  getPublicUserInfo
+  getPublicUserInfo,
+  watchUser
 };

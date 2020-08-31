@@ -158,4 +158,16 @@ app.get("/userpublicprofile/:id", async (req, res) => {
     return res.status(500).send("Server erroor");
   }
 });
+app.post("/watchUser",async (req,res)=>{
+  try{
+    let user = await userModel.findById(req.user._id)
+    if (user.watched.includes(req.body.userID))
+      return res.status(200).json(user)
+    user.watched.push(req.body.userID)
+    await user.save();
+    return res.status(200).json(user).end();
+  }catch(err){
+    return res.status(500).send("Server error").end()
+  }
+})
 module.exports = app;
