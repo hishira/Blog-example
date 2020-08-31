@@ -48,7 +48,7 @@ function UserPostComponent(props) {
           }
       </Card.Content>
 
-      <Card.Content extra>
+      <Card.Content style={{padding:".5rem"}} extra>
         <a
           style={{ marginRight: ".5rem" }}
           onClick={() => props.commentForPostHandle(props.post._id)}

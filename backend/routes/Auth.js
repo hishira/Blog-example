@@ -8,6 +8,9 @@ function getUserPreview(user) {
     email: user.email,
     username: user.username,
     role: user.role,
+    watched:user.watched,
+    posts:user.posts,
+    comments:user.comments
   };
 }
 app.post("/login", passport.authenticate("local", { session: true }), function (req,res){

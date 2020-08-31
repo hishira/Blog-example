@@ -9,6 +9,7 @@ import {
   Grid,
   Icon,
   Select,
+  Label
 } from "semantic-ui-react";
 import { getPublicUserInfo } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
@@ -17,7 +18,9 @@ import PostComments from "../comment/commentsForPost";
 import { likePost, removeLikePost, sortPost } from "../../api/postApi";
 import Cookies from "js-cookie";
 import Response from "../shared/response";
-import LoginModal from "../auth/loginModal" 
+import LoginModal from "../auth/loginModal";
+import { useHistory } from "react-router-dom";
+
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
@@ -34,6 +37,8 @@ function PublicUserProfile(props) {
       text: "Descending date",
     },
   ];
+  const history = useHistory();
+
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
@@ -45,7 +50,7 @@ function PublicUserProfile(props) {
   };
   const likePostHandle = async (post, u) => {
     if (!props.mainStore.getLogStatus) {
-      props.mainStore.setLoginModal(true)
+      props.mainStore.setLoginModal(true);
       return;
     }
     console.log("Old Post");
@@ -100,8 +105,16 @@ function PublicUserProfile(props) {
       props.userStore.setWatchedUserPost(res);
     }
   };
+  const checkWatchedMe = ()=>{
+    console.log(props.userStore.getLogedUser)
+    return props.mainStore.getLogStatus && props.userStore.getLogedUser.watched.includes(props.userStore.getWatchedUser._id)
+  }
   useEffect(() => {
     const fetchData = async () => {
+      if(props.mainStore.getLogStatus && props.userStore.getLogedUser._id === props.match.params.id){
+        history.push("/user")
+        return
+      }
       try {
         let data = await getPublicUserInfo(props.match.params.id).then(
           (response) => {
@@ -134,7 +147,7 @@ function PublicUserProfile(props) {
       ) : (
         <div>
           <Grid stackable columns={2}>
-            <Grid.Column style={{padding:"1.5rem"}} width={3}>
+            <Grid.Column style={{ padding: "1.5rem" }} width={3}>
               <Card
                 style={{
                   widht: "20rem",
@@ -159,11 +172,39 @@ function PublicUserProfile(props) {
                     <div></div>
                   )}
                 </Card.Content>
+                <Card.Content>
+                  {
+                  checkWatchedMe()?(<Button
+                    color="blue"
+                    basic
+                    size="small"
+                    content="Unwatch"
+                    icon='add user'
+                    onClick={() =>props.mainStore.setLoginModal(true)}
+                  />
+                  ):props.mainStore.getLogStatus?(<Button
+                    color="blue"
+                    basic
+                    size="small"
+                    content="Watch"
+                    icon='add user'
+                    
+                  />):(<Button
+                    color="blue"
+                    basic
+                    size="small"
+                    content="Watch"
+                    icon='add user'
+                    onClick={() =>props.mainStore.setLoginModal(true)}
+                  />)
+                  
+                  }
+                </Card.Content>
               </Card>
             </Grid.Column>
 
             <Grid.Column width={12}>
-              <Container style={{marginBottom:"3rem"}}>
+              <Container style={{ marginBottom: "3rem" }}>
                 <Select
                   placeholder="Sort by"
                   options={sortOptions}
@@ -188,9 +229,14 @@ function PublicUserProfile(props) {
                     <Card.Header>{post.title}</Card.Header>
                     <Card.Description>{post.content}</Card.Description>
                   </Card.Content>
-
-                  <Card.Content extra>
-                    <a onClick={() => commentForPostHandle(post._id)}>
+                  <Container style={{marginTop:".5rem",padding:".3rem"}}>
+                  <span style={{color:"blue"}}>#</span>
+                  {post.tags.map((tag) => (
+                    <Label>{tag}</Label>
+                  ))}
+                  </Container>
+                  <Card.Content style={{padding:".5rem"}} extra>
+                    <a style={{marginRight:".5rem"}} onClick={() => commentForPostHandle(post._id)}>
                       <Icon name="comment" />
                       {post.comments.length}
                     </a>

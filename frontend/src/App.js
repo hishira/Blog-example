@@ -19,9 +19,10 @@ import DescriptionChange from './components/user/descriptionChange'
 
 function App() {
   let user = Cookies.getJSON("user");
+  console.log(user)
   let stores = {
     mainStore: new MainStore(user ? user : null),
-    userStore: new UserStore()
+    userStore: new UserStore(user?user:null)
   };
   return (
     <Provider {...stores}>

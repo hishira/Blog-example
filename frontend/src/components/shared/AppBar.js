@@ -10,6 +10,7 @@ function AppBar(props){
     const logouthandle = async ()=>{
         await logout()
         props.mainStore.setLogged(false)
+        props.userStore.setLogedUser({})
         Cookies.remove('user')
         history.push('/')
     }
@@ -48,5 +49,6 @@ function AppBar(props){
     )
 }
 export default inject(stores => ({
-    mainStore: stores.mainStore
+    mainStore: stores.mainStore,
+    userStore: stores.userStore
 }))(observer(AppBar))

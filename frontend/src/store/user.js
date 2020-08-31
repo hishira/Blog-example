@@ -3,6 +3,9 @@ import {observable,computed,action,decorate,toJS} from 'mobx';
 export default class UserStore{
     logedUser = {}
     watchedUser = {}
+    constructor(user){
+        this.logedUser = user
+    }
     setLogedUser(user){
         this.logedUser = user
     }
