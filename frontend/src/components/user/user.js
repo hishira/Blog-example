@@ -175,6 +175,21 @@ function User(props) {
                       </Button>
                     )}
                   </Card.Content>
+                  <Card.Content extra>
+                      <Button
+                      basic
+                      color="blue"
+                      content="Watched"
+                      icon='user'
+                      label={{
+                        as:'a',
+                        basic:true,
+                        color:'blue',
+                        pointing:"left",
+                        content:props.userStore.getLogedUser.watched.length
+                      }}
+                      />
+                  </Card.Content>
                 </Card>
               )}
             </Grid.Column>

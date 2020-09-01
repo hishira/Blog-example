@@ -33,6 +33,7 @@ function Login(props) {
       Cookies.set('user',dane.user)
       console.log(dane.user)
       props.mainStore.setLogged(true)
+      props.userStore.setLogedUser(dane.user)
       history.push('/')
     }).catch(err=>{
       setMessage("Wrong email or password")
@@ -95,5 +96,6 @@ function Login(props) {
   );
 }
 export default inject(stores => ({
-  mainStore: stores.mainStore
+  mainStore: stores.mainStore,
+  userStore: stores.userStore
 }))(observer(Login))

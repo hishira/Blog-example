@@ -36,6 +36,7 @@ function LoginModal(props) {
         console.log(dane.user);
         props.mainStore.setLogged(true);
         props.mainStore.setLoginModal(false)
+        props.userStore.setLogedUser(dane.user)
         history.push("/user");
       })
       .catch((err) => {
@@ -111,4 +112,5 @@ function LoginModal(props) {
 }
 export default inject((stores) => ({
   mainStore: stores.mainStore,
+  userStore: stores.userStore,
 }))(observer(LoginModal));
