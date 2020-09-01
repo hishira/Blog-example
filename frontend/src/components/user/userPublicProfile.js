@@ -11,7 +11,7 @@ import {
   Select,
   Label
 } from "semantic-ui-react";
-import { getPublicUserInfo,watchUser } from "../../api/userApi";
+import { getPublicUserInfo, watchUser, unwatchUser } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
 import CommentModal from "../comment/commentModal";
 import PostComments from "../comment/commentsForPost";
@@ -122,6 +122,18 @@ function PublicUserProfile(props) {
     }
 
   }
+  const unWatchUserHandle = async()=>{
+    let obj = {userID:props.userStore.getWatchedUser._id}
+    console.log(obj)
+    let req = await unwatchUser(obj).then(response=>{
+      if(response.status === 200)
+        return response.json()
+      return false
+    })
+    if(req !== false){
+      props.userStore.setLogedUser(req)
+    }
+  }
   useEffect(() => {
     const fetchData = async () => {
       if(props.mainStore.getLogStatus && props.userStore.getLogedUser._id === props.match.params.id){
@@ -193,6 +205,7 @@ function PublicUserProfile(props) {
                     size="small"
                     content="Unwatch"
                     icon='add user'
+                    onClick={() =>unWatchUserHandle()}
                     
                   />
                   ):props.mainStore.getLogStatus?(<Button

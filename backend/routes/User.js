@@ -161,13 +161,30 @@ app.get("/userpublicprofile/:id", async (req, res) => {
 app.post("/watchUser",async (req,res)=>{
   try{
     let user = await userModel.findById(req.user._id)
-    if (user.watched.includes(req.body.userID))
+    if (user.watched.includes(req.body.userID)){
+      console.log("TAK")
       return res.status(200).json(user)
+    }
     user.watched.push(req.body.userID)
     await user.save();
     return res.status(200).json(user).end();
   }catch(err){
     return res.status(500).send("Server error").end()
+  }
+})
+app.post("/unwatchUser",async (req,res)=>{
+  try{
+    let user = await userModel.findById(req.user._id)
+    let id = user.watched.indexOf(req.body.userID)
+    if(id > -1){
+      user.watched.splice(id,1)
+      await user.save()
+      return res.status(200).json(user)
+    }
+    return res.status(404).send("Do not watch by user")
+    
+  }catch(err){
+    return res.status(500).send("Server error")
   }
 })
 module.exports = app;
