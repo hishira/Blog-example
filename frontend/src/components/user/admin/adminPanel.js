@@ -1,5 +1,6 @@
 import React from 'react';
 import {Container,Button,Icon,Header} from 'semantic-ui-react'
+import {useHistory} from 'react-router-dom'
 export default function AdminPanel(props){
     const styles = {
         mainContainer: {
@@ -16,13 +17,14 @@ export default function AdminPanel(props){
             padding:".5rem"
         }
     }
+    const history = useHistory();
     return(
     <Container  style={styles.mainContainer}>
         <Header as="h3">
         Admin panel
         </Header>
         <Button.Group style={styles.buttonGroup}>
-            <Button color="teal">
+            <Button onClick={()=>history.push('/useredits')} color="teal">
                 <Icon name="user"/>
                 Users edit
             </Button>
