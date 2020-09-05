@@ -22,7 +22,7 @@ import DeletePostModal from "../post/deletePostModal";
 import ChangePostTypeModal from "../post/changePostType";
 import { likePost, removeLikePost,sortPost } from "../../api/postApi";
 import UserPostComponent from "./userPostComponent"
-
+import AdminPanel from './admin/adminPanel'
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -218,6 +218,9 @@ function User(props) {
                   <Button.Content hidden>Description Change</Button.Content>
                 </Button>
               </Button.Group>
+              {
+                props.userStore.getLogedUser.role === "ADMIN"?(<AdminPanel/>):(<div/>)
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>
