@@ -9,9 +9,11 @@ import {
   Button,
 } from "semantic-ui-react";
 import { getAllUsers } from "../../../api/adminApi";
+import {useHistory} from "react-router-dom"
 export default function UserEditPanel(props) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState("false");
+  const history = useHistory()
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,9 +52,9 @@ export default function UserEditPanel(props) {
                   Role: {user.role}
                   </List.Content>
                 <Button.Group style={{margin:"1rem 0 1rem 0"}}>
-                    <Button color="teal">Edit user</Button>
-                    <Button color="teal">Post</Button>
-                    <Button color="teal">Commetns</Button>
+                    <Button color="teal" onClick={()=>history.push(`/edit/${user._id}`)}>Edit user</Button>
+                    <Button color="teal">User Posts</Button>
+                    <Button color="teal">User Comments</Button>
                 </Button.Group>
             </List.Item>
           ))}

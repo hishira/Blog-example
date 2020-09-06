@@ -17,6 +17,7 @@ import UserFind from './components/user/userFind'
 import PublicUserProfile from './components/user/userPublicProfile'
 import DescriptionChange from './components/user/descriptionChange'
 import UserEditPanel from './components/user/admin/userEditPanel'
+import UserInfoEdit from './components/user/admin/userInfoEdit'
 
 function App() {
   let user = Cookies.getJSON("user");
@@ -39,6 +40,7 @@ function App() {
         <Route component={PublicUserProfile} path="/userprofile/:id"/>
         <PrivateRoute component={DescriptionChange} path="/descriptionchange"/>
         <PrivateRoute component={UserEditPanel} path="/useredits"/>
+        <PrivateRoute component={UserInfoEdit} path="/edit/:id"/>
       </div>
     </Provider>
   );

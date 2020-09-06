@@ -19,6 +19,14 @@ app.get("/users", checkifAdmin, async (req, res) => {
     res.status(500).json({ message: "Database error" });
   }
 });
+app.get("/adminuserinfo/:id", checkifAdmin, async (req, res) => {
+  try {
+    const user = await userModel.findById(req.params.id);
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).send("Server error");
+  }
+});
 app.get("/userinfo", checkIfLogin, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -34,7 +42,7 @@ app.get("/userinfo", checkIfLogin, async (req, res) => {
           posts: user.posts,
           comments: user.comments,
           watched: user.watched,
-          _id:user._id
+          _id: user._id,
         })
         .end();
     } catch (err) {
@@ -151,40 +159,76 @@ app.post("/userfind", async (req, res) => {
 app.get("/userpublicprofile/:id", async (req, res) => {
   try {
     let user = await userModel.findById(req.params.id);
-    await user.populate({path:"posts",match:{ postType:"PUBLIC"}}).execPopulate()
+    await user
+      .populate({ path: "posts", match: { postType: "PUBLIC" } })
+      .execPopulate();
     if (!user) return res.status(404).send("UserNotFound").end();
     return res.status(200).json(user).end();
   } catch (err) {
     return res.status(500).send("Server erroor");
   }
 });
-app.post("/watchUser",async (req,res)=>{
-  try{
-    let user = await userModel.findById(req.user._id)
-    if (user.watched.includes(req.body.userID)){
-      console.log("TAK")
-      return res.status(200).json(user)
+app.post("/watchUser", async (req, res) => {
+  try {
+    let user = await userModel.findById(req.user._id);
+    if (user.watched.includes(req.body.userID)) {
+      console.log("TAK");
+      return res.status(200).json(user);
     }
-    user.watched.push(req.body.userID)
+    user.watched.push(req.body.userID);
     await user.save();
     return res.status(200).json(user).end();
-  }catch(err){
-    return res.status(500).send("Server error").end()
+  } catch (err) {
+    return res.status(500).send("Server error").end();
   }
-})
-app.post("/unwatchUser",async (req,res)=>{
-  try{
-    let user = await userModel.findById(req.user._id)
-    let id = user.watched.indexOf(req.body.userID)
-    if(id > -1){
-      user.watched.splice(id,1)
-      await user.save()
-      return res.status(200).json(user)
+});
+app.post("/unwatchUser", async (req, res) => {
+  try {
+    let user = await userModel.findById(req.user._id);
+    let id = user.watched.indexOf(req.body.userID);
+    if (id > -1) {
+      user.watched.splice(id, 1);
+      await user.save();
+      return res.status(200).json(user);
     }
-    return res.status(404).send("Do not watch by user")
-    
-  }catch(err){
-    return res.status(500).send("Server error")
+    return res.status(404).send("Do not watch by user");
+  } catch (err) {
+    return res.status(500).send("Server error");
   }
-})
+});
+app.put("/useredit/:id", checkifAdmin, async (req, res) => {
+  try {
+    if (req.body.password !== "") {
+      let user = await userModel.findById(req.params.id);
+      user.email = req.body.email;
+      user.username = req.body.username;
+      user.role = req.body.role;
+      user.description = req.body.description;
+      user.password = req.body.password;
+      await user.save();
+      return res.status(200).json(user);
+    } else {
+      userModel.findByIdAndUpdate(
+        req.params.id,
+        { 
+          email:req.body.email,
+          username:req.body.username,
+          role:req.body.role,
+          description: req.body.description 
+        },
+        { new: true },
+        (err, model) => {
+          if (err) {
+            return res.status(404).json({ message: "Problem" });
+          } else if (model === null) {
+            return res.status(404).json({ message: "Problem" });
+          }
+          return res.status(200).json(model);
+        }
+      );
+    }
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 module.exports = app;
