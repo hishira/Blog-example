@@ -12,10 +12,13 @@ import {
 import { getUserPosts } from "../../../api/adminApi";
 import {deletePost} from '../../../api/postApi'
 import { useHistory } from "react-router-dom";
+import EditPostModal from "../../post/editPostModal";
+import { inject, observer } from "mobx-react";
 
-export default function UserPosts(props) {
+function UserPosts(props) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState("false");
+  const [editPost, setEditPost] = useState({});
   const history = useHistory();
 
   const deletePostHandle = async (postID)=>{
@@ -28,6 +31,10 @@ export default function UserPosts(props) {
       if (data == true)
         history.push("/user")
 
+  }
+  const editPostHandle = (post) =>{
+    setEditPost(post);
+    props.mainStore.setEditPostModal(true);
   }
   useEffect(() => {
     let id = props.match.params.id;
@@ -71,7 +78,7 @@ export default function UserPosts(props) {
                   </Card.Meta>
                   <br />
                   <Button.Group>
-                    <Button size="tiny">Edit post</Button>
+                    <Button size="tiny" onClick={() => editPostHandle(post)}>Edit post</Button>
                     <Button.Or size="tiny" />
                     <Button size="tiny" onClick={() => deletePostHandle(post._id)}>Delete</Button>
                   </Button.Group>
@@ -100,6 +107,10 @@ export default function UserPosts(props) {
           ))}
         </div>
       )}
+      <EditPostModal post={editPost} />
     </Container>
   );
 }
+export default inject((stores) => ({
+  mainStore: stores.mainStore,
+}))(observer(UserPosts));
