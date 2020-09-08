@@ -240,4 +240,12 @@ app.post("/sortpost",async (req,res)=>{
     return res.status(500).send("Server problem")
   }
 })
+app.get("/userposts/:id",checkifAdmin,async(req,res)=>{
+  try{
+    const posts = await postModel.find({user:req.params.id})
+    return res.status(200).json(posts)
+  }catch(err){
+    return res.status(505).send("Server error")
+  }
+})
 module.exports = app;

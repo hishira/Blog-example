@@ -12,5 +12,9 @@ async function editUserInfo(id,obj){
     let url = getApiLink(`users/useredit/${id}`)
     return await fetch(url,getFetchPutObject(obj))
 }
+async function getUserPosts(id){
+    let url = getApiLink(`post/userposts/${id}`)
+    return await fetch(url,fetchObject)
+}
 
-export {getAllUsers,getUserInfo,editUserInfo}
+export {getAllUsers,getUserInfo,editUserInfo,getUserPosts}

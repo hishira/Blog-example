@@ -18,6 +18,7 @@ import PublicUserProfile from './components/user/userPublicProfile'
 import DescriptionChange from './components/user/descriptionChange'
 import UserEditPanel from './components/user/admin/userEditPanel'
 import UserInfoEdit from './components/user/admin/userInfoEdit'
+import UserPosts from './components/user/admin/usersPosts'
 
 function App() {
   let user = Cookies.getJSON("user");
@@ -41,6 +42,7 @@ function App() {
         <PrivateRoute component={DescriptionChange} path="/descriptionchange"/>
         <PrivateRoute component={UserEditPanel} path="/useredits"/>
         <PrivateRoute component={UserInfoEdit} path="/edit/:id"/>
+        <PrivateRoute component={UserPosts} path="/userposts/:id"/>
       </div>
     </Provider>
   );
