@@ -97,7 +97,7 @@ app.delete("/comment/:id", checkIfLogin, async (req, res) => {
     if (!comment) {
       res.status(404).json({ message: "Comment not found" });
     }
-    const user = await userModel.findById(req.user._id);
+    const user = await userModel.findById(req.body.userID);
     user.comments.remove(req.params.id);
     await user.save();
     const post = await postModel.findById(comment.post);

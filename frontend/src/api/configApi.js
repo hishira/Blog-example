@@ -18,6 +18,19 @@ const fetchDeleteObject = {
   credentials: "include",
   method: "DELETE",
 };
+function getDeleteFetchObject(obj){
+  return {
+    mode: "cors",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "http://localhost:3000",
+  },
+  credentials: "include",
+  method: "DELETE",
+  body: JSON.stringify(obj),
+  }
+}
 
 function getApiLink(str) {
   let url = `http://localhost:9000/${str}`;
@@ -52,4 +65,5 @@ export {
   getApiLink,
   getFetchPutObject,
   fetchDeleteObject,
+  getDeleteFetchObject
 };
