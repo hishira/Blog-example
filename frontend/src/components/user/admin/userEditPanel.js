@@ -54,7 +54,7 @@ export default function UserEditPanel(props) {
                 <Button.Group style={{margin:"1rem 0 1rem 0"}}>
                     <Button color="teal" onClick={()=>history.push(`/edit/${user._id}`)}>Edit user</Button>
                     <Button color="teal" onClick={()=>history.push(`/userposts/${user._id}`)}>User Posts</Button>
-                    <Button color="teal">User Comments</Button>
+                    <Button color="teal" onClick={()=>history.push(`/userallcomment/${user._id}`)}>User Comments</Button>
                 </Button.Group>
             </List.Item>
           ))}

@@ -149,5 +149,13 @@ app.post("/sortcomment",async(req,res)=>{
     return res.status(500).send("Server error").end()
   }
 })
+app.get("/usercomments/:id",checkIfAdmin,async (req,res)=>{
+  try{
+    let userComments = commentModel.find({user:req.params.id})
+    return res.status(200).json(userComments)
+  }catch(err){
+    return res.status(505).send("Server error")
+  }
+})
 
 module.exports = app;

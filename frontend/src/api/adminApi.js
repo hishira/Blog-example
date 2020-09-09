@@ -16,5 +16,9 @@ async function getUserPosts(id){
     let url = getApiLink(`post/userposts/${id}`)
     return await fetch(url,fetchObject)
 }
+async function getUserComments(id){
+    let url = getApiLink(`comment/usercomments/${id}`)
+    return await fetch(url,fetchObject)
+}
 
-export {getAllUsers,getUserInfo,editUserInfo,getUserPosts}
+export {getAllUsers,getUserInfo,editUserInfo,getUserPosts,getUserComments}
