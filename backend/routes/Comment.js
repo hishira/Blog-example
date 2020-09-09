@@ -151,7 +151,7 @@ app.post("/sortcomment",async(req,res)=>{
 })
 app.get("/usercomments/:id",checkIfAdmin,async (req,res)=>{
   try{
-    let userComments = commentModel.find({user:req.params.id})
+    let userComments = await commentModel.find({user:req.params.id})
     return res.status(200).json(userComments)
   }catch(err){
     return res.status(505).send("Server error")
