@@ -51,7 +51,7 @@ export default function UserComments(props) {
       ) : (
         <Comment.Group
           style={{
-            border: "2px solid red",
+            
             width: "100%",
             marginLeft: "auto",
             marginRight: "auto",

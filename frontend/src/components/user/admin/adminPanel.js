@@ -28,7 +28,7 @@ export default function AdminPanel(props){
                 <Icon name="user"/>
                 Users edit
             </Button>
-            <Button color="teal">
+            <Button onClick={()=>{history.push('/posts')}} color="teal">
                 <Icon name="wordpress forms"/>
                 Posts edit
             </Button>

@@ -29,11 +29,16 @@ async function userCommentDelete(id,obj) {
   let url = getApiLink(`comment/comment/${id}`);
   return await fetch(url, getDeleteFetchObject(obj));
 }
+async function getAllPosts(){
+  let url = getApiLink("post/posts")
+  return await fetch(url,fetchObject)
+}
 export {
   getAllUsers,
   getUserInfo,
   editUserInfo,
   getUserPosts,
   getUserComments,
-  userCommentDelete
+  userCommentDelete,
+  getAllPosts
 };
