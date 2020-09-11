@@ -3,10 +3,28 @@ import { Container, Comment, Button} from "semantic-ui-react";
 import Loading from "../../shared/loadingComponent";
 import "./admin.css";
 import {getAllComments} from '../../../api/adminApi'
+import {userCommentDelete} from '../../../api/adminApi'
+import { useHistory } from "react-router-dom";
 
 export default function Comments(props) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState("false");
+  const [dataChange,setDataChange] = useState(false)
+  const history = useHistory();
+  const deleteCommentHandle = async (commentId,userCommentID)=>{
+    console.log(commentId,userCommentID)
+    let obj = {userID:userCommentID}
+    let data = await userCommentDelete(commentId,obj).then(response=>{
+      if(response.status === 200)
+        return true
+      return false
+    })
+    if (data){
+      setDataChange(!dataChange)
+      history.push('/comments')
+      return
+    }
+  }
   useEffect(()=>{
       const fetchData = async () => {
           try{
@@ -23,7 +41,7 @@ export default function Comments(props) {
         }
       }
       fetchData()
-  },[])
+  },[dataChange])
   return (
     <Container>
       {loading === "false" ? (
@@ -49,7 +67,7 @@ export default function Comments(props) {
                   <br />
                   Edited: {comment.editingDate.split("T")[0]}
                   <br />
-                  <Button color="teal" size="tiny" /*onClick={()=>deleteCommentHandle(comment._id)}*/ style={{ margin: ".5rem" }}>
+                  <Button color="teal" size="tiny" onClick={()=>deleteCommentHandle(comment._id,comment.user)} style={{ margin: ".5rem" }}>
                     Delete
                   </Button>
                 </Comment.Metadata>

@@ -2,6 +2,8 @@ const express = require("express");
 const userModel = require("../models/User");
 const app = express();
 const passport = require("passport");
+const checkIfAdmin = require("../middleware/ifadmin");
+const checkIfLogin = require("../middleware/logedin");
 function getUserPreview(user) {
   return {
     _id: user._id,
@@ -21,6 +23,13 @@ app.get("/logout", function (req, res) {
   res.status(200).json({ user: req.user });
 });
 
+app.get("/checklogged",checkIfLogin,async(req,res)=>{
+  try{
+    return res.status(200).json({ user: getUserPreview(req.user) })
+  }catch(err){
+    return res.status(500).send("Server error")
+  }
+})
 app.post("/register", async (req, res) => {
   const userExists = await userModel.findOne({ email: req.body.email });
   if (userExists) {

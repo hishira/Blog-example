@@ -12,5 +12,8 @@ async function register(obj){
     let url = getApiLink('auth/register')
     return await fetch(url,getFetchPostObject(obj))
 }
-
-export  {login,register,logout}
+async function checkLogin(){
+    let url = getApiLink('auth/checklogged')
+    return await fetch(url,fetchObject)
+}
+export  {login,register,logout,checkLogin}
