@@ -4,11 +4,15 @@ import Loading from "../../shared/loadingComponent";
 import { getAllPosts } from "../../../api/adminApi";
 import {deletePost} from '../../../api/postApi'
 import { useHistory } from "react-router-dom";
+import EditPostModal from "../../post/editPostModal";
+import { inject, observer } from "mobx-react";
+import "./admin.css"
 
-export default function Posts(props) {
+function Posts(props) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState("false");
   const [dataChange, setDataChange] = useState(false);
+  const [editPost, setEditPost] = useState({});
   const history = useHistory();
 
   const deletePostHandle = async (postID) => {
@@ -23,6 +27,10 @@ export default function Posts(props) {
         return
     };
   };
+  const editPostHandle = (post) =>{
+    setEditPost(post);
+    props.mainStore.setEditPostModal(true);
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,7 +54,7 @@ export default function Posts(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <div>
+        <div className="postEdit">
           {posts.map((post) => (
             <Card
               style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}
@@ -80,7 +88,7 @@ export default function Posts(props) {
                 </a>
                 <br />
                 <Button.Group>
-                  <Button size="tiny" /*onClick={() => editPostHandle(post)}*/>
+                  <Button size="tiny" onClick={() => editPostHandle(post)}>
                     Edit post
                   </Button>
                   <Button.Or size="tiny" />
@@ -95,6 +103,10 @@ export default function Posts(props) {
           ))}
         </div>
       )}
+      <EditPostModal post={editPost} />
     </Container>
   );
 }
+export default inject((stores) => ({
+    mainStore: stores.mainStore,
+  }))(observer(Posts));

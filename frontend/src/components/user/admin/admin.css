@@ -1,0 +1,12 @@
+.postEdit{
+    opacity: 0;
+    animation: slidein ease 3s alternate forwards;
+}
+@keyframes slidein{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}

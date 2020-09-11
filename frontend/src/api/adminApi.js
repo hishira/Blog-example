@@ -33,6 +33,10 @@ async function getAllPosts(){
   let url = getApiLink("post/posts")
   return await fetch(url,fetchObject)
 }
+async function getAllComments(){
+  let url = getApiLink("comment/comments")
+  return await fetch(url,fetchObject)
+}
 export {
   getAllUsers,
   getUserInfo,
@@ -40,5 +44,6 @@ export {
   getUserPosts,
   getUserComments,
   userCommentDelete,
-  getAllPosts
+  getAllPosts,
+  getAllComments
 };

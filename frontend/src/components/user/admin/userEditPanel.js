@@ -10,6 +10,8 @@ import {
 } from "semantic-ui-react";
 import { getAllUsers } from "../../../api/adminApi";
 import {useHistory} from "react-router-dom"
+import "./admin.css"
+
 export default function UserEditPanel(props) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState("false");
@@ -42,7 +44,7 @@ export default function UserEditPanel(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <List >
+        <List className="postEdit">
           {users.map((user) => (
             <List.Item style={{padding:".5rem"}}>
               <List.Content>

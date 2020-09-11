@@ -32,7 +32,7 @@ export default function AdminPanel(props){
                 <Icon name="wordpress forms"/>
                 Posts edit
             </Button>
-            <Button color="teal">
+            <Button onClick={()=>history.push("/comments")} color="teal">
                 <Icon name="comment"/>
                 Comments edit
             </Button>    

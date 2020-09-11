@@ -21,6 +21,7 @@ import UserInfoEdit from './components/user/admin/userInfoEdit'
 import UserPosts from './components/user/admin/usersPosts'
 import UserComments from './components/user/admin/userComments'
 import Posts from './components/user/admin/posts'
+import Comments from './components/user/admin/comments'
 
 function App() {
   let user = Cookies.getJSON("user");
@@ -47,6 +48,7 @@ function App() {
         <PrivateRoute component={UserPosts} path="/userposts/:id"/>
         <PrivateRoute component={UserComments} path="/userallcomment/:id"/>
         <PrivateRoute component={Posts} path="/posts"/>
+        <PrivateRoute component={Comments} path="/comments"/>
       </div>
     </Provider>
   );
