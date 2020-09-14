@@ -189,35 +189,13 @@ function User(props) {
                         content:props.userStore.getLogedUser.watched.length
                       }}
                       />
+                      <Button style={{marginLeft: ".2rem" }} icon='settings' onClick={()=>history.push("/usersettings")}/>
                   </Card.Content>
                 </Card>
               )}
             </Grid.Column>
             <Grid.Column width={13}>
-              <Button.Group widths="4">
-                <Button onClick={() => history.push("/emailchange")} animated>
-                  <Button.Content visible>Email</Button.Content>
-                  <Button.Content hidden>Change Email</Button.Content>
-                </Button>
-                <Button onClick={() => history.push("/postcreate")} animated>
-                  <Button.Content visible>Post</Button.Content>
-                  <Button.Content hidden>Create Post</Button.Content>
-                </Button>
-                <Button
-                  onClick={() => history.push("/passwordchange")}
-                  animated
-                >
-                  <Button.Content visible>Password</Button.Content>
-                  <Button.Content hidden>Password Change</Button.Content>
-                </Button>
-                <Button
-                  onClick={() => history.push("/descriptionchange")}
-                  animated
-                >
-                  <Button.Content visible>Description</Button.Content>
-                  <Button.Content hidden>Description Change</Button.Content>
-                </Button>
-              </Button.Group>
+              
               {
                 props.userStore.getLogedUser.role === "ADMIN"?(<AdminPanel/>):(<div/>)
               }
@@ -243,7 +221,9 @@ function User(props) {
             marginLeft: "auto",
           }}
         >
-          <Container>
+          <Button color='teal' onClick={()=>history.push('/postcreate')}>Create post</Button>
+          <Container  style={{marginTop:"1.5rem"}}>
+            
             <Select
               placeholder="Sort by"
               options={sortOptions}
