@@ -248,4 +248,12 @@ app.get("/userposts/:id",checkifAdmin,async(req,res)=>{
     return res.status(505).send("Server error")
   }
 })
+app.post("/sortpostsbylikes",async(req,res)=>{
+  try{
+    const posts = await postModel.find({user:req.body.userID}).sort({likes:-1})
+    return res.status(200).json(posts)
+  }catch(err){
+    return res.status(500).send("server error")
+  }
+})
 module.exports = app;

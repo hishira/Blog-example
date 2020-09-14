@@ -20,9 +20,14 @@ import PostComments from "../comment/commentsForPost";
 import EditPostModal from "../post/editPostModal";
 import DeletePostModal from "../post/deletePostModal";
 import ChangePostTypeModal from "../post/changePostType";
-import { likePost, removeLikePost,sortPost } from "../../api/postApi";
-import UserPostComponent from "./userPostComponent"
-import AdminPanel from './admin/adminPanel'
+import {
+  likePost,
+  removeLikePost,
+  sortPost,
+  sortPostByLikes,
+} from "../../api/postApi";
+import UserPostComponent from "./userPostComponent";
+import AdminPanel from "./admin/adminPanel";
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -40,6 +45,11 @@ function User(props) {
       key: "date_descending",
       value: "date_descending",
       text: "Descending date",
+    },
+    {
+      key: "post_likes",
+      value: "post_likes",
+      text: "Post likes",
     },
   ];
   const commentHandle = (post) => {
@@ -100,17 +110,28 @@ function User(props) {
   };
   const sortHandle = async () => {
     console.log(sortOption);
-    if(sortOption === "")
-      return
-    let obj = {userID:props.userStore.getLogedUser._id,sortOption:sortOption}
-    console.log(obj)
-    let res = await sortPost(obj).then(response=>{
-      if(response.status === 200)
-        return response.json()
-      return false
-    })
-    if(res !== false){
-      props.userStore.setLogedUserPost(res)
+    if (sortOption === "") return;
+    let obj = {
+      userID: props.userStore.getLogedUser._id,
+      sortOption: sortOption,
+    };
+    console.log(obj);
+    if (sortOption === "post_likes") {
+      let res = await sortPostByLikes(obj).then((response) => {
+        if (response.status === 200) return response.json();
+        return false;
+      });
+      if (res !== false) {
+        props.userStore.setLogedUserPost(res);
+      }
+      return;
+    }
+    let res = await sortPost(obj).then((response) => {
+      if (response.status === 200) return response.json();
+      return false;
+    });
+    if (res !== false) {
+      props.userStore.setLogedUserPost(res);
     }
   };
   useEffect(() => {
@@ -176,29 +197,34 @@ function User(props) {
                     )}
                   </Card.Content>
                   <Card.Content extra>
-                      <Button
+                    <Button
                       basic
                       color="blue"
                       content="Watched"
-                      icon='user'
+                      icon="user"
                       label={{
-                        as:'a',
-                        basic:true,
-                        color:'blue',
-                        pointing:"left",
-                        content:props.userStore.getLogedUser.watched.length
+                        as: "a",
+                        basic: true,
+                        color: "blue",
+                        pointing: "left",
+                        content: props.userStore.getLogedUser.watched.length,
                       }}
-                      />
-                      <Button style={{marginLeft: ".2rem" }} icon='settings' onClick={()=>history.push("/usersettings")}/>
+                    />
+                    <Button
+                      style={{ marginLeft: ".2rem" }}
+                      icon="settings"
+                      onClick={() => history.push("/usersettings")}
+                    />
                   </Card.Content>
                 </Card>
               )}
             </Grid.Column>
             <Grid.Column width={13}>
-              
-              {
-                props.userStore.getLogedUser.role === "ADMIN"?(<AdminPanel/>):(<div/>)
-              }
+              {props.userStore.getLogedUser.role === "ADMIN" ? (
+                <AdminPanel />
+              ) : (
+                <div />
+              )}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -221,15 +247,14 @@ function User(props) {
             marginLeft: "auto",
           }}
         >
-          <Button color='teal' onClick={()=>history.push('/postcreate')}>Create post</Button>
-          <Container  style={{marginTop:"1.5rem"}}>
-            
+          <Button color="teal" onClick={() => history.push("/postcreate")}>
+            Create post
+          </Button>
+          <Container style={{ marginTop: "1.5rem" }}>
             <Select
               placeholder="Sort by"
               options={sortOptions}
-              onChange={(e,{value}) => 
-                setSortOption(value)
-              }
+              onChange={(e, { value }) => setSortOption(value)}
             />
             <Button
               onClick={() => sortHandle()}
@@ -239,16 +264,15 @@ function User(props) {
             </Button>
           </Container>
           {props.userStore.getLogedUser.posts.map((post) => (
-            <UserPostComponent 
-            post={post}
-            editPostHandle={editPostHandle}
-            deletePosthandle={deletePosthandle}
-            changePostTypeHandle={changePostTypeHandle}
-            commentForPostHandle={commentForPostHandle}
-            unlikePostHandle={unlikePostHandle}
-            likePostHandle={likePostHandle}
-            commentHandle={commentHandle}
-           
+            <UserPostComponent
+              post={post}
+              editPostHandle={editPostHandle}
+              deletePosthandle={deletePosthandle}
+              changePostTypeHandle={changePostTypeHandle}
+              commentForPostHandle={commentForPostHandle}
+              unlikePostHandle={unlikePostHandle}
+              likePostHandle={likePostHandle}
+              commentHandle={commentHandle}
             />
           ))}
         </div>
