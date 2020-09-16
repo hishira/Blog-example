@@ -4,7 +4,6 @@ import {useHistory} from 'react-router-dom'
 export default function AdminPanel(props){
     const styles = {
         mainContainer: {
-            marginTop:"2rem",
             border:"1px solid #e6e6e6",
             borderRadius:"15px",
             padding:".4rem",

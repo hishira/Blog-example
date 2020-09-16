@@ -155,9 +155,9 @@ function User(props) {
   return (
     <div style={{ margin: ".5rem" }}>
       <div>
-        <Grid stackable columns={2}>
+        <Grid columns={1}>
           <Grid.Row>
-            <Grid.Column width={3}>
+            <Grid.Column>
               {loading === "false" ? (
                 <Segment>
                   <Dimmer active inverted>
@@ -215,15 +215,17 @@ function User(props) {
                       icon="settings"
                       onClick={() => history.push("/usersettings")}
                     />
-                  </Card.Content>
-                </Card>
-              )}
-            </Grid.Column>
-            <Grid.Column width={13}>
-              {props.userStore.getLogedUser.role === "ADMIN" ? (
-                <AdminPanel />
+                    {props.userStore.getLogedUser.role === "ADMIN" ? (
+                       <Button
+                       style={{ marginLeft: ".2rem" }}
+                       icon="adn"
+                       onClick={() => history.push("/adminpanel")}
+                     />
               ) : (
                 <div />
+              )}
+                  </Card.Content>
+                </Card>
               )}
             </Grid.Column>
           </Grid.Row>
@@ -241,8 +243,8 @@ function User(props) {
       ) : (
         <div
           style={{
-            marginTop: "2.5rem",
-            maxWidth: "80rem",
+
+            marginTop:"1rem",
             marginRight: "auto",
             marginLeft: "auto",
           }}
