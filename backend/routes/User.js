@@ -231,4 +231,13 @@ app.put("/useredit/:id", checkifAdmin, async (req, res) => {
     return res.status(500).send(err);
   }
 });
+app.post("/getwatchedusers",async(req,res)=>{
+  try{
+    const user = await userModel.findById(req.body.userID)
+    await user.populate("watched").execPopulate()
+    return res.status(200).json(user)
+  }catch(err){
+    return res.status(500).send("Server error");
+  }
+})
 module.exports = app;

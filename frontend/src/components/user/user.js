@@ -27,7 +27,7 @@ import {
   sortPostByLikes,
 } from "../../api/postApi";
 import UserPostComponent from "./userPostComponent";
-import AdminPanel from "./admin/adminPanel";
+import WatchedUsersModal from './watchedUserModal'
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -144,6 +144,7 @@ function User(props) {
         if (userFromRequest === null) throw new Error("Err");
         props.userStore.setLogedUser(userFromRequest);
         setLoading("true");
+        setUser(userFromRequest)
         console.log(userFromRequest);
       } catch (err) {
         setLoading("error");
@@ -202,6 +203,7 @@ function User(props) {
                       color="blue"
                       content="Watched"
                       icon="user"
+                      onClick={() => props.mainStore.setWatchedUserModal(true)}
                       label={{
                         as: "a",
                         basic: true,
@@ -287,6 +289,7 @@ function User(props) {
         id={postIdToTypechange}
         typeToChange={postTypeRevert}
       />
+      <WatchedUsersModal user={user}/>
     </div>
   );
 }

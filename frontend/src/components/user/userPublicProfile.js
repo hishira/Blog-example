@@ -9,7 +9,7 @@ import {
   Grid,
   Icon,
   Select,
-  Label
+  Label,
 } from "semantic-ui-react";
 import { getPublicUserInfo, watchUser, unwatchUser } from "../../api/userApi";
 import { inject, observer } from "mobx-react";
@@ -105,40 +105,45 @@ function PublicUserProfile(props) {
       props.userStore.setWatchedUserPost(res);
     }
   };
-  const checkWatchedMe = ()=>{
-    console.log(props.userStore.getLogedUser)
-    return props.mainStore.getLogStatus && props.userStore.getLogedUser.watched.includes(props.userStore.getWatchedUser._id)
-  }
-  const watchUserHandle = async ()=>{
-    let obj = {userID:props.userStore.getWatchedUser._id}
-    console.log(obj)
-    let req = await watchUser(obj).then(response =>{
-      if(response.status === 200)
-        return response.json()
-      return false
-    })
-    if(req !== false){
-      props.userStore.setLogedUser(req)
+  const checkWatchedMe = () => {
+    console.log(props.userStore.getLogedUser);
+    return (
+      props.mainStore.getLogStatus &&
+      props.userStore.getLogedUser.watched.includes(
+        props.userStore.getWatchedUser._id
+      )
+    );
+  };
+  const watchUserHandle = async () => {
+    let obj = { userID: props.userStore.getWatchedUser._id };
+    console.log(obj);
+    let req = await watchUser(obj).then((response) => {
+      if (response.status === 200) return response.json();
+      return false;
+    });
+    if (req !== false) {
+      props.userStore.setLogedUser(req);
     }
-
-  }
-  const unWatchUserHandle = async()=>{
-    let obj = {userID:props.userStore.getWatchedUser._id}
-    console.log(obj)
-    let req = await unwatchUser(obj).then(response=>{
-      if(response.status === 200)
-        return response.json()
-      return false
-    })
-    if(req !== false){
-      props.userStore.setLogedUser(req)
+  };
+  const unWatchUserHandle = async () => {
+    let obj = { userID: props.userStore.getWatchedUser._id };
+    console.log(obj);
+    let req = await unwatchUser(obj).then((response) => {
+      if (response.status === 200) return response.json();
+      return false;
+    });
+    if (req !== false) {
+      props.userStore.setLogedUser(req);
     }
-  }
+  };
   useEffect(() => {
     const fetchData = async () => {
-      if(props.mainStore.getLogStatus && props.userStore.getLogedUser._id === props.match.params.id){
-        history.push("/user")
-        return
+      if (
+        props.mainStore.getLogStatus &&
+        props.userStore.getLogedUser._id === props.match.params.id
+      ) {
+        history.push("/user");
+        return;
       }
       try {
         let data = await getPublicUserInfo(props.match.params.id).then(
@@ -171,8 +176,8 @@ function PublicUserProfile(props) {
         <div>Error</div>
       ) : (
         <div>
-          <Grid stackable columns={2}>
-            <Grid.Column style={{ padding: "1.5rem" }} width={3}>
+          <Grid columns={1}>
+            <Grid.Column style={{ padding: "1.5rem" }}>
               <Card
                 style={{
                   widht: "20rem",
@@ -198,99 +203,99 @@ function PublicUserProfile(props) {
                   )}
                 </Card.Content>
                 <Card.Content>
-                  {
-                  checkWatchedMe()?(<Button
-                    color="blue"
-                    basic
-                    size="small"
-                    content="Unwatch"
-                    icon='add user'
-                    onClick={() =>unWatchUserHandle()}
-                    
-                  />
-                  ):props.mainStore.getLogStatus?(<Button
-                    color="blue"
-                    basic
-                    size="small"
-                    content="Watch"
-                    icon='add user'
-                    onClick={()=>watchUserHandle()}
-                    
-                  />):(<Button
-                    color="blue"
-                    basic
-                    size="small"
-                    content="Watch"
-                    icon='add user'
-                    onClick={() =>props.mainStore.setLoginModal(true)}
-                  />)
-                  
-                  }
+                  {checkWatchedMe() ? (
+                    <Button
+                      color="blue"
+                      basic
+                      size="small"
+                      content="Unwatch"
+                      icon="add user"
+                      onClick={() => unWatchUserHandle()}
+                    />
+                  ) : props.mainStore.getLogStatus ? (
+                    <Button
+                      color="blue"
+                      basic
+                      size="small"
+                      content="Watch"
+                      icon="add user"
+                      onClick={() => watchUserHandle()}
+                    />
+                  ) : (
+                    <Button
+                      color="blue"
+                      basic
+                      size="small"
+                      content="Watch"
+                      icon="add user"
+                      onClick={() => props.mainStore.setLoginModal(true)}
+                    />
+                  )}
                 </Card.Content>
               </Card>
             </Grid.Column>
-
-            <Grid.Column width={12}>
-              <Container style={{ marginBottom: "3rem" }}>
-                <Select
-                  placeholder="Sort by"
-                  options={sortOptions}
-                  onChange={(e, { value }) => setSortOption(value)}
-                />
-                <Button
-                  onClick={() => sortHandle()}
-                  style={{ marginLeft: "1.5rem" }}
-                >
-                  Sort posts
-                </Button>
-              </Container>
-              {props.userStore.getWatchedUser.posts.map((post) => (
-                <Card
-                  style={{
-                    marginRight: "auto",
-                    marginLeft: "auto",
-                    width: "100%",
-                  }}
-                >
-                  <Card.Content>
-                    <Card.Header>{post.title}</Card.Header>
-                    <Card.Description>{post.content}</Card.Description>
-                  </Card.Content>
-                  <Container style={{marginTop:".5rem",padding:".3rem"}}>
-                  <span style={{color:"blue"}}>#</span>
-                  {post.tags.map((tag) => (
-                    <Label>{tag}</Label>
-                  ))}
-                  </Container>
-                  <Card.Content style={{padding:".5rem"}} extra>
-                    <a style={{marginRight:".5rem"}} onClick={() => commentForPostHandle(post._id)}>
-                      <Icon name="comment" />
-                      {post.comments.length}
-                    </a>
-                    {loggedUser && post.likes.includes(loggedUser._id) ? (
-                      <a onClick={() => unlikePostHandle(post, loggedUser)}>
-                        <Icon style={{ color: "red" }} name="like" />
-                        {post.likes.length}
-                      </a>
-                    ) : (
-                      <a onClick={() => likePostHandle(post, loggedUser)}>
-                        <Icon name="like" />
-                        {post.likes.length}
-                      </a>
-                    )}
-                    <Button
-                      style={{ marginLeft: "1.5rem" }}
-                      basic
-                      color="blue"
-                      onClick={() => commentHandle(post)}
-                    >
-                      Add comment
-                    </Button>
-                  </Card.Content>
-                </Card>
-              ))}
-            </Grid.Column>
           </Grid>
+          <Container style={{ marginBottom: "1rem" }}>
+            <Select
+              placeholder="Sort by"
+              options={sortOptions}
+              onChange={(e, { value }) => setSortOption(value)}
+            />
+            <Button
+              onClick={() => sortHandle()}
+              style={{ marginLeft: "1.5rem" }}
+            >
+              Sort posts
+            </Button>
+          </Container>
+          {props.userStore.getWatchedUser.posts.map((post) => (
+            <Card
+              style={{
+                marginRight: "auto",
+                marginLeft: "auto",
+                width: "100%",
+              }}
+            >
+              <Card.Content>
+                <Card.Header>{post.title}</Card.Header>
+                <Card.Description>{post.content}</Card.Description>
+              </Card.Content>
+              <Container style={{ marginTop: ".5rem", padding: ".3rem" }}>
+                <span style={{ color: "blue" }}>#</span>
+                {post.tags.map((tag) => (
+                  <Label>{tag}</Label>
+                ))}
+              </Container>
+              <Card.Content style={{ padding: ".5rem" }} extra>
+                <a
+                  style={{ marginRight: ".5rem" }}
+                  onClick={() => commentForPostHandle(post._id)}
+                >
+                  <Icon name="comment" />
+                  {post.comments.length}
+                </a>
+                {loggedUser && post.likes.includes(loggedUser._id) ? (
+                  <a onClick={() => unlikePostHandle(post, loggedUser)}>
+                    <Icon style={{ color: "red" }} name="like" />
+                    {post.likes.length}
+                  </a>
+                ) : (
+                  <a onClick={() => likePostHandle(post, loggedUser)}>
+                    <Icon name="like" />
+                    {post.likes.length}
+                  </a>
+                )}
+                <Button
+                  style={{ marginLeft: "1.5rem" }}
+                  basic
+                  color="blue"
+                  onClick={() => commentHandle(post)}
+                >
+                  Add comment
+                </Button>
+              </Card.Content>
+            </Card>
+          ))}
           <CommentModal post={postComment} />
           <PostComments postid={commentsForPost} />
           <LoginModal />

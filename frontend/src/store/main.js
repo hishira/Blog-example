@@ -9,6 +9,7 @@ export default class MainStore{
     deletePostModal = false
     editTypePostModal = false
     loginModal = false
+    watchedModal = false
     constructor(user){
         if(user){
             this.isLoged = true
@@ -38,6 +39,9 @@ export default class MainStore{
     setLoginModal(value){
         this.loginModal = value
     }
+    setWatchedUserModal(value){
+        this.watchedModal = value
+    }
     get getLogStatus(){
         return this.isLoged
     }
@@ -51,6 +55,7 @@ decorate(MainStore,{
     deletePostModal:observable,
     editTypePostModal:observable,
     loginModal:observable,
+    watchedModal:observable,
     setLogged:action,
     getLogStatus:computed,
     setModal: action,
@@ -60,4 +65,5 @@ decorate(MainStore,{
     setDeletePostModal:action,
     setEditTypePostModal:action,
     setLoginModal:action,
+    setWatchedUserModal:action,
 })

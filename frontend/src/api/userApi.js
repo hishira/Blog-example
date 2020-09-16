@@ -37,6 +37,10 @@ async function unwatchUser(obj){
   let url = getApiLink("users/unwatchUser")
   return await fetch(url,getFetchPostObject(obj))
 }
+async function getWatchedUser(obj){
+  let url = getApiLink("users/getwatchedusers")
+  return await fetch(url,getFetchPostObject(obj))
+}
 export {
   getUserInfo,
   addUserDescription,
@@ -45,5 +49,6 @@ export {
   userFind,
   getPublicUserInfo,
   watchUser,
-  unwatchUser
+  unwatchUser,
+  getWatchedUser
 };

@@ -19,6 +19,7 @@ export default function AdminPanel(props){
     const history = useHistory();
     return(
     <Container  style={styles.mainContainer}>
+              <Button onClick={() => history.push("/user")} style={{position:"absolute",left:20,top:100}}icon='arrow left'/>
         <Header as="h3">
         Admin panel
         </Header>
