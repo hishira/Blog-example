@@ -143,8 +143,8 @@ function User(props) {
         });
         if (userFromRequest === null) throw new Error("Err");
         props.userStore.setLogedUser(userFromRequest);
-        setLoading("true");
         setUser(userFromRequest)
+        setLoading("true");
         console.log(userFromRequest);
       } catch (err) {
         setLoading("error");
@@ -289,7 +289,10 @@ function User(props) {
         id={postIdToTypechange}
         typeToChange={postTypeRevert}
       />
-      <WatchedUsersModal user={user}/>
+      {
+        loading === "false"?(<div/>):loading === "error"?(<div/>):
+      (<WatchedUsersModal user={user}/>)
+      }
     </div>
   );
 }

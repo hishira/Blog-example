@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Modal,Container,List,Button } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
-import { getWatchedUser } from "../../api/userApi";
+import { getWatchedUser,unwatchUser } from "../../api/userApi";
 import Loading from "../shared/loadingComponent";
 import { useHistory } from "react-router-dom";
 
-function WatchedUsersModal({ user, mainStore }) {
+function WatchedUsersModal({ user, mainStore,userStore }) {
+  const [userInfo,setUserInfo] = useState(user)
   const [watchedUsers, setWatchedUsers] = useState({});
   const [loading, setLoading] = useState("false");
   const history = useHistory();
@@ -26,7 +27,19 @@ function WatchedUsersModal({ user, mainStore }) {
       }
     };
     fetchData();
-  }, [user]);
+  }, [userInfo]);
+  const unwatchUserHandle = async (userid)=>{
+    let obj = { userID: userid };
+    let req = await unwatchUser(obj).then((response) => {
+      if (response.status === 200) return response.json();
+      return false;
+    });
+    if (req !== false) {
+      console.log(req)
+      setUserInfo(req)
+      userStore.changeWathcedArray()
+    }
+  }
   return (
     <Modal
       dimmer="blurring"
@@ -55,16 +68,24 @@ function WatchedUsersModal({ user, mainStore }) {
                 style={{
                   display: "flex",
                   width: "25rem",
-                  justifyContent: "space-between",
                   alignItems:"center",
                   marginLeft: "2rem",
                 }}
               >
                 <List.Header as="h4">{user.username}</List.Header>
-                <Button icon="user" onClick={()=>{
-                  history.push(`/userprofile/${user._id}`);
-                  mainStore.setWatchedUserModal(false)
-                  }} />
+                <Button.Group labeled style={{padding:".5rem",marginLeft:"12rem"}}>
+                <Button icon="user"
+                  content="User" 
+                  onClick={()=>{
+                    history.push(`/userprofile/${user._id}`);
+                    mainStore.setWatchedUserModal(false)
+                  }}
+                />
+                  <Button 
+                  content="Unwatch"
+                  icon="user delete"
+                  onClick={()=>unwatchUserHandle(user._id)} />
+                  </Button.Group>
               </List.Content>
             </List.Item>
           ))}

@@ -15,6 +15,9 @@ export default class UserStore{
     get getLogedUser(){
         return toJS(this.logedUser)
     }
+    changeWathcedArray(){
+        this.logedUser.watched.length -=1
+    }
     get getWatchedUser(){
         return toJS(this.watchedUser)
     }
@@ -32,6 +35,7 @@ decorate(UserStore,{
     watchedUser:observable,
     getLogedUser:computed,
     getWatchedUser:computed,
+    changeWathcedArray:action,
     setLogedUserPost:action,
     setWatchedUserPost:action,
 })
