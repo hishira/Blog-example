@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import { Button, Card, Icon,Label } from "semantic-ui-react";
 function UserPostComponent(props) {
   return (
-    <Card style={{ marginRight: "auto", marginLeft: "auto", width: "100%" }}>
+    <Card style={{ marginRight: "auto", marginLeft: "auto", width: "80%" }}>
       <Card.Content>
         <Card.Header>
           <div>{props.post.title}</div>

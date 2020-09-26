@@ -84,7 +84,7 @@ export default function CreatePost(props) {
           style={{ minHeight: 300, resize: "none" }}
         />
         <Input>
-        <input onChange={(e)=>setTag(e.target.value)}/>
+        <input value={tag} onChange={(e)=>setTag(e.target.value)}/>
         <Button onClick={()=>setTagsHandle()} size='small'>
           <Icon name='tags'/>
           Add
