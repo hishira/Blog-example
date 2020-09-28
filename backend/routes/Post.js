@@ -256,4 +256,12 @@ app.post("/sortpostsbylikes",async(req,res)=>{
     return res.status(500).send("server error")
   }
 })
+app.post("/getpostsbytag",async(req,res)=>{
+  try{
+      const posts = await postModel.find({tags:{$all:[req.body.username]}})
+      return res.status(200).json(posts)
+  }catch(err){
+    return res.status(500).send("server error")
+  }
+})
 module.exports = app;

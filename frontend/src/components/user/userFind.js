@@ -10,10 +10,12 @@ import {
 } from "semantic-ui-react";
 import { userFind } from "../../api/userApi";
 import { useHistory } from "react-router-dom";
+import {getPostsByTag} from '../../api/postApi'
 
 export default function UserFind(props) {
   const [loading, setLoading] = useState("false");
   const [users, setUsers] = useState([]);
+  const [post,setPosts] = useState([]);
   const history = useHistory();
   useEffect(() => {
     let fetchData = async () => {
@@ -24,8 +26,15 @@ export default function UserFind(props) {
           return null;
         });
         if (response === null) throw new Error("err");
+        let responseOneMore = await getPostsByTag({username:user}).then(response=>{
+          if (response.status === 200) return response.json();
+          return null
+        })
+        if(responseOneMore === null) throw new Error("err");
         setUsers(response);
+        setPosts(responseOneMore)
         console.log(response);
+        console.log(responseOneMore);
         setLoading("true");
       } catch (err) {
         setLoading("error");

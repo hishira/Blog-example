@@ -55,7 +55,7 @@ function AppBar(props) {
           icon={
             <Icon name="search" link onClick={() => searchSumbitHandle()} />
           }
-          placeholder="Find user"
+          placeholder="Find user, or post by tags"
         />
       </Menu.Item>
       <Menu.Menu position="right">

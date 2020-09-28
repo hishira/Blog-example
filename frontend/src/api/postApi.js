@@ -42,6 +42,10 @@ async function sortPostByLikes(obj){
   let url = getApiLink('post/sortpostsbylikes')
   return await fetch(url,getFetchPostObject(obj))
 }
+async function getPostsByTag(obj){
+  let url = getApiLink("post/getpostsbytag")
+  return await fetch(url,getFetchPostObject(obj))
+}
 export {
   createPost,
   editPost,
@@ -51,5 +55,6 @@ export {
   likePost,
   removeLikePost,
   sortPost,
-  sortPostByLikes
+  sortPostByLikes,
+  getPostsByTag
 };
