@@ -7,15 +7,20 @@ import {
   Header,
   List,
   Button,
+  Divider,
+  Card,
+  Label,
+  Icon
 } from "semantic-ui-react";
 import { userFind } from "../../api/userApi";
 import { useHistory } from "react-router-dom";
 import {getPostsByTag} from '../../api/postApi'
+import { inject, observer } from "mobx-react";
 
-export default function UserFind(props) {
+function UserFind(props) {
   const [loading, setLoading] = useState("false");
   const [users, setUsers] = useState([]);
-  const [post,setPosts] = useState([]);
+  const [posts,setPosts] = useState([]);
   const history = useHistory();
   useEffect(() => {
     let fetchData = async () => {
@@ -82,18 +87,99 @@ export default function UserFind(props) {
       ) : (
         <Header
           style={{
-            position: "absolute",
+            position: "relative",
             left: "50%",
             marginTop: "3rem",
-            marginRight: "-50%",
-            transform: "translate(-50%,-50%)",
+            transform: "translate(-15%,-50%)",
           }}
           as="h2"
           icon="exclamation"
-          textAlign="center"
           content="Not user found"
         />
       )}
+      <Divider horizontal>Or</Divider>
+      { loading === "false" ? (
+          <Segment>
+            <Dimmer active inverted>
+              <Loader inverted>Loading</Loader>
+            </Dimmer>
+          </Segment>
+        ) : loading === "error" ? (
+          <div>Error</div>
+        ) : posts.length > 0 ? (
+          <Container>
+            {
+              posts.map((post) => 
+              <Card style={{ marginRight: "auto", marginLeft: "auto", width: "80%" }}>
+              <Card.Content>
+                <Card.Header>
+                  <div>{post.title}</div>
+                  <Card.Meta style={{ marginTop: ".5rem" }}>
+                    Create: {post.createDate.split("T")[0]}
+                  </Card.Meta>
+                  <br />
+                </Card.Header>
+                <Card.Description style={{ marginTop: "2rem" }}>
+                  {post.content}
+                </Card.Description>
+                Tags: <br />
+                {post.tags.map((tag) => (
+                  <Label>{tag}</Label>
+                ))}
+              </Card.Content>
+              <Card.Content style={{ padding: ".5rem" }} extra>
+                <a
+                  style={{ marginRight: ".5rem" }}
+                  
+                >
+                  <Icon name="comment" />
+                  {post.comments.length}
+                </a>
+                {post.likes.includes(props.userStore.getLogedUser._id) ? (
+                  <a
+                  >
+                    <Icon style={{ color: "red" }} name="like" />
+                    {post.likes.length}
+                  </a>
+                ) : (
+                  <a
+                    
+                  >
+                    <Icon name="like" />
+                    {post.likes.length}
+                  </a>
+                )}
+                <Button
+                  style={{ marginLeft: "1.5rem" }}
+                  basic
+                  color="blue"
+                 
+                >
+                  Add comment
+                </Button>
+              </Card.Content>
+            </Card>
+            )
+                }
+          </Container>
+          ):(
+          <Header
+            style={{
+              position: "relative",
+              left: "50%",
+              marginTop: "3rem",
+              transform: "translate(-15%,-50%)",
+            }}
+            as="h2"
+            icon="exclamation"
+            content="Not post with that tag found"
+          />
+        )
+      }
     </Container>
   );
 }
+export default inject((stores) => ({
+  mainStore: stores.mainStore,
+  userStore: stores.userStore,
+}))(observer(UserFind));
