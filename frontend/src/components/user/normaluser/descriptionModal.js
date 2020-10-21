@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import Response from "../../shared/response";
 import { addUserDescription } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
+import cssobject from './css/Usermodal'
 
 function DescriptionModal(props) {
   const [description, setDescription] = useState("");
@@ -51,12 +52,7 @@ function DescriptionModal(props) {
             <label>Description</label>
             <TextArea
               onChange={(e) => setDescription(e.target.value)}
-              style={{
-                marginTop: ".4rem",
-                minHeight: 200,
-                resize: "none",
-                padding: ".5rem",
-              }}
+              style={cssobject.modalTextArea}
             />
           </Form.Field>
         </Form>

@@ -4,7 +4,7 @@ import { inject, observer } from "mobx-react";
 import { getWatchedUser,unwatchUser } from "../../../api/userApi";
 import Loading from "../../shared/loadingComponent";
 import { useHistory } from "react-router-dom";
-
+import cssobject from './css/Usermodal'
 function WatchedUsersModal({ user, mainStore,userStore }) {
   const [userInfo,setUserInfo] = useState(user)
   const [watchedUsers, setWatchedUsers] = useState({});
@@ -56,24 +56,17 @@ function WatchedUsersModal({ user, mainStore,userStore }) {
         <List divided relaxed>
              {watchedUsers.map((user) => (
             <List.Item
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "1rem",
-                alignItems: "center",
-              }}
+              style={cssobject.itemstyle}
+              
             >
               <List.Icon name="user" size="large" verticalAlign="middle" />
               <List.Content
-                style={{
-                  display: "flex",
-                  width: "25rem",
-                  alignItems:"center",
-                  marginLeft: "2rem",
-                }}
+                style={
+                  cssobject.listcontent
+                }
               >
                 <List.Header as="h4">{user.username}</List.Header>
-                <Button.Group labeled style={{padding:".5rem",marginLeft:"12rem"}}>
+                <Button.Group labeled style={cssobject.buttonGroup}>
                 <Button icon="user"
                   content="User" 
                   onClick={()=>{
