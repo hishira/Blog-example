@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {passwordChange} from '../../api/userApi'
+import {passwordChange} from '../../../api/userApi'
 import {
   Container,
   Header,
@@ -10,7 +10,7 @@ import {
   Button
 } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-import Response from '../shared/response'
+import Response from '../../shared/response'
 export default function EmailChange(props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

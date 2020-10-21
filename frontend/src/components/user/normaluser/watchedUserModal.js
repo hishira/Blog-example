@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal,Container,List,Button } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
-import { getWatchedUser,unwatchUser } from "../../api/userApi";
-import Loading from "../shared/loadingComponent";
+import { getWatchedUser,unwatchUser } from "../../../api/userApi";
+import Loading from "../../shared/loadingComponent";
 import { useHistory } from "react-router-dom";
 
 function WatchedUsersModal({ user, mainStore,userStore }) {

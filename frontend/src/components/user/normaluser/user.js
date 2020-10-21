@@ -12,22 +12,23 @@ import {
   Select,
 } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-import { getUserInfo } from "../../api/userApi";
+import { getUserInfo } from "../../../api/userApi";
 import DescriptionModal from "./descriptionModal";
 import { inject, observer } from "mobx-react";
-import CommentModal from "../comment/commentModal";
-import PostComments from "../comment/commentsForPost";
-import EditPostModal from "../post/editPostModal";
-import DeletePostModal from "../post/deletePostModal";
-import ChangePostTypeModal from "../post/changePostType";
+import CommentModal from "../../comment/commentModal";
+import PostComments from "../../comment/commentsForPost";
+import EditPostModal from "../../post/editPostModal";
+import DeletePostModal from "../../post/deletePostModal";
+import ChangePostTypeModal from "../../post/changePostType";
 import {
   likePost,
   removeLikePost,
   sortPost,
   sortPostByLikes,
-} from "../../api/postApi";
+} from "../../../api/postApi";
 import UserPostComponent from "./userPostComponent";
 import WatchedUsersModal from './watchedUserModal'
+import LoadingComponent from '../../shared/loadingComponent'
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -160,11 +161,7 @@ function User(props) {
           <Grid.Row>
             <Grid.Column>
               {loading === "false" ? (
-                <Segment>
-                  <Dimmer active inverted>
-                    <Loader inverted>Loading</Loader>
-                  </Dimmer>
-                </Segment>
+                <LoadingComponent/>
               ) : loading === "error" ? (
                 <div>Error</div>
               ) : (

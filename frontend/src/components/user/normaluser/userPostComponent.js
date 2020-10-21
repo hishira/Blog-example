@@ -11,10 +11,10 @@ function UserPostComponent(props) {
             Create: {props.post.createDate.split("T")[0]}
           </Card.Meta>
           <br />
-          <Button.Group style={{ width: "14rem", height: "3rem" }}>
+          <Button.Group style={{ position:"absolute",right:".4rem",top:".4rem",width: "14rem", height: "3rem" }}>
             <Button
               size="tiny"
-              style={{ width: "3.5rem" }}
+              style={{ width: "3.5rem",marginRight:".5rem" }}
               onClick={() => props.editPostHandle(props.post)}
             >
               Edit
@@ -23,6 +23,9 @@ function UserPostComponent(props) {
             <Button
               size="tiny"
               icon="delete"
+              style={{
+                marginRight:".5rem"
+              }}
               onClick={() => props.deletePosthandle(props.post)}
             />
             {props.post.postType === "PUBLIC" ? (

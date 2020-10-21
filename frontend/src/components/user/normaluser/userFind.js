@@ -12,9 +12,9 @@ import {
   Label,
   Icon
 } from "semantic-ui-react";
-import { userFind } from "../../api/userApi";
+import { userFind } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
-import {getPostsByTag} from '../../api/postApi'
+import {getPostsByTag} from '../../../api/postApi'
 import { inject, observer } from "mobx-react";
 
 function UserFind(props) {

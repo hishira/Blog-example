@@ -11,14 +11,14 @@ import {
   Select,
   Label,
 } from "semantic-ui-react";
-import { getPublicUserInfo, watchUser, unwatchUser } from "../../api/userApi";
+import { getPublicUserInfo, watchUser, unwatchUser } from "../../../api/userApi";
 import { inject, observer } from "mobx-react";
-import CommentModal from "../comment/commentModal";
-import PostComments from "../comment/commentsForPost";
-import { likePost, removeLikePost, sortPost } from "../../api/postApi";
+import CommentModal from "../../comment/commentModal";
+import PostComments from "../../comment/commentsForPost";
+import { likePost, removeLikePost, sortPost } from "../../../api/postApi";
 import Cookies from "js-cookie";
-import Response from "../shared/response";
-import LoginModal from "../auth/loginModal";
+import Response from "../../shared/response";
+import LoginModal from "../../auth/loginModal";
 import { useHistory } from "react-router-dom";
 
 function PublicUserProfile(props) {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Form, TextArea, Button } from "semantic-ui-react";
-import {addUserDescription} from '../../api/userApi'
+import {addUserDescription} from '../../../api/userApi'
 import { useHistory } from "react-router-dom";
-import Response from "../shared/response";
+import Response from "../../shared/response";
 
 export default function DescriptionChange(props) {
   const [description, setDescription] = useState("");

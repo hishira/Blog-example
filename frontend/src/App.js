@@ -9,20 +9,20 @@ import Cookies from "js-cookie";
 import MainStore from "./store/main";
 import UserStore from './store/user'
 import PrivateRoute from "./components/shared/privateRoute";
-import User from "./components/user/user";
+import User from "./components/user/normaluser/user";
 import PostCreate from "./components/post/postcreate";
-import EmailChange from "./components/user/emailchange";
-import PasswordChange from './components/user/passwordchange'
-import UserFind from './components/user/userFind'
-import PublicUserProfile from './components/user/userPublicProfile'
-import DescriptionChange from './components/user/descriptionChange'
+import EmailChange from "./components/user/normaluser/emailchange";
+import PasswordChange from './components/user/normaluser/passwordchange'
+import UserFind from './components/user/normaluser/userFind'
+import PublicUserProfile from './components/user/normaluser/userPublicProfile'
+import DescriptionChange from './components/user/normaluser/descriptionChange'
 import UserEditPanel from './components/user/admin/userEditPanel'
 import UserInfoEdit from './components/user/admin/userInfoEdit'
 import UserPosts from './components/user/admin/usersPosts'
 import UserComments from './components/user/admin/userComments'
 import Posts from './components/user/admin/posts'
 import Comments from './components/user/admin/comments'
-import UserSettings from './components/user/userSettings'
+import UserSettings from './components/user/normaluser/userSettings'
 import AdminPanel from './components/user/admin/adminPanel'
 function App() {
   let user = Cookies.getJSON("user");

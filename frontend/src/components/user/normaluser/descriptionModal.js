@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, TextArea } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
-import Response from "../shared/response";
-import { addUserDescription } from "../../api/userApi";
+import Response from "../../shared/response";
+import { addUserDescription } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
 
 function DescriptionModal(props) {
