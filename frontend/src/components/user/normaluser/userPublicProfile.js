@@ -20,7 +20,7 @@ import Cookies from "js-cookie";
 import Response from "../../shared/response";
 import LoginModal from "../../auth/loginModal";
 import { useHistory } from "react-router-dom";
-
+import cssobject from "./css/UserPostComponent";
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
@@ -164,7 +164,7 @@ function PublicUserProfile(props) {
     fetchData();
   }, [props.match.params.id]);
   return (
-    <div style={{ marginTop: ".5rem" }}>
+    <div style={cssobject.margintop}>
       <Response open={open} message={message} />
       {loading === "false" ? (
         <Segment>
@@ -177,18 +177,14 @@ function PublicUserProfile(props) {
       ) : (
         <div>
           <Grid columns={1}>
-            <Grid.Column style={{ padding: "1.5rem" }}>
+            <Grid.Column style={cssobject.publicprofilegrid}>
               <Card
-                style={{
-                  widht: "20rem",
-                  marginRight: "auto",
-                  marginLeft: "auto",
-                }}
+                style={cssobject.publicprofilecard}
               >
                 <Card.Content>
                   <Icon name="user" size="large" />
                   <Card.Header
-                    style={{ marginTop: "1rem", fontSize: "1.1rem" }}
+                    style={cssobject.publicprofilecardheader}
                   >
                     Username: {props.userStore.getWatchedUser.username}
                     <br />
@@ -235,7 +231,7 @@ function PublicUserProfile(props) {
               </Card>
             </Grid.Column>
           </Grid>
-          <Container style={{ marginBottom: "1rem" }}>
+          <Container style={cssobject.publicprofilecontainer}>
             <Select
               placeholder="Sort by"
               options={sortOptions}
@@ -243,32 +239,28 @@ function PublicUserProfile(props) {
             />
             <Button
               onClick={() => sortHandle()}
-              style={{ marginLeft: "1.5rem" }}
+              style={cssobject.cardbutton}
             >
               Sort posts
             </Button>
           </Container>
           {props.userStore.getWatchedUser.posts.map((post) => (
             <Card
-              style={{
-                marginRight: "auto",
-                marginLeft: "auto",
-                width: "80%",
-              }}
+              style={cssobject.card}
             >
               <Card.Content>
                 <Card.Header>{post.title}</Card.Header>
                 <Card.Description>{post.content}</Card.Description>
               </Card.Content>
-              <Container style={{ marginTop: ".5rem", padding: ".3rem" }}>
-                <span style={{ color: "blue" }}>#</span>
+              <Container style={cssobject.cardcontainer}>
+                <span style={cssobject.bluespan}>#</span>
                 {post.tags.map((tag) => (
                   <Label>{tag}</Label>
                 ))}
               </Container>
-              <Card.Content style={{ padding: ".5rem" }} extra>
+              <Card.Content style={cssobject.cardcontent} extra>
                 <a
-                  style={{ marginRight: ".5rem" }}
+                  style={cssobject.carda}
                   onClick={() => commentForPostHandle(post._id)}
                 >
                   <Icon name="comment" />
@@ -286,7 +278,7 @@ function PublicUserProfile(props) {
                   </a>
                 )}
                 <Button
-                  style={{ marginLeft: "1.5rem" }}
+                  style={cssobject.cardbutton}
                   basic
                   color="blue"
                   onClick={() => commentHandle(post)}

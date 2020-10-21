@@ -1,20 +1,21 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import { Button, Card, Icon, Label } from "semantic-ui-react";
+import cssobject from "./css/UserPostComponent";
 function UserPostComponent(props) {
   return (
-    <Card style={{ marginRight: "auto", marginLeft: "auto", width: "80%" }}>
+    <Card style={cssobject.card}>
       <Card.Content>
         <Card.Header>
           <div>{props.post.title}</div>
-          <Card.Meta style={{ marginTop: ".5rem" }}>
+          <Card.Meta style={cssobject.cardheadermeta}>
             Create: {props.post.createDate.split("T")[0]}
           </Card.Meta>
           <br />
-          <Button.Group style={{ position:"absolute",right:".4rem",top:".4rem",width: "14rem", height: "3rem" }}>
+          <Button.Group style={cssobject.butttongroup}>
             <Button
               size="tiny"
-              style={{ width: "3.5rem",marginRight:".5rem" }}
+              style={cssobject.editbutton}
               onClick={() => props.editPostHandle(props.post)}
             >
               Edit
@@ -23,19 +24,14 @@ function UserPostComponent(props) {
             <Button
               size="tiny"
               icon="delete"
-              style={{
-                marginRight:".5rem"
-              }}
+              style={cssobject.marginright}
               onClick={() => props.deletePosthandle(props.post)}
             />
             {props.post.postType === "PUBLIC" ? (
               <Button
                 onClick={() => props.changePostTypeHandle(props.post)}
                 size="tiny"
-                style={{
-                  width: "4rem",
-                  padding: ".4rem",
-                }}
+                style={cssobject.privatebutton}
               >
                 Make private
               </Button>
@@ -43,14 +39,14 @@ function UserPostComponent(props) {
               <Button
                 onClick={() => props.changePostTypeHandle(props.post)}
                 size="tiny"
-                style={{ width: "4rem" }}
+                style={cssobject.width4rem}
               >
                 Make public
               </Button>
             )}
           </Button.Group>
         </Card.Header>
-        <Card.Description style={{ marginTop: "2rem" }}>
+        <Card.Description style={cssobject.marginTop}>
           {props.post.content}
         </Card.Description>
         Tags: <br />
@@ -59,9 +55,9 @@ function UserPostComponent(props) {
         ))}
       </Card.Content>
 
-      <Card.Content style={{ padding: ".5rem" }} extra>
+      <Card.Content style={cssobject.cardcontent} extra>
         <a
-          style={{ marginRight: ".5rem" }}
+          style={cssobject.carda}
           onClick={() => props.commentForPostHandle(props.post._id)}
         >
           <Icon name="comment" />
@@ -73,7 +69,7 @@ function UserPostComponent(props) {
               props.unlikePostHandle(props.post, props.userStore.getLogedUser)
             }
           >
-            <Icon style={{ color: "red" }} name="like" />
+            <Icon style={cssobject.cardicon} name="like" />
             {props.post.likes.length}
           </a>
         ) : (
@@ -87,7 +83,7 @@ function UserPostComponent(props) {
           </a>
         )}
         <Button
-          style={{ marginLeft: "1.5rem" }}
+          style={cssobject.cardbutton}
           basic
           color="blue"
           onClick={() => props.commentHandle(props.post)}

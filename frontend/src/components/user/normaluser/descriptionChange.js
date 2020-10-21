@@ -3,6 +3,7 @@ import { Container, Form, TextArea, Button } from "semantic-ui-react";
 import {addUserDescription} from '../../../api/userApi'
 import { useHistory } from "react-router-dom";
 import Response from "../../shared/response";
+import cssobject from './css/UserSettings'
 
 export default function DescriptionChange(props) {
   const [description, setDescription] = useState("");
@@ -33,14 +34,14 @@ export default function DescriptionChange(props) {
     <Container>
         <Response open={open} message={message}/>
       <Form>
-        <label style={{fontSize:"1.5rem"}}>User description</label>
+        <label style={cssobject.descriptionchangelabel}>User description</label>
         <TextArea
           onChange={(e) => setDescription(e.target.value)}
-          style={{marginTop:"2rem", resize: "none",minHeight:"14rem" }}
+          style={cssobject.descriptionchangetextarea}
         />
       </Form>
       <Button
-        style={{ marginTop: "2rem" }}
+        style={cssobject.descriptionchangebutton}
         onClick={() => descriptionChangeHandle()}
       >
         Change Description

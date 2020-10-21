@@ -16,6 +16,7 @@ import { userFind } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
 import {getPostsByTag} from '../../../api/postApi'
 import { inject, observer } from "mobx-react";
+import cssobject from "./css/User";
 
 function UserFind(props) {
   const [loading, setLoading] = useState("false");
@@ -61,22 +62,11 @@ function UserFind(props) {
         <List divided>
           {users.map((user) => (
             <List.Item
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "1rem",
-                alignItems: "center",
-              }}
+              style={cssobject.userfindlistitem}
             >
               <List.Icon name="user" size="large" verticalAlign="middle" />
               <List.Content
-                style={{
-                  display: "flex",
-                  width: "25rem",
-                  justifyContent: "space-between",
-                  alignItems:"center",
-                  marginLeft: "2rem",
-                }}
+                style={cssobject.userfindlistcontent}
               >
                 <List.Header as="h4">{user.username}</List.Header>
                 <Button icon="user" onClick={()=>history.push(`/userprofile/${user._id}`)} />
@@ -86,12 +76,7 @@ function UserFind(props) {
         </List>
       ) : (
         <Header
-          style={{
-            position: "relative",
-            left: "50%",
-            marginTop: "3rem",
-            transform: "translate(-15%,-50%)",
-          }}
+          style={cssobject.userfindheader}
           as="h2"
           icon="exclamation"
           content="Not user found"
@@ -110,16 +95,16 @@ function UserFind(props) {
           <Container>
             {
               posts.map((post) => 
-              <Card style={{ marginRight: "auto", marginLeft: "auto", width: "80%" }}>
+              <Card style={cssobject.userfindcard}>
               <Card.Content>
                 <Card.Header>
                   <div>{post.title}</div>
-                  <Card.Meta style={{ marginTop: ".5rem" }}>
+                  <Card.Meta style={cssobject.userfindcardmeta}>
                     Create: {post.createDate.split("T")[0]}
                   </Card.Meta>
                   <br />
                 </Card.Header>
-                <Card.Description style={{ marginTop: "2rem" }}>
+                <Card.Description style={cssobject.userfindcarddesc}>
                   {post.content}
                 </Card.Description>
                 Tags: <br />
@@ -127,10 +112,9 @@ function UserFind(props) {
                   <Label>{tag}</Label>
                 ))}
               </Card.Content>
-              <Card.Content style={{ padding: ".5rem" }} extra>
+              <Card.Content style={cssobject.userfindcardcontent} extra>
                 <a
-                  style={{ marginRight: ".5rem" }}
-                  
+                  style={cssobject.userfindcardcontenta}
                 >
                   <Icon name="comment" />
                   {post.comments.length}
@@ -138,7 +122,7 @@ function UserFind(props) {
                 {post.likes.includes(props.userStore.getLogedUser._id) ? (
                   <a
                   >
-                    <Icon style={{ color: "red" }} name="like" />
+                    <Icon style={cssobject.userfindicon} name="like" />
                     {post.likes.length}
                   </a>
                 ) : (
@@ -150,7 +134,7 @@ function UserFind(props) {
                   </a>
                 )}
                 <Button
-                  style={{ marginLeft: "1.5rem" }}
+                  style={cssobject.userfindbutton}
                   basic
                   color="blue"
                  
@@ -164,12 +148,7 @@ function UserFind(props) {
           </Container>
           ):(
           <Header
-            style={{
-              position: "relative",
-              left: "50%",
-              marginTop: "3rem",
-              transform: "translate(-15%,-50%)",
-            }}
+            style={cssobject.userfindheader}
             as="h2"
             icon="exclamation"
             content="Not post with that tag found"

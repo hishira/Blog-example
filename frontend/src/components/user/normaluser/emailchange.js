@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import Response from '../../shared/response'
+import cssobject from './css/UserSettings'
 export default function EmailChange(props) {
   const [email, setEmail] = useState("");
   const [open,setOpen] = useState(false)
@@ -38,7 +39,7 @@ export default function EmailChange(props) {
         <Response open={open} message={message}/>
       <Header
         textAlign="center"
-        style={{ marginTop: "2rem", marginBottom: "2rem" }}
+        style={cssobject.changeheader}
         as="h1"
       >
         <Header.Content>Email change</Header.Content>
@@ -50,7 +51,7 @@ export default function EmailChange(props) {
           <input />
         </Input>
         <br/>
-        <Button style={{marginTop:"2rem"}} onClick={(e)=>submitHandle(e)}>Change email</Button>
+        <Button style={cssobject.descriptionchangebutton} onClick={(e)=>submitHandle(e)}>Change email</Button>
       </Form>
     </Container>
   );

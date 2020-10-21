@@ -27,8 +27,9 @@ import {
   sortPostByLikes,
 } from "../../../api/postApi";
 import UserPostComponent from "./userPostComponent";
-import WatchedUsersModal from './watchedUserModal'
-import LoadingComponent from '../../shared/loadingComponent'
+import WatchedUsersModal from "./watchedUserModal";
+import LoadingComponent from "../../shared/loadingComponent";
+import cssobject from "./css/User";
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -144,7 +145,7 @@ function User(props) {
         });
         if (userFromRequest === null) throw new Error("Err");
         props.userStore.setLogedUser(userFromRequest);
-        setUser(userFromRequest)
+        setUser(userFromRequest);
         setLoading("true");
         console.log(userFromRequest);
       } catch (err) {
@@ -155,28 +156,20 @@ function User(props) {
   }, props.userStore.getLogedUser);
   const history = useHistory();
   return (
-    <div style={{ margin: ".5rem" }}>
+    <div style={cssobject.margin}>
       <div>
         <Grid columns={1}>
           <Grid.Row>
             <Grid.Column>
               {loading === "false" ? (
-                <LoadingComponent/>
+                <LoadingComponent />
               ) : loading === "error" ? (
                 <div>Error</div>
               ) : (
-                <Card
-                  style={{
-                    widht: "20rem",
-                    marginRight: "auto",
-                    marginLeft: "auto",
-                  }}
-                >
+                <Card style={cssobject.usercard}>
                   <Card.Content>
                     <Icon name="user" size="large" />
-                    <Card.Header
-                      style={{ marginTop: "1rem", fontSize: "1.1rem" }}
-                    >
+                    <Card.Header style={cssobject.usercardheader}>
                       Username: {props.userStore.getLogedUser.username}
                       <br />
                       Email: {props.userStore.getLogedUser.email}
@@ -210,19 +203,19 @@ function User(props) {
                       }}
                     />
                     <Button
-                      style={{ marginLeft: ".2rem" }}
+                      style={cssobject.buttonmarginleft}
                       icon="settings"
                       onClick={() => history.push("/usersettings")}
                     />
                     {props.userStore.getLogedUser.role === "ADMIN" ? (
-                       <Button
-                       style={{ marginLeft: ".2rem" }}
-                       icon="adn"
-                       onClick={() => history.push("/adminpanel")}
-                     />
-              ) : (
-                <div />
-              )}
+                      <Button
+                        style={cssobject.buttonmarginleft}
+                        icon="adn"
+                        onClick={() => history.push("/adminpanel")}
+                      />
+                    ) : (
+                      <div />
+                    )}
                   </Card.Content>
                 </Card>
               )}
@@ -240,27 +233,17 @@ function User(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <div
-          style={{
-
-            marginTop:"1rem",
-            marginRight: "auto",
-            marginLeft: "auto",
-          }}
-        >
+        <div style={cssobject.normaldivstyle}>
           <Button color="teal" onClick={() => history.push("/postcreate")}>
             Create post
           </Button>
-          <Container style={{ marginTop: "1.5rem" }}>
+          <Container style={cssobject.containermargintop}>
             <Select
               placeholder="Sort by"
               options={sortOptions}
               onChange={(e, { value }) => setSortOption(value)}
             />
-            <Button
-              onClick={() => sortHandle()}
-              style={{ marginLeft: "1.5rem" }}
-            >
+            <Button onClick={() => sortHandle()} style={cssobject.buttonmargin}>
               Sort posts
             </Button>
           </Container>
@@ -286,10 +269,13 @@ function User(props) {
         id={postIdToTypechange}
         typeToChange={postTypeRevert}
       />
-      {
-        loading === "false"?(<div/>):loading === "error"?(<div/>):
-      (<WatchedUsersModal user={user}/>)
-      }
+      {loading === "false" ? (
+        <div />
+      ) : loading === "error" ? (
+        <div />
+      ) : (
+        <WatchedUsersModal user={user} />
+      )}
     </div>
   );
 }
