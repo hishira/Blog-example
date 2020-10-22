@@ -30,6 +30,7 @@ import UserPostComponent from "./userPostComponent";
 import WatchedUsersModal from "./watchedUserModal";
 import LoadingComponent from "../../shared/loadingComponent";
 import cssobject from "./css/User";
+import UserInfoCard from './UserInfoCard'
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -166,58 +167,7 @@ function User(props) {
               ) : loading === "error" ? (
                 <div>Error</div>
               ) : (
-                <Card style={cssobject.usercard}>
-                  <Card.Content>
-                    <Icon name="user" size="large" />
-                    <Card.Header style={cssobject.usercardheader}>
-                      Username: {props.userStore.getLogedUser.username}
-                      <br />
-                      Email: {props.userStore.getLogedUser.email}
-                    </Card.Header>
-                    {props.userStore.getLogedUser.description !== "" ? (
-                      <Card.Description>
-                        Opis:{props.userStore.getLogedUser.description}
-                      </Card.Description>
-                    ) : (
-                      <Button
-                        size="tiny"
-                        onClick={() => props.mainStore.setModal(true)}
-                      >
-                        Add description
-                      </Button>
-                    )}
-                  </Card.Content>
-                  <Card.Content extra>
-                    <Button
-                      basic
-                      color="blue"
-                      content="Watched"
-                      icon="user"
-                      onClick={() => props.mainStore.setWatchedUserModal(true)}
-                      label={{
-                        as: "a",
-                        basic: true,
-                        color: "blue",
-                        pointing: "left",
-                        content: props.userStore.getLogedUser.watched.length,
-                      }}
-                    />
-                    <Button
-                      style={cssobject.buttonmarginleft}
-                      icon="settings"
-                      onClick={() => history.push("/usersettings")}
-                    />
-                    {props.userStore.getLogedUser.role === "ADMIN" ? (
-                      <Button
-                        style={cssobject.buttonmarginleft}
-                        icon="adn"
-                        onClick={() => history.push("/adminpanel")}
-                      />
-                    ) : (
-                      <div />
-                    )}
-                  </Card.Content>
-                </Card>
+                <UserInfoCard/>
               )}
             </Grid.Column>
           </Grid.Row>

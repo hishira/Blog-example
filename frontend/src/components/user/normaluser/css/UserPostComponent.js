@@ -16,7 +16,7 @@ export default {
     width: "4rem",
     padding: ".4rem",
   },
-  width4rem: { width: "4rem" },
+  width4rem: { width: "4rem",padding:".5rem" },
   marginTop: { marginTop: "2rem" },
   cardcontent: { padding: ".5rem" },
   carda: { marginRight: ".5rem" },
