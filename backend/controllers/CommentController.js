@@ -7,12 +7,12 @@ class CommentController {
     try {
       const comments = await commentModel.find({});
       try {
-        res.status(200).json(comments);
+        return res.status(200).json(comments);
       } catch (err) {
-        res.status(404).json({ message: "Error with geting comments" });
+        return res.status(404).json({ message: "Error with geting comments" });
       }
     } catch (err) {
-      res.status(500).json({ message: "Server error" });
+      return res.status(500).json({ message: "Server error" });
     }
   }
   static async CreateAnonymousComment(req, res) {
@@ -22,7 +22,6 @@ class CommentController {
         return res.status(404).json({ message: "Post do not exists" });
       } else {
         try {
-          console.log(req.body);
           const newComment = new commentModel({
             content: req.body.content,
             post: req.body.postID,
@@ -78,7 +77,6 @@ class CommentController {
   }
   static async GetCommentsByPost(req, res) {
     try {
-      console.log(req.body);
       const comments = await commentModel.find({ post: req.body.postID });
       let arr = [];
       for (let i of comments) {
@@ -103,9 +101,9 @@ class CommentController {
       const post = await postModel.findById(comment.post);
       post.comments.remove(req.params.id);
       await post.save();
-      res.status(200).json({ messagge: "OK" }).end();
+      return res.status(200).json({ messagge: "OK" }).end();
     } catch (err) {
-      res.status(500).json({ message: "Problem with comment deleting" }).end();
+      return res.status(500).json({ message: "Problem with comment deleting" }).end();
     }
   }
   static async Update() {
@@ -163,4 +161,4 @@ class CommentController {
     }
   }
 }
-module.exports = CommentController
+module.exports = CommentController;

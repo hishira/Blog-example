@@ -5,15 +5,15 @@ class UserController {
   static async GetAllUsers(req, res) {
     try {
       const users = await userModel.find({}).catch((err) => {
-        res.status(404).send("Database error");
+        return res.status(404).send("Database error");
       });
       try {
-        res.status(200).send(users).end();
+        return res.status(200).send(users).end();
       } catch (err) {
-        res.status(400).send(err).end();
+        return res.status(400).send(err).end();
       }
     } catch (err) {
-      res.status(500).json({ message: "Database error" });
+      return res.status(500).json({ message: "Database error" });
     }
   }
   static async UserInfo(req, res) {
@@ -53,11 +53,11 @@ class UserController {
     try {
       const user = await userModel.findByIdAndDelete(req.params.id);
       if (!user) {
-        res.status(404).send("Not user found");
+        return res.status(404).send("Not user found");
       }
-      res.status(200).send("OK");
+      return res.status(200).send("OK");
     } catch (err) {
-      res.status(500).send(err);
+      return res.status(500).send(err);
     }
   }
   static async ChangeUserRole(req, res) {
@@ -79,7 +79,7 @@ class UserController {
         }
       );
     } catch (err) {
-      res.status(500).json({ message: err });
+      return res.status(500).json({ message: err });
     }
   }
   static async EmailChange(req, res) {
@@ -94,14 +94,14 @@ class UserController {
         },
         (err, model) => {
           if (err) {
-            res.status(404).json({ message: "Erorro with user role updating" });
+            return res.status(404).json({ message: "Erorro with user role updating" });
           } else {
-            res.status(200).json({ obj: model });
+            return res.status(200).json({ obj: model });
           }
         }
       );
     } catch (err) {
-      res.status(500).json({ message: err });
+      return res.status(500).json({ message: err });
     }
   }
   static async DescriptionChange(req, res) {
@@ -131,10 +131,10 @@ class UserController {
         }
         user.password = req.body.password;
         user.save();
-        res.status(200).send("Ok");
+        return res.status(200).send("Ok");
       });
     } catch (err) {
-      res.status(500).send("Server error");
+      return res.status(500).send("Server error");
     }
   }
   static async UserFind(req, res) {
@@ -142,9 +142,9 @@ class UserController {
       let users = await userModel.find({
         username: { $regex: req.body.username, $options: "i" },
       });
-      res.status(200).json(users).end();
+      return res.status(200).json(users).end();
     } catch (err) {
-      res.status(500).json(err).end();
+      return res.status(500).json(err).end();
     }
   }
   static async GetUserPublicProfile(req, res) {
@@ -163,7 +163,6 @@ class UserController {
     try {
       let user = await userModel.findById(req.user._id);
       if (user.watched.includes(req.body.userID)) {
-        console.log("TAK");
         return res.status(200).json(user);
       }
       user.watched.push(req.body.userID);
