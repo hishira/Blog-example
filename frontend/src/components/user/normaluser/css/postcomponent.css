@@ -1,0 +1,59 @@
+.editpostoptions {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+.editpostoptions-title {
+  border: 1px solid whitesmoke;
+  background-color: rgba(196,196,196,.4);
+  border-radius: 5px;
+  padding: .3rem;
+
+}
+.editpostoptions-title:hover {
+  cursor: pointer;
+}
+.editpostoptions > ul {
+  padding: 1.4rem;
+}
+.hook{
+    background-color:rgba(196,196,196,.4);
+    opacity: 0;
+    border-radius: 10px;
+    margin-top: .5rem;
+}
+.clickhook {
+  display: block;
+  margin-bottom: .65rem;
+  box-sizing: border-box;
+  opacity: 0;
+}
+.clickhook:hover{
+    cursor: pointer;
+}
+.animateclass {
+  animation: appear 1.2s ease-in-out forwards;
+  animation-play-state: running;
+  transition: all 1.2s ease-in-out;
+}
+.animateoff {
+  animation: appearoff 1.2s ease-in-out forwards;
+  animation-play-state: running;
+  transition: all 1.2s ease-in-out;
+}
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes appearoff {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.editpostoptions > ul > li:not(:first-child) {
+  border-top: 1px solid black;
+}

@@ -1,8 +1,27 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-import { Button, Card, Icon, Label } from "semantic-ui-react";
+import { Button, Card, Container, Icon, Label } from "semantic-ui-react";
 import cssobject from "./css/UserPostComponent";
+import "./css/postcomponent.css";
 function UserPostComponent(props) {
+  let editVariable = false;
+  const editclickhandle = () => {
+    if (!editVariable) {
+      let elements = document.getElementsByClassName(props.post._id);
+      for (let i of elements) {
+        i.classList.remove("animateoff");
+        i.classList.add("animateclass");
+      }
+      editVariable = !editVariable;
+    } else {
+      let elements = document.getElementsByClassName(props.post._id);
+      for (let i of elements) {
+        i.classList.remove("animateclass");
+        i.classList.add("animateoff");
+      }
+      editVariable = !editVariable;
+    }
+  };
   return (
     <Card style={cssobject.card}>
       <Card.Content>
@@ -12,47 +31,57 @@ function UserPostComponent(props) {
             Create: {props.post.createDate.split("T")[0]}
           </Card.Meta>
           <br />
-          <Button.Group style={cssobject.butttongroup}>
-            <Button
-              size="tiny"
-              style={cssobject.editbutton}
-              onClick={() => props.editPostHandle(props.post)}
+          <div className="editpostoptions">
+            <div
+              className="editpostoptions-title"
+              onClick={() => editclickhandle()}
             >
-              Edit
-            </Button>
-
-            <Button
-              size="tiny"
-              icon="delete"
-              style={cssobject.marginright}
-              onClick={() => props.deletePosthandle(props.post)}
-            />
-            {props.post.postType === "PUBLIC" ? (
-              <Button
-                onClick={() => props.changePostTypeHandle(props.post)}
-                size="tiny"
-                style={cssobject.privatebutton}
+              Edit options
+            </div>
+            <ul className={props.post._id + " hook"}>
+              <li
+                className={props.post._id + " clickhook"}
+                onClick={() => props.editPostHandle(props.post)}
               >
-                Make private
-              </Button>
-            ) : (
-              <Button
-                onClick={() => props.changePostTypeHandle(props.post)}
-                size="tiny"
-                style={cssobject.width4rem}
+                Edit
+              </li>
+              <li
+                className={props.post._id + " clickhook"}
+                onClick={() => props.deletePosthandle(props.post)}
               >
-                Make public
-              </Button>
-            )}
-          </Button.Group>
+                Delete
+              </li>
+              {props.post.postType === "PUBLIC" ? (
+                <li
+                  className={props.post._id + " clickhook"}
+                  onClick={() => props.changePostTypeHandle(props.post)}
+                >
+                  Make private
+                </li>
+              ) : (
+                <li
+                  className={props.post._id + " clickhook"}
+                  onClick={() => props.changePostTypeHandle(props.post)}
+                >
+                  Make public
+                </li>
+              )}
+            </ul>
+          </div>
         </Card.Header>
         <Card.Description style={cssobject.marginTop}>
           {props.post.content}
         </Card.Description>
-        Tags: <br />
-        {props.post.tags.map((tag) => (
-          <Label>{tag}</Label>
-        ))}
+        {props.post.tags.length > 0 ? (
+          <Container style={cssobject.tags}>
+            Tags:
+            {props.post.tags.map((tag) => (
+              <Label style={cssobject.labelspan}>{tag}</Label>
+            ))}
+          </Container>
+        ) : (
+          <Container />
+        )}
       </Card.Content>
 
       <Card.Content style={cssobject.cardcontent} extra>

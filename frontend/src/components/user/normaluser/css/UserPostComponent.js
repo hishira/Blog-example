@@ -16,7 +16,7 @@ export default {
     width: "4rem",
     padding: ".4rem",
   },
-  width4rem: { width: "4rem",padding:".5rem" },
+  width4rem: { width: "4rem", padding: ".5rem" },
   marginTop: { marginTop: "2rem" },
   cardcontent: { padding: ".5rem" },
   carda: { marginRight: ".5rem" },
@@ -33,4 +33,13 @@ export default {
   publicprofilecontainer: { marginBottom: "1rem" },
   cardcontainer: { marginTop: ".5rem", padding: ".3rem" },
   bluespan: { color: "blue" },
+  tags:{
+    textAlign:"start",
+    padding:".9rem",
+    boxSizing:"border-box"
+  },
+  labelspan:{
+    marginLeft:".9rem",
+    marginTop:".5rem"
+  }
 };
