@@ -1,5 +1,5 @@
 export default {
-  card: { marginRight: "auto", marginLeft: "auto", width: "80%" },
+  card: { marginRight: "auto", marginLeft: "auto", width: "80%",padding:".7rem" },
   cardheadermeta: { marginTop: ".5rem" },
   butttongroup: {
     position: "absolute",
@@ -23,6 +23,14 @@ export default {
   cardicon: { color: "red" },
   cardbutton: { marginLeft: "1.5rem" },
   margintop: { marginTop: ".5rem" },
+  cardcontentext: {
+    marginTop: ".5rem",
+    textAlign: "start",
+    boxSizing:"border-box",
+    padding:".6rem",
+    lineHeight:"1.8rem",
+    fontSize:"1.2rem"
+  },
   publicprofilegrid: { padding: "1.5rem" },
   publicprofilecard: {
     widht: "20rem",
@@ -33,13 +41,14 @@ export default {
   publicprofilecontainer: { marginBottom: "1rem" },
   cardcontainer: { marginTop: ".5rem", padding: ".3rem" },
   bluespan: { color: "blue" },
-  tags:{
-    textAlign:"start",
-    padding:".9rem",
-    boxSizing:"border-box"
+  tags: {
+    textAlign: "start",
+    padding: ".9rem",
+    boxSizing: "border-box",
+    
   },
-  labelspan:{
-    marginLeft:".9rem",
-    marginTop:".5rem"
-  }
+  labelspan: {
+    marginLeft: ".9rem",
+    marginTop: ".5rem",
+  },
 };

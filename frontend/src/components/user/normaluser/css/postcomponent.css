@@ -5,10 +5,9 @@
 }
 .editpostoptions-title {
   border: 1px solid whitesmoke;
-  background-color: rgba(196,196,196,.4);
+  background-color: rgba(196, 196, 196, 0.4);
   border-radius: 5px;
-  padding: .3rem;
-
+  padding: 0.3rem;
 }
 .editpostoptions-title:hover {
   cursor: pointer;
@@ -16,21 +15,25 @@
 .editpostoptions > ul {
   padding: 1.4rem;
 }
-.hook{
-    background-color:rgba(196,196,196,.4);
-    opacity: 0;
-    border-radius: 10px;
-    margin-top: .5rem;
+.hook {
+  opacity: 0;
+  border-radius: 10px;
+  margin-top: 0;
+  visibility: hidden;
 }
 .clickhook {
   display: block;
-  margin-bottom: .65rem;
+  margin-bottom: 0.85rem;
   box-sizing: border-box;
   opacity: 0;
+  background-color: whitesmoke;
 }
-.clickhook:hover{
-    cursor: pointer;
+.clickhook:hover {
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+  color: lightgrey;
 }
+
 .animateclass {
   animation: appear 1.2s ease-in-out forwards;
   animation-play-state: running;
@@ -43,17 +46,17 @@
 }
 @keyframes appear {
   to {
+    visibility: visible;
     opacity: 1;
   }
 }
 @keyframes appearoff {
   from {
     opacity: 1;
+    visibility: visible;
   }
   to {
     opacity: 0;
+    visibility: hidden;
   }
-}
-.editpostoptions > ul > li:not(:first-child) {
-  border-top: 1px solid black;
 }

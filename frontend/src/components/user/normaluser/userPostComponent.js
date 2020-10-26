@@ -5,21 +5,19 @@ import cssobject from "./css/UserPostComponent";
 import "./css/postcomponent.css";
 function UserPostComponent(props) {
   let editVariable = false;
+  const firstHelperFunction = (classtoremove,classtoadd)=>{
+    let elements = document.getElementsByClassName(props.post._id);
+      for (let i of elements) {
+        i.classList.remove(classtoremove);
+        i.classList.add(classtoadd);
+      }
+      editVariable = !editVariable;
+  }
   const editclickhandle = () => {
     if (!editVariable) {
-      let elements = document.getElementsByClassName(props.post._id);
-      for (let i of elements) {
-        i.classList.remove("animateoff");
-        i.classList.add("animateclass");
-      }
-      editVariable = !editVariable;
+      firstHelperFunction("animateoff","animateclass")
     } else {
-      let elements = document.getElementsByClassName(props.post._id);
-      for (let i of elements) {
-        i.classList.remove("animateclass");
-        i.classList.add("animateoff");
-      }
-      editVariable = !editVariable;
+      firstHelperFunction("animateclass","animateoff")
     }
   };
   return (
@@ -69,11 +67,12 @@ function UserPostComponent(props) {
             </ul>
           </div>
         </Card.Header>
-        <Card.Description style={cssobject.marginTop}>
+        <Card.Description style={cssobject.cardcontentext}>
+          
           {props.post.content}
         </Card.Description>
         {props.post.tags.length > 0 ? (
-          <Container style={cssobject.tags}>
+          <Container fluid style={cssobject.tags}>
             Tags:
             {props.post.tags.map((tag) => (
               <Label style={cssobject.labelspan}>{tag}</Label>
