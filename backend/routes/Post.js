@@ -44,4 +44,5 @@ app.post("/sortpost",PostController.Sort);
 app.get("/userposts/:id",checkifAdmin,PostController.UserPosts);
 app.post("/sortpostsbylikes",PostController.SortByLikes);
 app.post("/getpostsbytag",PostController.PostsByTag);
+app.get("/watcheduserposts",PostController.GetPostBy24hrUser);
 module.exports = app;

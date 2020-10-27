@@ -46,6 +46,10 @@ async function getPostsByTag(obj){
   let url = getApiLink("post/getpostsbytag")
   return await fetch(url,getFetchPostObject(obj))
 }
+async function getPostsWatchedUser(obj){
+  let url = getApiLink("post/watcheduserposts");
+  return await fetch(url,fetchObject);
+}
 export {
   createPost,
   editPost,
@@ -56,5 +60,6 @@ export {
   removeLikePost,
   sortPost,
   sortPostByLikes,
-  getPostsByTag
+  getPostsByTag,
+  getPostsWatchedUser
 };

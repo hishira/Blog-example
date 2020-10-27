@@ -260,5 +260,23 @@ class PostController {
       return res.status(500).send("server error");
     }
   }
+  static async GetPostBy24hrUser(req,res){
+    try{
+      let user = await userModel.findById(req.user._id);
+      let posts = []
+      for(let i of user.watched){
+        let watcheduserposts = await postModel.find({user:i}).lean();
+        let postsfor24hours = []
+        for(let j of watcheduserposts){
+          if( new Date(j.editingDate) > (new Date(new Date(Date.now()).getTime() - 24 * 60 * 60 * 1000)))
+            postsfor24hours.push(j)
+        }
+        posts = posts.concat(postsfor24hours);
+      }
+      return res.status(200).json(posts);
+    }catch(e){
+      return res.status(500).send("Server error")
+    }
+  }
 }
 module.exports = PostController;

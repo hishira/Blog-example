@@ -24,6 +24,7 @@ import Posts from './components/user/admin/posts'
 import Comments from './components/user/admin/comments'
 import UserSettings from './components/user/normaluser/userSettings'
 import AdminPanel from './components/user/admin/adminPanel'
+import WatchedUserPosts from './components/user/normaluser/watcheduserposts'
 function App() {
   let user = Cookies.getJSON("user");
   console.log(user)
@@ -38,6 +39,7 @@ function App() {
         <Route component={Login} path="/login" />
         <Route component={SignUp} path="/signup" />
         <Route component={UserFind} path="/userfind/:user"/>
+        <PrivateRoute exact component={WatchedUserPosts} path='/'/>
         <PrivateRoute component={User} path="/user" />
         <PrivateRoute component={PostCreate} path="/postcreate" />
         <PrivateRoute component={EmailChange} path="/emailchange" />
