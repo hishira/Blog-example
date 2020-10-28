@@ -265,7 +265,7 @@ class PostController {
       let user = await userModel.findById(req.user._id);
       let posts = []
       for(let i of user.watched){
-        let watcheduserposts = await postModel.find({user:i}).lean();
+        let watcheduserposts = await postModel.find({user:i}).populate("user").lean();
         let postsfor24hours = []
         for(let j of watcheduserposts){
           if( new Date(j.editingDate) > (new Date(new Date(Date.now()).getTime() - 24 * 60 * 60 * 1000)))
