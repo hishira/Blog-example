@@ -3,11 +3,17 @@ import LoadingComponent from "../../shared/loadingComponent";
 import { getPostsWatchedUser } from "../../../api/postApi";
 import { inject, observer } from "mobx-react";
 import { Icon } from "semantic-ui-react";
-
+import PostComments from '../../comment/commentsForPost';
 import "./css/watcheduserposts.css";
 function WatchedUserPosts(props) {
   const [loading, setLoading] = useState("false");
   const [posts, setPosts] = useState([]);
+  const [commentsPostId,setCommentsPostID] = useState("")
+
+  const commentsForPostOpenHandle = (postid)=>{
+    setCommentsPostID(postid);
+    props.mainStore.setCommentsForPost(true);
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,12 +51,15 @@ function WatchedUserPosts(props) {
                 <div className="owncard-createdate">
                   {userpost.createDate.split("T")[0]}
                 </div>
+                <div className="owncard-username">
+                  {userpost.user.username}
+                </div>
               </div>
               <div className="owncard-content">{userpost.content}</div>
               <div className="owncard-meta">
                 <a
                   onClick={
-                    () => {} /*props.commentForPostHandle(props.post._id)*/
+                    () => commentsForPostOpenHandle(userpost._id)
                   }
                 >
                   <Icon name="comment" />
@@ -80,7 +89,9 @@ function WatchedUserPosts(props) {
               </div>
             </div>
           ))}
+            <PostComments postid={commentsPostId} />
         </div>
+
       )}
     </div>
   );

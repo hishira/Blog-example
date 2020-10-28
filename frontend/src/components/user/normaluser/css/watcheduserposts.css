@@ -1,6 +1,8 @@
 .owncard {
   padding: 0.5rem;
   margin: 1.2rem;
+  border: .1rem groove lightgray;
+  border-radius: 8px;
 }
 .owncard-title {
   position: relative;
@@ -25,6 +27,13 @@
   right: 0.6rem;
   font-size: 1.1rem;
   color: slategrey;
+}
+.owncard-username{
+    position: absolute;
+    top:.3rem;
+    left: 0.9rem;
+    font-size: 1.1rem;
+    color: slategrey;
 }
 @media (max-width: 500px) {
   .owncard-createdate {
