@@ -5,14 +5,50 @@ import { inject, observer } from "mobx-react";
 import { Icon } from "semantic-ui-react";
 import PostComments from '../../comment/commentsForPost';
 import "./css/watcheduserposts.css";
+import {likePost,removeLikePost} from '../../../api/postApi'
 function WatchedUserPosts(props) {
   const [loading, setLoading] = useState("false");
   const [posts, setPosts] = useState([]);
   const [commentsPostId,setCommentsPostID] = useState("")
-
+  const [reload,setReload] = useState(false)
   const commentsForPostOpenHandle = (postid)=>{
     setCommentsPostID(postid);
     props.mainStore.setCommentsForPost(true);
+  }
+  const likeposthandle = async (post)=>{
+    let obj = {userID:props.userStore.getLogedUser._id};
+    console.log(obj);
+    let res = await likePost(post._id,obj).then(response=>{
+      if(response.status === 200) return true;
+      else return false
+    })
+    if(res){
+      let newposts = posts;
+      for(let i in newposts){
+        if(newposts[i]._id === post._id){
+          newposts[i].likes.push(props.userStore.getLogedUser._id);
+        }
+      }
+      setReload(!reload);
+    }
+  }
+  const unlikePostHandle = async (post) => {
+    let obj = {userID: props.userStore.getLogedUser._id};
+    let res = await removeLikePost(post._id,obj).then(response=>{
+      if(response.status === 200) return true
+      return false
+    })
+    if(res){
+      let user = props.userStore.getLogedUser;
+      let newPosts = posts;
+      for(let i in newPosts){
+        if(newPosts[i]._id === post._id){
+          let index = newPosts[i].likes.indexOf(user._id);
+          if(index > -1) newPosts[i].likes.splice(index,1);
+        }
+      }
+      setReload(!reload);
+    }
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +69,7 @@ function WatchedUserPosts(props) {
       }
     };
     fetchData();
-  }, []);
+  }, reload);
   return (
     <div>
       {loading === "false" ? (
@@ -68,7 +104,7 @@ function WatchedUserPosts(props) {
                 {userpost.likes.includes(props.userStore.getLogedUser._id) ? (
                   <a
                     onClick={
-                      () => {}
+                      () => unlikePostHandle(userpost)
                       /*props.unlikePostHandle(props.post, props.userStore.getLogedUser)*/
                     }
                   >
@@ -78,7 +114,7 @@ function WatchedUserPosts(props) {
                 ) : (
                   <a
                     onClick={
-                      () => {}
+                      () => likeposthandle(userpost,props.userStore.getLogedUser)
                       /* props.likePostHandle(props.post, props.userStore.getLogedUser)*/
                     }
                   >
