@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import LoadingComponent from "../../shared/loadingComponent";
 import { getPostsWatchedUser } from "../../../api/postApi";
-export default function WatchedUserPosts(props) {
+import { inject, observer } from "mobx-react";
+import { Icon } from "semantic-ui-react";
+
+import "./css/watcheduserposts.css";
+function WatchedUserPosts(props) {
   const [loading, setLoading] = useState("false");
   const [posts, setPosts] = useState([]);
   useEffect(() => {
@@ -33,8 +37,55 @@ export default function WatchedUserPosts(props) {
       ) : loading === "error" ? (
         <div>Error</div>
       ) : (
-        <div />
+        <div>
+          {posts.map((userpost) => (
+            <div key={userpost._id} className="owncard">
+              <div className="owncard-title">
+                {userpost.title}
+                <div className="owncard-createdate">
+                  {userpost.createDate.split("T")[0]}
+                </div>
+              </div>
+              <div className="owncard-content">{userpost.content}</div>
+              <div className="owncard-meta">
+                <a
+                  onClick={
+                    () => {} /*props.commentForPostHandle(props.post._id)*/
+                  }
+                >
+                  <Icon name="comment" />
+                  {userpost.comments.length}
+                </a>
+                {userpost.likes.includes(props.userStore.getLogedUser._id) ? (
+                  <a
+                    onClick={
+                      () => {}
+                      /*props.unlikePostHandle(props.post, props.userStore.getLogedUser)*/
+                    }
+                  >
+                    <Icon name="like" style={{color:"red"}} />
+                    {userpost.likes.length}
+                  </a>
+                ) : (
+                  <a
+                    onClick={
+                      () => {}
+                      /* props.likePostHandle(props.post, props.userStore.getLogedUser)*/
+                    }
+                  >
+                    <Icon name="like" />
+                    {userpost.likes.length}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 }
+export default inject((stores) => ({
+  mainStore: stores.mainStore,
+  userStore: stores.userStore,
+}))(observer(WatchedUserPosts));
