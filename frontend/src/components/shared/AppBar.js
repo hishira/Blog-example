@@ -47,7 +47,7 @@ function AppBar(props) {
     fetchData()
   }, []);
   return (
-    <Menu size="large">
+    <Menu fluid size='large'>
       <Menu.Item name="home" active onClick={() => history.push("/")} />
       <Menu.Item>
         <Input

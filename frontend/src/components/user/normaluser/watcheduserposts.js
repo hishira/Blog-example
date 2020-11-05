@@ -6,6 +6,8 @@ import { Icon } from "semantic-ui-react";
 import PostComments from '../../comment/commentsForPost';
 import "./css/watcheduserposts.css";
 import {likePost,removeLikePost} from '../../../api/postApi'
+import { useHistory } from "react-router-dom";
+
 function WatchedUserPosts(props) {
   const [loading, setLoading] = useState("false");
   const [posts, setPosts] = useState([]);
@@ -70,6 +72,7 @@ function WatchedUserPosts(props) {
     };
     fetchData();
   }, reload);
+  const history = useHistory();
   return (
     <div>
       {loading === "false" ? (
@@ -80,7 +83,8 @@ function WatchedUserPosts(props) {
         <div>Error</div>
       ) : (
         <div>
-          {posts.map((userpost) => (
+          {posts.length > 0?
+           (<div>{posts.map((userpost) => (
             <div key={userpost._id} className="owncard">
               <div className="owncard-title">
                 {userpost.title}
@@ -105,7 +109,6 @@ function WatchedUserPosts(props) {
                   <a
                     onClick={
                       () => unlikePostHandle(userpost)
-                      /*props.unlikePostHandle(props.post, props.userStore.getLogedUser)*/
                     }
                   >
                     <Icon name="like" style={{color:"red"}} />
@@ -115,7 +118,6 @@ function WatchedUserPosts(props) {
                   <a
                     onClick={
                       () => likeposthandle(userpost,props.userStore.getLogedUser)
-                      /* props.likePostHandle(props.post, props.userStore.getLogedUser)*/
                     }
                   >
                     <Icon name="like" />
@@ -123,11 +125,18 @@ function WatchedUserPosts(props) {
                   </a>
                 )}
               </div>
+            </div>))
+            }
+            </div>):(
+              <div>
+            <div className='noposttitle' >Now new posts</div>
+            <div className='createpoststitle' onClick={()=>history.push("/postcreate")}>
+              Create post
             </div>
-          ))}
+            </div>)
+            }
             <PostComments postid={commentsPostId} />
         </div>
-
       )}
     </div>
   );

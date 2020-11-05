@@ -44,3 +44,23 @@
     padding:.5rem;
     color: slategrey;
 }
+.noposttitle{
+  font-size: 2rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+}
+.createpoststitle{
+  padding: 1.5rem;
+  margin: 2rem auto 0 auto;
+  border-radius: 15px;
+  font-size: 1.5rem;
+  color:white;
+  font-weight: 500;
+  height: 5rem;
+  line-height: 1.8rem;
+  background-color: #2185d0;
+  width: 14rem;
+}
+.createpoststitle:hover{
+  cursor: pointer;
+}
