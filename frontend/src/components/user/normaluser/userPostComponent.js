@@ -24,10 +24,11 @@ function UserPostComponent(props) {
     <Card style={cssobject.card}>
       <Card.Content>
         <Card.Header>
+        <div style={
+          cssobject.cardheadermeta  
+        }>{props.post.createDate.split("T")[0]}</div>
           <div>{props.post.title}</div>
-          <Card.Meta style={cssobject.cardheadermeta}>
-            Create: {props.post.createDate.split("T")[0]}
-          </Card.Meta>
+          
           <br />
           <div className="editpostoptions">
             <div
@@ -68,7 +69,6 @@ function UserPostComponent(props) {
           </div>
         </Card.Header>
         <Card.Description style={cssobject.cardcontentext}>
-          
           {props.post.content}
         </Card.Description>
         {props.post.tags.length > 0 ? (

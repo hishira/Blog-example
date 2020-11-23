@@ -25,9 +25,12 @@
   display: block;
   padding:.3rem;
   border-radius: 5px;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.55rem;
   box-sizing: border-box;
   opacity: 0;
+  width:8rem;
+  box-sizing: border-box;
+  box-shadow: 2px 3px  4px 1px lightgray;
   background-color: whitesmoke;
 }
 .clickhook:hover {
