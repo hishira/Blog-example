@@ -20,13 +20,19 @@ function UserPostComponent(props) {
       removeAndAddClass("animateclass","animateoff")
     }
   };
+  const dateReChange = (post)=>{
+    if (post.createDate !== post.editingDate){
+      return `Edited at ${post.editingDate.split("T")[0]}`
+    }
+    return `${post.editingDate.split("T")[0]}`
+  }
   return (
     <Card style={cssobject.card}>
       <Card.Content>
         <Card.Header>
         <div style={
           cssobject.cardheadermeta  
-        }>{props.post.createDate.split("T")[0]}</div>
+        }>{dateReChange(props.post)}</div>
           <div>{props.post.title}</div>
           
           <br />
