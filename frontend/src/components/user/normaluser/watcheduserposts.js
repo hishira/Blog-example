@@ -129,7 +129,7 @@ function WatchedUserPosts(props) {
             }
             </div>):(
               <div>
-            <div className='noposttitle' >Now new posts</div>
+            <div className='noposttitle' >Not new posts</div>
             <div className='createpoststitle' onClick={()=>history.push("/postcreate")}>
               Create post
             </div>

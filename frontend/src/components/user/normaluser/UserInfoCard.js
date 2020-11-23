@@ -12,7 +12,7 @@ function UserInfoCard(props) {
     const history = useHistory();
   return (
     <Card style={cssobject.usercard}>
-      <Card.Content>
+      <Card.Content style={cssobject.headerWidth}>
         <Icon name="user" size="large" />
         <Card.Header style={cssobject.usercardheader}>
           Username: {props.userStore.getLogedUser.username}
@@ -21,7 +21,7 @@ function UserInfoCard(props) {
         </Card.Header>
         {props.userStore.getLogedUser.description !== "" ? (
           <Card.Description>
-            Opis:{props.userStore.getLogedUser.description}
+            {`${props.userStore.getLogedUser.description}`}
           </Card.Description>
         ) : (
           <Button size="tiny" onClick={() => props.mainStore.setModal(true)}>

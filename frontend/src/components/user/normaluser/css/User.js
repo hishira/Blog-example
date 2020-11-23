@@ -1,10 +1,13 @@
 export default {
   margin: { margin: ".5rem" },
   usercard: {
-    widht: "20rem",
+    width: "40rem",
     marginRight: "auto",
     marginLeft: "auto",
+    marginTop:"1rem",
+    padding:".3rem"
   },
+  headerWidth:{width:"40rem"},
   usercardheader:{ marginTop: "1rem", fontSize: "1.1rem" },
   buttonmarginleft:{ marginLeft: ".2rem" },
   normaldivstyle:{

@@ -5,7 +5,7 @@ import cssobject from "./css/UserPostComponent";
 import "./css/postcomponent.css";
 function UserPostComponent(props) {
   let editVariable = false;
-  const firstHelperFunction = (classtoremove,classtoadd)=>{
+  const removeAndAddClass = (classtoremove,classtoadd)=>{
     let elements = document.getElementsByClassName(props.post._id);
       for (let i of elements) {
         i.classList.remove(classtoremove);
@@ -15,9 +15,9 @@ function UserPostComponent(props) {
   }
   const editclickhandle = () => {
     if (!editVariable) {
-      firstHelperFunction("animateoff","animateclass")
+      removeAndAddClass("animateoff","animateclass")
     } else {
-      firstHelperFunction("animateclass","animateoff")
+      removeAndAddClass("animateclass","animateoff")
     }
   };
   return (

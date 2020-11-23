@@ -23,6 +23,8 @@
 }
 .clickhook {
   display: block;
+  padding:.3rem;
+  border-radius: 5px;
   margin-bottom: 0.85rem;
   box-sizing: border-box;
   opacity: 0;
@@ -30,19 +32,19 @@
 }
 .clickhook:hover {
   cursor: pointer;
-  transition: all .3s ease-in-out;
+  transition: all .1s ease-in-out;
   color: lightgrey;
 }
 
 .animateclass {
-  animation: appear 1.2s ease-in-out forwards;
+  animation: appear .6s ease-in-out forwards;
   animation-play-state: running;
-  transition: all 1.2s ease-in-out;
+  transition: all .6s ease-in-out;
 }
 .animateoff {
-  animation: appearoff 1.2s ease-in-out forwards;
+  animation: appearoff .6s ease-in-out forwards;
   animation-play-state: running;
-  transition: all 1.2s ease-in-out;
+  transition: all .6s ease-in-out;
 }
 @keyframes appear {
   to {
