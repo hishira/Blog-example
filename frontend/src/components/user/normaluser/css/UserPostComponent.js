@@ -7,10 +7,8 @@ export default {
     boxSizing:"border-box"
   },
   cardheadermeta: {
-    position:"absolute",
     color:"gray",
     fontSize:"1rem",
-    left:"1.5rem"
   },
   butttongroup: {
     position: "absolute",
@@ -41,7 +39,6 @@ export default {
     padding: ".8rem",
     lineHeight: "1.8rem",
     fontSize: "1.3rem",
-    border:"2px solid red"
   },
   publicprofilegrid: { padding: "1.5rem" },
   publicprofilecard: {

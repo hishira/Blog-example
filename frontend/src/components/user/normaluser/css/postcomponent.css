@@ -1,7 +1,6 @@
 .editpostoptions {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
+  right:0;
+  top:0
 }
 .editpostoptions-title {
   border: 1px solid whitesmoke;
@@ -20,23 +19,43 @@
   border-radius: 10px;
   margin-top: 0;
   visibility: hidden;
+  position: absolute;
+}
+.cardheader{
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
 }
 .clickhook {
   display: block;
-  padding:.3rem;
+  position: relative;
+  left: -20px;
+  padding: .3rem;
   border-radius: 5px;
   margin-bottom: 0.55rem;
   box-sizing: border-box;
   opacity: 0;
-  width:8rem;
+  width: 8rem;
   box-sizing: border-box;
   box-shadow: 2px 3px  4px 1px lightgray;
   background-color: whitesmoke;
+  z-index: 2;
 }
 .clickhook:hover {
   cursor: pointer;
   transition: all .1s ease-in-out;
   color: lightgrey;
+}
+@media (max-width:800px){
+  .cardheader{
+    flex-direction: column;
+  }
+  .cardheader > *{
+    margin-top: .4rem;
+  }
 }
 
 .animateclass {
