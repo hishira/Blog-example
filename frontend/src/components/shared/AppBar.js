@@ -11,11 +11,11 @@ function AppBar(props) {
   const [loading, setLoading] = useState("false");
   const history = useHistory();
   const logouthandle = async () => {
+    history.push("/");
     await logout();
     props.mainStore.setLogged(false);
     props.userStore.setLogedUser({});
     Cookies.remove("user");
-    history.push("/");
   };
   const searchSumbitHandle = () => {
     console.log(userToFind);

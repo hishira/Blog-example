@@ -42,6 +42,7 @@ function User(props) {
   const [postIdToTypechange, setPostIdToTypeChange] = useState({});
   const [postTypeRevert, setPostTypeRevert] = useState("");
   const [sortOption, setSortOption] = useState("");
+  
   const sortOptions = [
     { key: "date_ascending", value: "date_ascending", text: "Ascending date" },
     {
@@ -55,28 +56,34 @@ function User(props) {
       text: "Post likes",
     },
   ];
+  
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
   };
+  
   const commentForPostHandle = (postid) => {
     console.log(postid);
     setCommentsForPost(postid);
     props.mainStore.setCommentsForPost(true);
   };
+  
   const editPostHandle = (post) => {
     setEditPost(post);
     props.mainStore.setEditPostModal(true);
   };
+  
   const deletePosthandle = (post) => {
     setPostIdToDelete(post._id);
     props.mainStore.setDeletePostModal(true);
   };
+  
   const changePostTypeHandle = (post) => {
     setPostIdToTypeChange(post._id);
     setPostTypeRevert(post.postType === "PUBLIC" ? "private" : "public");
     props.mainStore.setEditTypePostModal(true);
   };
+  
   const likePostHandle = async (post, u) => {
     let obj = { userID: props.userStore.getLogedUser._id };
     let res = await likePost(post._id, obj).then((response) => {
@@ -92,6 +99,7 @@ function User(props) {
       props.userStore.setLogedUser(newUser);
     }
   };
+  
   const unlikePostHandle = async (post, u) => {
     let obj = { userID: props.userStore.getLogedUser._id };
     let res = await removeLikePost(post._id, obj).then((response) => {
@@ -111,6 +119,7 @@ function User(props) {
       props.userStore.setLogedUser(userRemove);
     }
   };
+  
   const sortHandle = async () => {
     console.log(sortOption);
     if (sortOption === "") return;
@@ -137,6 +146,7 @@ function User(props) {
       props.userStore.setLogedUserPost(res);
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
