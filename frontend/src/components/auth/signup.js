@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import Response from "../shared/response";
 import {register} from '../../api/authApi'
 import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
-
+import {signUpUserFunction} from "../../utils/auth.util"
 export default function SignUp(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,44 +12,23 @@ export default function SignUp(props) {
   const [message,setMessage] = useState("")
   const history = useHistory();
 
+  const messageOpen = (messageString)=>{
+    setMessage(messageString)
+      setOpen(true)
+      setTimeout(() => {
+        setOpen(false)
+      }, 1500);
+  }
+  
   const signUp = async () => {
-    console.log(email);
-    console.log(password);
-    console.log(username);
-    if (email === "" || password === "" || username === ""){
-      setMessage("Please fill fields below")
-      setOpen(true)
-      setTimeout(() => {
-        setOpen(false)
-      }, 1500);
-      return
-    }
-    let obj = { email: email,username: username, password: password };
-    await register(obj).then(request=>{
-      console.log(request)
-      if(request.status === 200){
-        return request.json()
-      }else if(request.status === 400){
-        setMessage("User with that email exists")
-        setOpen(true)
-        setTimeout(() => {
-        setOpen(false)
-      }, 1500);
-      }
-      else
-        throw "Error with"
-    }).then(data=>{
-      console.log(data)
+    const response = await signUpUserFunction(email,password,username)
+    if(typeof response === "string"){
+      messageOpen(response);
+    }else{
       history.push('/login')
-    }).catch(err=>{
-      console.log(err)
-      setMessage("Wrong with server")
-      setOpen(true)
-      setTimeout(() => {
-        setOpen(false)
-      }, 1500);
-    })
+    }
   };
+  
   return (
     <div>
       <Response open={open} message={message} />
