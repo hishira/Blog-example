@@ -4,7 +4,7 @@ export default {
     marginLeft: "auto",
     width: "90%",
     padding: ".3rem",
-    boxSizing:"border-box"
+    boxSizing:"border-box",
   },
   cardheadermeta: {
     color:"gray",
@@ -42,7 +42,7 @@ export default {
   },
   publicprofilegrid: { padding: "1.5rem" },
   publicprofilecard: {
-    widht: "20rem",
+    width: "40rem",
     marginRight: "auto",
     marginLeft: "auto",
   },

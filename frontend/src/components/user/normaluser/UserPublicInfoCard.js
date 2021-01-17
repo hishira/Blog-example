@@ -48,7 +48,7 @@ function UserPublicInfoCard(props) {
   };
   return (
   <Card style={cssobject.publicprofilecard}>
-    <Card.Content>
+    <Card.Content style={{width:"40rem"}}>
       <Icon name="user" size="large" />
       <Card.Header style={cssobject.publicprofilecardheader}>
         Username: {props.userStore.getWatchedUser.username}

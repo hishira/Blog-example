@@ -1,51 +1,51 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Response from "../shared/response";
-import Cookies from 'js-cookie'
-import {login} from '../../api/authApi'
+import Cookies from "js-cookie";
+import { login } from "../../api/authApi";
 import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
-import {inject, observer} from "mobx-react";
-
+import { inject, observer } from "mobx-react";
+import { loginUserFunction } from "../../utils/auth.util";
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
-  const [message,setMessage] = useState("")
+  const [message, setMessage] = useState("");
   const history = useHistory();
 
-  const loginhandle = async () => {
-    console.log(email);
-    console.log(password);
-    if (email === "" || password === ""){
-      setMessage("Please fill fields below")
-      setOpen(true)
-      setTimeout(() => {
-        setOpen(false)
-      }, 1500);
-      return
-    }
-    let obj = { email: email, password: password };
-    await login(obj).then(response=>{
-      if(response.status === 200){
-        return response.json()
-      }
-    }).then(dane=>{
-      Cookies.set('user',dane.user)
-      console.log(dane.user)
-      props.mainStore.setLogged(true)
-      props.userStore.setLogedUser(dane.user)
-      history.push('/')
-    }).catch(err=>{
-      setMessage("Wrong email or password")
-      setOpen(true)
-      setTimeout(() => {
-        setOpen(false)
-      }, 1500);
-    })
+  const emptiesField = () => {
+    setMessage("Please fill fields below");
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 1500);
   };
+
+  const wrongEmailOrPassowrd = () => {
+    setMessage("Wrong email or password");
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 1500);
+  };
+
+  const loginhandle = async () => {
+    const response = await loginUserFunction(email, password);
+    if (response === null) {
+      emptiesField();
+      return;
+    } else if (response === false) {
+      wrongEmailOrPassowrd();
+      return;
+    }
+    props.mainStore.setLogged(true);
+    props.userStore.setLogedUser(response.user);
+    history.push("/");
+  };
+
   return (
     <div>
-      <Response open={open} message={message}/>
+      <Response open={open} message={message} />
       <Grid
         textAlign="center"
         style={{ marginTop: "8rem" }}
@@ -84,7 +84,11 @@ function Login(props) {
           <Message>
             New to us?{" "}
             <span
-              style={{ cursor: "pointer",color:"blue",textDecoration:"underline" }}
+              style={{
+                cursor: "pointer",
+                color: "blue",
+                textDecoration: "underline",
+              }}
               onClick={() => history.push("/signup")}
             >
               Sign Up
@@ -95,7 +99,7 @@ function Login(props) {
     </div>
   );
 }
-export default inject(stores => ({
+export default inject((stores) => ({
   mainStore: stores.mainStore,
-  userStore: stores.userStore
-}))(observer(Login))
+  userStore: stores.userStore,
+}))(observer(Login));
