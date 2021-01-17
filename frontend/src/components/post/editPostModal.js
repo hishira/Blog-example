@@ -2,47 +2,37 @@ import React, { useState } from "react";
 import { Button, Modal, Form, TextArea, Input } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
 import Response from "../shared/response";
-import { editPost } from "../../api/postApi";
 import { useHistory } from "react-router-dom";
+import { EditPostHandle } from "../../utils/post.util";
 function EditPostModal(props) {
   const [postTitle, setPostTitle] = useState(props.post.title);
   const [postContent, setPostContent] = useState(props.post.content);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
+
+  const setMessageOpenModal = (message) => {
+    setMessage(message);
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 1500);
+  };
+
+  const goodRequetEndFunction = () => {
+    props.mainStore.setEditPostModal(false);
+    if (props.mainStore.getLogStatus) history.push("/user");
+  };
+
   const submitHandle = async (e) => {
     e.preventDefault();
-    console.log(props.post._id);
-    if (postContent === "" || postTitle === "") {
-      setMessage("Post title or post content cannot be empty");
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-      }, 1500);
-      return;
-    }
-    let obj = {
-      title: postTitle,
-      content: postContent,
-    };
-    let flag = false;
-    console.log(obj);
-    let response = await editPost(props.post._id, obj).then((response) => {
-      if (response.status === 200) {
-        flag = true;
-      } else {
-        setMessage("Post cannot be edited");
-        setOpen(true);
-        setTimeout(() => {
-          setOpen(false);
-        }, 1500);
-        return;
-      }
-    });
-    if (flag) {
-      props.mainStore.setEditPostModal(false);
-      if (props.mainStore.getLogStatus) history.push("/user");
-    }
+    await EditPostHandle(
+      props.post._id,
+      postTitle,
+      postContent,
+      goodRequetEndFunction,
+      setMessageOpenModal
+    );
   };
   return (
     <Modal

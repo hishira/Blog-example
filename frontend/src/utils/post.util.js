@@ -1,4 +1,9 @@
-import { makePostPublic, makePostPrivate,deletePost } from "../api/postApi";
+import {
+  makePostPublic,
+  makePostPrivate,
+  deletePost,
+  editPost,
+} from "../api/postApi";
 
 const makePostPrivateHandle = async (postid, closemodal) => {
   const response = await makePostPrivate(postid).then((resp) => {
@@ -9,25 +14,49 @@ const makePostPrivateHandle = async (postid, closemodal) => {
     closemodal();
   }
 };
+
 const makePostPublicHandle = async (postid, closemodal) => {
   const response = await makePostPublic(postid).then((resp) => {
     if (resp.status === 200) return true;
     return false;
   });
-  if(response)
-    closemodal();
+  if (response) closemodal();
 };
-const deletePostHandle = async(postid,modalclose,deleteproblemhandle)=>{
-    const response = await deletePost(postid).then(resp=>{
-        if(resp.status === 200)
-            return true;
-        return false;
-    });
-    if(response){
-        modalclose();
-    }else{
-        deleteproblemhandle("Post cannot be deleted");
-    }
-}
 
-export {makePostPrivateHandle,makePostPublicHandle,deletePostHandle}
+const deletePostHandle = async (postid, modalclose, deleteproblemhandle) => {
+  const response = await deletePost(postid).then((resp) => {
+    if (resp.status === 200) return true;
+    return false;
+  });
+  if (response) {
+    modalclose();
+  } else {
+    deleteproblemhandle("Post cannot be deleted");
+  }
+};
+
+const EditPostHandle = async (postid, posttitle, postcontent, endFunction,messagefunction) => {
+  if (posttitle === "" || postcontent === "") {
+    messagefunction("Post title or post content cannot be empty")
+    return;
+  }
+  const editedPostObject = {
+    title: posttitle,
+    content: postcontent,
+  };
+  const response = await editPost(postid, editedPostObject).then((resp) => {
+    if (resp.status === 200) return resp.json();
+    return 400;
+  });
+  if (response !== 400) {
+    endFunction();
+  }else{
+    messagefunction("Post cannot be edited")
+  }
+};
+export {
+  makePostPrivateHandle,
+  makePostPublicHandle,
+  deletePostHandle,
+  EditPostHandle,
+};
