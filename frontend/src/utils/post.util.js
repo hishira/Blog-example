@@ -3,6 +3,7 @@ import {
   makePostPrivate,
   deletePost,
   editPost,
+  createPost,
 } from "../api/postApi";
 
 const makePostPrivateHandle = async (postid, closemodal) => {
@@ -35,9 +36,15 @@ const deletePostHandle = async (postid, modalclose, deleteproblemhandle) => {
   }
 };
 
-const EditPostHandle = async (postid, posttitle, postcontent, endFunction,messagefunction) => {
+const EditPostHandle = async (
+  postid,
+  posttitle,
+  postcontent,
+  endFunction,
+  messagefunction
+) => {
   if (posttitle === "" || postcontent === "") {
-    messagefunction("Post title or post content cannot be empty")
+    messagefunction("Post title or post content cannot be empty");
     return;
   }
   const editedPostObject = {
@@ -50,13 +57,35 @@ const EditPostHandle = async (postid, posttitle, postcontent, endFunction,messag
   });
   if (response !== 400) {
     endFunction();
-  }else{
-    messagefunction("Post cannot be edited")
+  } else {
+    messagefunction("Post cannot be edited");
   }
+};
+
+const createPostHandle = async (
+  title,
+  content,
+  makePostPrivate,
+  tags,
+  endFunction
+) => {
+  const newPost = {
+    title: title,
+    content: content,
+    postPrivate: makePostPrivate,
+    tags: tags,
+  };
+  const response = await createPost(newPost).then((resp) => {
+    if (resp.status === 200) return true;
+    return false;
+  });
+  if(response)
+    endFunction();
 };
 export {
   makePostPrivateHandle,
   makePostPublicHandle,
   deletePostHandle,
   EditPostHandle,
+  createPostHandle,
 };

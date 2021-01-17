@@ -5,8 +5,8 @@ import Response from "../shared/response";
 import { useHistory } from "react-router-dom";
 import { EditPostHandle } from "../../utils/post.util";
 function EditPostModal(props) {
-  const [postTitle, setPostTitle] = useState(props.post.title);
-  const [postContent, setPostContent] = useState(props.post.content);
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
