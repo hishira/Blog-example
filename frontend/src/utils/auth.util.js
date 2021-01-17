@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { login, register } from "../api/authApi";
+import { login, register, checkLogin } from "../api/authApi";
 
 const loginUserFunction = async (email, password) => {
   if (email === "" || password === "") {
@@ -40,4 +40,24 @@ const signUpUserFunction = async (email, password, username) => {
     ? "Wrong with server"
     : response;
 };
-export { loginUserFunction,signUpUserFunction };
+
+const checkIfUserIslogged = async (removefunction,setfunction) => {
+  try {
+    const response = await checkLogin().then((resp) => {
+      if (resp.status === 200) return resp.json();
+      return false;
+    });
+    if (response === false) {
+      Cookies.remove("user");
+      removefunction();
+      return "true"
+    } else {
+      Cookies.set("user", response.user);
+      setfunction(response);
+      return "true";
+    }
+  } catch (e) {
+    return "error";
+  }
+};
+export { loginUserFunction, signUpUserFunction, checkIfUserIslogged };

@@ -5,44 +5,38 @@ import Cookies from "js-cookie";
 import { logout, checkLogin } from "../../api/authApi";
 import { inject, observer } from "mobx-react";
 import Loading from "../shared/loadingComponent";
-
+import {checkIfUserIslogged} from "../../utils/auth.util"
 function AppBar(props) {
   const [userToFind, setUserToFind] = useState("");
   const [loading, setLoading] = useState("false");
   const history = useHistory();
   const logouthandle = async () => {
-    history.push("/");
+    history.push("/login");
     await logout();
     props.mainStore.setLogged(false);
     props.userStore.setLogedUser({});
     Cookies.remove("user");
   };
+  
   const searchSumbitHandle = () => {
     console.log(userToFind);
     history.push(`/userfind/${userToFind}`);
   };
+  
+  const setLogoutStore = ()=>{
+    props.mainStore.setLogged(false);
+    props.userStore.setLogedUser({}); 
+  }
+  
+  const setLoggedStore = (data)=>{
+    props.mainStore.setLogged(true);
+    props.userStore.setLogedUser(data.user);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        let dane = await checkLogin().then((response) => {
-          if (response.status === 200) return response.json();
-          return false;
-        });
-        if (dane === false) {
-          props.mainStore.setLogged(false);
-          props.userStore.setLogedUser({});
-          Cookies.remove("user");
-          setLoading("true");
-        } else {
-          Cookies.set("user", dane.user);
-          console.log(dane.user);
-          props.mainStore.setLogged(true);
-          props.userStore.setLogedUser(dane.user);
-          setLoading("true");
-        }
-      } catch (err) {
-        setLoading("error");
-      }
+      const data = await checkIfUserIslogged(setLogoutStore,setLoggedStore);
+      setLoading(data);
     };
     fetchData()
   }, []);
