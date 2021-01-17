@@ -40,6 +40,7 @@ function AppBar(props) {
     };
     fetchData()
   }, []);
+  
   return (
     <Menu fluid size='large'>
       <Menu.Item name="home" active onClick={() => history.push("/")} />
