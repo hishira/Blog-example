@@ -1,4 +1,9 @@
-import { createComment, createAnonymousComment } from "../api/commentApi";
+import {
+  createComment,
+  createAnonymousComment,
+  getCommentsByPost,
+  sortComments,
+} from "../api/commentApi";
 
 const createUserComment = async (newcomment, messagefunction) => {
   const response = await createComment(newcomment).then((resp) => {
@@ -47,4 +52,34 @@ const createCommentHandle = async (
   }
 };
 
-export {createCommentHandle}
+const fetchCommentForPost = async (postid) => {
+  const sendObject = {
+    postID: postid,
+  };
+  const commentsForPost = await getCommentsByPost(sendObject).then((res) => {
+    if (res.status === 200) {
+      return res.json();
+    } else return false;
+  });
+  if (commentsForPost === false) {
+    throw new Error("Error");
+  }
+  return commentsForPost;
+};
+const sortPosts = async (postid, sortoption) => {
+  if (sortoption === "") {
+    return [];
+  }
+  const sendObject = {
+    postID: postid,
+    sortOption: sortoption,
+  };
+  const response = await sortComments(sendObject).then((res) => {
+    if (res.status === 200) {
+      return res.json();
+    }
+    return [];
+  });
+  return response;
+};
+export { createCommentHandle, fetchCommentForPost, sortPosts };

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Modal, Form, TextArea } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
 import Response from "../shared/response";
-import { createComment, createAnonymousComment } from "../../api/commentApi";
 import { useHistory } from "react-router-dom";
 import { createCommentHandle } from "../../utils/comment.util";
 
