@@ -5,39 +5,31 @@ import Response from "../../shared/response";
 import { addUserDescription } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
 import cssobject from './css/Usermodal'
-
+import {changeUserDescription} from "../../../utils/user.util"
 function DescriptionModal(props) {
   const [description, setDescription] = useState("");
   const [response, setResponse] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
 
+  const messageFunction = (message)=>{
+    setMessage(message);
+    setResponse(true);
+    setTimeout(() => {
+      setResponse(false);
+      setMessage("");
+    }, 1500);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(description);
-    if (description.length > 250) {
-      setMessage("Description must have less than 250 characters");
-      setResponse(true);
-      setTimeout(() => {
-        setResponse(false);
-        setMessage("");
-      }, 1500);
-      return;
+    const responseStatus = await changeUserDescription(description,messageFunction);
+    if(responseStatus){
+      history.push("/user");
+      props.mainStore.setModal(false)
     }
-    let response = await addUserDescription({ description: description }).then(
-      (res) => {
-        if (res.status === 200) history.push("/user");
-        else {
-          setMessage("Problem with description adding");
-          setResponse(true);
-          setTimeout(() => {
-            setResponse(false);
-            setMessage("");
-          }, 1500);
-        }
-      }
-    );
   };
+  
   return (
     <Modal
       open={props.mainStore.descriptiopnModal}
