@@ -3,6 +3,7 @@ import {
   emailChange,
   passwordChange,
   getUserInfo,
+  userFind,
 } from "../api/userApi";
 
 const checkDescriptionLength = (description, messageFunction) => {
@@ -61,14 +62,32 @@ const changePassword = async (
 };
 
 const GetUserProfileInfo = async () => {
-  const responseUserInfo = await getUserInfo().then(resp=>{
-    if(resp.status === 200){
+  const responseUserInfo = await getUserInfo().then((resp) => {
+    if (resp.status === 200) {
       return resp.json();
     }
     return null;
-  })
-  if(responseUserInfo === null ) throw new Error("Err")
+  });
+  if (responseUserInfo === null) throw new Error("Err");
   return responseUserInfo;
-}
+};
 
-export { changeUserDescription, changeEmail, changePassword, GetUserProfileInfo };
+const findUser = async (username) => {
+  const usernameObject = {
+    username: username,
+  };
+  const userwhichwefind = await userFind(usernameObject).then((resp) => {
+    if (resp.status === 200) return resp.json();
+    return null;
+  });
+  if(userwhichwefind === null) throw new Error("err")
+  return userwhichwefind;
+};
+
+export {
+  changeUserDescription,
+  changeEmail,
+  changePassword,
+  GetUserProfileInfo,
+  findUser,
+};

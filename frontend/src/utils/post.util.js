@@ -8,6 +8,7 @@ import {
   removeLikePost,
   sortPostByLikes,
   sortPost,
+  getPostsByTag,
 } from "../api/postApi";
 
 const makePostPrivateHandle = async (postid, closemodal) => {
@@ -83,59 +84,65 @@ const createPostHandle = async (
     if (resp.status === 200) return true;
     return false;
   });
-  if(response)
-    endFunction();
+  if (response) endFunction();
 };
 
-const likeUserPost = async (postid,userid)=>{
+const likeUserPost = async (postid, userid) => {
   const userobj = {
     userID: userid,
-  }
-  const response = await likePost(postid,userobj).then(resp=>{
-    if(resp.status === 200)
-      return true;
-    return false;
-  })
-  return response;
-}
-
-const unlikeUserPost = async(postid,userid) =>{
-  const userobj = {userID:userid};
-  const response = await removeLikePost(postid,userobj).then(res=>{
-    if(res.status === 200)
-      return true;
+  };
+  const response = await likePost(postid, userobj).then((resp) => {
+    if (resp.status === 200) return true;
     return false;
   });
   return response;
-}
+};
 
-const sortUserPost = async(sortoption,userid,savePostsInState)=>{
+const unlikeUserPost = async (postid, userid) => {
+  const userobj = { userID: userid };
+  const response = await removeLikePost(postid, userobj).then((res) => {
+    if (res.status === 200) return true;
+    return false;
+  });
+  return response;
+};
+
+const sortUserPost = async (sortoption, userid, savePostsInState) => {
   const sortObject = {
-    userID:userid,
-    sortOption:sortoption,
-  }
-  if(sortoption === "post_likes"){
-    const sortedPosts = await sortPostByLikes(sortObject).then(res=>{
-      if(res.status === 200)
-        return res.json()
+    userID: userid,
+    sortOption: sortoption,
+  };
+  if (sortoption === "post_likes") {
+    const sortedPosts = await sortPostByLikes(sortObject).then((res) => {
+      if (res.status === 200) return res.json();
       return false;
-    })
-    if(sortedPosts !== false){
-      savePostsInState(sortedPosts)
+    });
+    if (sortedPosts !== false) {
+      savePostsInState(sortedPosts);
     }
     return;
   }
-  const sortedPosts = await sortPost(sortObject).then(res=>{
-    if(res.status === 200)
-      return res.json();
+  const sortedPosts = await sortPost(sortObject).then((res) => {
+    if (res.status === 200) return res.json();
     return false;
-  })
-  if(sortedPosts !== false){
+  });
+  if (sortedPosts !== false) {
     savePostsInState(sortedPosts);
   }
   return;
+};
 
-}
+const findPostsByTagName = async (tagname) => {
+  const tagobject = {
+    username: tagname,
+  };
+  const postWithTagResponse = await getPostsByTag(tagobject).then((resp) => {
+    if (resp.status === 200) return resp.json();
+    return null;
+  });
+  if (postWithTagResponse === null) throw new Error("Error");
+  return postWithTagResponse;
+};
 
 export {
   makePostPrivateHandle,
@@ -145,5 +152,6 @@ export {
   createPostHandle,
   likeUserPost,
   unlikeUserPost,
-  sortUserPost
+  sortUserPost,
+  findPostsByTagName
 };
