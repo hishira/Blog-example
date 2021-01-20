@@ -2,6 +2,7 @@ import {
   addUserDescription,
   emailChange,
   passwordChange,
+  getUserInfo,
 } from "../api/userApi";
 
 const checkDescriptionLength = (description, messageFunction) => {
@@ -59,4 +60,15 @@ const changePassword = async (
   return response;
 };
 
-export { changeUserDescription, changeEmail, changePassword };
+const GetUserProfileInfo = async () => {
+  const responseUserInfo = await getUserInfo().then(resp=>{
+    if(resp.status === 200){
+      return resp.json();
+    }
+    return null;
+  })
+  if(responseUserInfo === null ) throw new Error("Err")
+  return responseUserInfo;
+}
+
+export { changeUserDescription, changeEmail, changePassword, GetUserProfileInfo };
