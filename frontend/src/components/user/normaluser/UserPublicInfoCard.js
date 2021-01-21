@@ -1,19 +1,9 @@
 import React from "react";
 import { Button, Card, Icon } from "semantic-ui-react";
-import {
-  getPublicUserInfo,
-  watchUser,
-  unwatchUser,
-} from "../../../api/userApi";
 import { inject, observer } from "mobx-react";
-import CommentModal from "../../comment/commentModal";
-import PostComments from "../../comment/commentsForPost";
-import { likePost, removeLikePost, sortPost } from "../../../api/postApi";
-import Cookies from "js-cookie";
-import Response from "../../shared/response";
-import LoginModal from "../../auth/loginModal";
-import { useHistory } from "react-router-dom";
 import cssobject from "./css/UserPostComponent";
+import {watchUser,unWatchUser} from "../../../utils/user.util";
+
 function UserPublicInfoCard(props) {
   const checkWatchedMe = () => {
     console.log(props.userStore.getLogedUser);
@@ -24,28 +14,21 @@ function UserPublicInfoCard(props) {
       )
     );
   };
+  
   const watchUserHandle = async () => {
-    let obj = { userID: props.userStore.getWatchedUser._id };
-    console.log(obj);
-    let req = await watchUser(obj).then((response) => {
-      if (response.status === 200) return response.json();
-      return false;
-    });
-    if (req !== false) {
-      props.userStore.setLogedUser(req);
+    const responseStatus = await watchUser(props.userStore.getWatchedUser._id)
+    if (responseStatus !== false) {
+      props.userStore.setLogedUser(responseStatus);
     }
   };
+  
   const unWatchUserHandle = async () => {
-    let obj = { userID: props.userStore.getWatchedUser._id };
-    console.log(obj);
-    let req = await unwatchUser(obj).then((response) => {
-      if (response.status === 200) return response.json();
-      return false;
-    });
-    if (req !== false) {
-      props.userStore.setLogedUser(req);
+    const responseStatus = await unWatchUser(props.userStore.getWatchedUser._id);
+    if (responseStatus !== false) {
+      props.userStore.setLogedUser(responseStatus);
     }
   };
+  
   return (
   <Card style={cssobject.publicprofilecard}>
     <Card.Content style={{width:"40rem"}}>

@@ -4,6 +4,8 @@ import {
   passwordChange,
   getUserInfo,
   userFind,
+  watchUser as watch,
+  unwatchUser
 } from "../api/userApi";
 
 const checkDescriptionLength = (description, messageFunction) => {
@@ -80,9 +82,32 @@ const findUser = async (username) => {
     if (resp.status === 200) return resp.json();
     return null;
   });
-  if(userwhichwefind === null) throw new Error("err")
+  if (userwhichwefind === null) throw new Error("err");
   return userwhichwefind;
 };
+
+const watchUser = async (userid) => {
+  const userObject = {
+    userID: userid,
+  };
+  const responseStatus = watch(userObject).then((resp) => {
+    if (resp.status === 200) return resp.json();
+    return false;
+  });
+  return responseStatus;
+};
+
+const unWatchUser = async (userid)=>{
+  const userToWatchObject = {
+    userID:userid,
+  }
+  const responseStatus = await unwatchUser(userToWatchObject).then(resp=>{
+    if(resp.status === 200)
+      return resp.json();
+    return false;
+  })
+  return responseStatus;
+}
 
 export {
   changeUserDescription,
@@ -90,4 +115,6 @@ export {
   changePassword,
   GetUserProfileInfo,
   findUser,
+  watchUser,
+  unWatchUser
 };
