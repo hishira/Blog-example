@@ -5,7 +5,8 @@ import {
   getUserInfo,
   userFind,
   watchUser as watch,
-  unwatchUser
+  unwatchUser,
+  getPublicUserInfo
 } from "../api/userApi";
 
 const checkDescriptionLength = (description, messageFunction) => {
@@ -109,6 +110,16 @@ const unWatchUser = async (userid)=>{
   return responseStatus;
 }
 
+const GetPublicUserProfileInfo = async (userid)=>{
+  const userInfo = await getPublicUserInfo(userid).then(resp=>{
+    if(resp.status === 200)
+      return resp.json();
+    return null;
+  })
+  if(userInfo === null) throw new Error("problem");
+  return userInfo;
+}
+
 export {
   changeUserDescription,
   changeEmail,
@@ -116,5 +127,6 @@ export {
   GetUserProfileInfo,
   findUser,
   watchUser,
-  unWatchUser
+  unWatchUser,
+  GetPublicUserProfileInfo
 };
