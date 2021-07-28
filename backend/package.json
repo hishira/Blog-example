@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --no-warnings app.js",
+    "start:docker": "node app.js",
     "test": "nyc mocha --timeout 1000000 --exit"
   },
   "author": "MS",
