@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Response from "../shared/response";
-import Cookies from "js-cookie";
-import { login } from "../../api/authApi";
 import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
 import { loginUserFunction } from "../../utils/auth.util";
@@ -13,7 +11,7 @@ function Login(props) {
   const [message, setMessage] = useState("");
   const history = useHistory();
 
-  const emptiesField = () => {
+  const emptiesFieldMessage = () => {
     setMessage("Please fill fields below");
     setOpen(true);
     setTimeout(() => {
@@ -21,7 +19,7 @@ function Login(props) {
     }, 1500);
   };
 
-  const wrongEmailOrPassowrd = () => {
+  const wrongEmailOrPassowrdMessage = () => {
     setMessage("Wrong email or password");
     setOpen(true);
     setTimeout(() => {
@@ -32,10 +30,10 @@ function Login(props) {
   const loginhandle = async () => {
     const response = await loginUserFunction(email, password);
     if (response === null) {
-      emptiesField();
+      emptiesFieldMessage();
       return;
     } else if (response === false) {
-      wrongEmailOrPassowrd();
+      wrongEmailOrPassowrdMessage();
       return;
     }
     props.mainStore.setLogged(true);

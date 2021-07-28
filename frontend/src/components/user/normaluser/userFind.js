@@ -12,41 +12,33 @@ import {
   Label,
   Icon
 } from "semantic-ui-react";
-import { userFind } from "../../../api/userApi";
 import { useHistory } from "react-router-dom";
-import {getPostsByTag} from '../../../api/postApi'
 import { inject, observer } from "mobx-react";
 import cssobject from "./css/User";
+import {findUser} from "../../../utils/user.util"
+import {findPostsByTagName} from "../../../utils/post.util"
 
 function UserFind(props) {
   const [loading, setLoading] = useState("false");
   const [users, setUsers] = useState([]);
   const [posts,setPosts] = useState([]);
   const history = useHistory();
+  
+  const fetchDatiWhichWeWillFind = async ()=>{
+    try {
+      const { user } = props.match.params;
+      const userWhichWeFind = await findUser(user);
+      const postWithTagWichFind = await findPostsByTagName(user);
+      setUsers(userWhichWeFind);
+      setPosts(postWithTagWichFind)
+      setLoading("true");
+    } catch (err) {
+      setLoading("error");
+    }
+  }
+
   useEffect(() => {
-    let fetchData = async () => {
-      try {
-        const { user } = props.match.params;
-        let response = await userFind({ username: user }).then((response) => {
-          if (response.status === 200) return response.json();
-          return null;
-        });
-        if (response === null) throw new Error("err");
-        let responseOneMore = await getPostsByTag({username:user}).then(response=>{
-          if (response.status === 200) return response.json();
-          return null
-        })
-        if(responseOneMore === null) throw new Error("err");
-        setUsers(response);
-        setPosts(responseOneMore)
-        console.log(response);
-        console.log(responseOneMore);
-        setLoading("true");
-      } catch (err) {
-        setLoading("error");
-      }
-    };
-    fetchData();
+    fetchDatiWhichWeWillFind();
   }, [props]);
   return (
     <Container>

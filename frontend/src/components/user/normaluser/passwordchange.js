@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import { passwordChange } from "../../../api/userApi";
-import {
-  Container,
-  Header,
-  Divider,
-  Form,
-  Input,
-  Icon,
-  Button,
-} from "semantic-ui-react";
+import { Container, Header, Divider, Form, Button } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import Response from "../../shared/response";
 import cssobject from "./css/UserSettings";
+import { changePassword } from "../../../utils/user.util";
 
 export default function EmailChange(props) {
   const [password, setPassword] = useState("");
@@ -19,31 +11,29 @@ export default function EmailChange(props) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
+
+  const messageFunction = (message) => {
+    setMessage(message);
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+      setMessage("");
+    }, 1500);
+  };
+
   const submitHandle = async (e) => {
     e.preventDefault();
     console.log(password, confirmPassword);
-    if (password !== confirmPassword) {
-      setMessage("Password do not match with confirm password");
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-        setMessage("");
-      }, 1500);
-      return;
+    const responseStatus = await changePassword(
+      password,
+      confirmPassword,
+      messageFunction
+    );
+    if (responseStatus) {
+      history.push("/user");
     }
-    let response = await passwordChange({ password: password }).then((res) => {
-      console.log(res.status);
-      if (res.status === 200) history.push("/user");
-      else {
-        setMessage("Problem with password change");
-        setOpen(true);
-        setTimeout(() => {
-          setOpen(false);
-          setMessage("");
-        }, 1500);
-      }
-    });
   };
+
   return (
     <Container>
       <Response open={open} message={message} />

@@ -30,7 +30,13 @@ import UserPostComponent from "./userPostComponent";
 import WatchedUsersModal from "./watchedUserModal";
 import LoadingComponent from "../../shared/loadingComponent";
 import cssobject from "./css/User";
-import UserInfoCard from './UserInfoCard'
+import UserInfoCard from "./UserInfoCard";
+import {
+  likeUserPost,
+  unlikeUserPost,
+  sortUserPost,
+} from "../../../utils/post.util";
+import {GetUserProfileInfo} from "../../../utils/user.util" 
 function User(props) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState("false");
@@ -42,6 +48,7 @@ function User(props) {
   const [postIdToTypechange, setPostIdToTypeChange] = useState({});
   const [postTypeRevert, setPostTypeRevert] = useState("");
   const [sortOption, setSortOption] = useState("");
+
   const sortOptions = [
     { key: "date_ascending", value: "date_ascending", text: "Ascending date" },
     {
@@ -55,106 +62,105 @@ function User(props) {
       text: "Post likes",
     },
   ];
+
   const commentHandle = (post) => {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
   };
+
   const commentForPostHandle = (postid) => {
     console.log(postid);
     setCommentsForPost(postid);
     props.mainStore.setCommentsForPost(true);
   };
+
   const editPostHandle = (post) => {
     setEditPost(post);
     props.mainStore.setEditPostModal(true);
   };
+
   const deletePosthandle = (post) => {
     setPostIdToDelete(post._id);
     props.mainStore.setDeletePostModal(true);
   };
+
   const changePostTypeHandle = (post) => {
     setPostIdToTypeChange(post._id);
     setPostTypeRevert(post.postType === "PUBLIC" ? "private" : "public");
     props.mainStore.setEditTypePostModal(true);
   };
+
+  const addLikeInViewToPost = (post, user) => {
+    let newUser = props.userStore.getLogedUser;
+    for (let i in newUser.posts) {
+      if (newUser.posts[i]._id === post._id)
+        newUser.posts[i].likes.push(user._id);
+    }
+    props.userStore.setLogedUser(newUser);
+  };
+
   const likePostHandle = async (post, u) => {
-    let obj = { userID: props.userStore.getLogedUser._id };
-    let res = await likePost(post._id, obj).then((response) => {
-      if (response.status === 200) return true;
-      else return false;
-    });
-    if (res) {
-      let newUser = props.userStore.getLogedUser;
-      for (let i in newUser.posts) {
-        if (newUser.posts[i]._id === post._id)
-          newUser.posts[i].likes.push(u._id);
-      }
-      props.userStore.setLogedUser(newUser);
+    const responseStatus = await likeUserPost(
+      post._id,
+      props.userStore.getLogedUser._id
+    );
+    //To prevent from refresh and fetch data
+    if (responseStatus) {
+      addLikeInViewToPost(post, u);
     }
   };
-  const unlikePostHandle = async (post, u) => {
-    let obj = { userID: props.userStore.getLogedUser._id };
-    let res = await removeLikePost(post._id, obj).then((response) => {
-      if (response.status === 200) return true;
-      else return false;
-    });
-    if (res) {
-      let userRemove = props.userStore.getLogedUser;
-      for (let i in userRemove.posts) {
-        if (userRemove.posts[i]._id === post._id) {
-          let index = userRemove.posts[i].likes.indexOf(userRemove._id);
-          console.log(index);
-          if (index > -1) userRemove.posts[i].likes.splice(index, 1);
-        }
+
+  const removeLikeFromPostInView = (post) => {
+    let userRemove = props.userStore.getLogedUser;
+    for (let i in userRemove.posts) {
+      if (userRemove.posts[i]._id === post._id) {
+        let index = userRemove.posts[i].likes.indexOf(userRemove._id);
+        console.log(index);
+        if (index > -1) userRemove.posts[i].likes.splice(index, 1);
       }
-      console.log(userRemove);
-      props.userStore.setLogedUser(userRemove);
+    }
+    props.userStore.setLogedUser(userRemove);
+  };
+
+  const unlikePostHandle = async (post) => {
+    const responsStatus = unlikeUserPost(
+      post._id,
+      props.userStore.getLogedUser._id
+    );
+    //To prevent from refresh and fetch data
+    if (responsStatus) {
+      removeLikeFromPostInView(post);
     }
   };
+
+  const SavePostInState = (posts)=>{
+    props.userStore.setLogedUserPost(posts);
+  }
+
   const sortHandle = async () => {
     console.log(sortOption);
     if (sortOption === "") return;
-    let obj = {
-      userID: props.userStore.getLogedUser._id,
-      sortOption: sortOption,
-    };
-    console.log(obj);
-    if (sortOption === "post_likes") {
-      let res = await sortPostByLikes(obj).then((response) => {
-        if (response.status === 200) return response.json();
-        return false;
-      });
-      if (res !== false) {
-        props.userStore.setLogedUserPost(res);
-      }
-      return;
-    }
-    let res = await sortPost(obj).then((response) => {
-      if (response.status === 200) return response.json();
-      return false;
-    });
-    if (res !== false) {
-      props.userStore.setLogedUserPost(res);
-    }
+    await sortUserPost(
+      sortOption,
+      props.userStore.getLogedUser._id,
+      SavePostInState
+    );
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userFromRequest = await getUserInfo().then((request) => {
-          if (request.status === 200) return request.json();
-          else return null;
-        });
-        if (userFromRequest === null) throw new Error("Err");
+        const userFromRequest = await GetUserProfileInfo();
         props.userStore.setLogedUser(userFromRequest);
         setUser(userFromRequest);
         setLoading("true");
-        console.log(userFromRequest);
       } catch (err) {
         setLoading("error");
       }
     };
     fetchData();
   }, props.userStore.getLogedUser);
+
   const history = useHistory();
   return (
     <div style={cssobject.margin}>
@@ -167,7 +173,7 @@ function User(props) {
               ) : loading === "error" ? (
                 <div>Error</div>
               ) : (
-                <UserInfoCard/>
+                <UserInfoCard />
               )}
             </Grid.Column>
           </Grid.Row>

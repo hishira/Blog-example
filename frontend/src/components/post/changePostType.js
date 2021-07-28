@@ -1,41 +1,26 @@
 import React, { useState } from "react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
-import {makePostPublic,makePostPrivate} from '../../api/postApi'
 import { useHistory } from "react-router-dom";
-
+import { makePostPrivateHandle, makePostPublicHandle } from "../../utils/post.util";
 function ChangePostType(props) {
-    const history = useHistory();
+  const history = useHistory();
+
+  const closePostEditModal = () => {
+    props.mainStore.setEditTypePostModal(false);
+    history.push("/user");
+  };
   const changepostTypeHandle = async () => {
     if (props.typeToChange === "private") {
-        let res = await makePostPrivate(props.id).then(response=>{
-            if(response.status === 200)
-                return true
-            else return false
-        })
-        if(res === true){
-            console.log("yse")
-            props.mainStore.setEditTypePostModal(false)
-            history.push('/user')
-        }
-    }else{
-        let res = await makePostPublic(props.id).then(response=>{
-            if(response.status === 200)
-                return true
-            else return false
-        })
-        if(res === true){
-            props.mainStore.setEditTypePostModal(false)
-            history.push('/user')
-        }
+      await makePostPrivateHandle(props.id, closePostEditModal);
+    } else {
+      await makePostPublicHandle(props.id, closePostEditModal);
     }
-
   };
   return (
     <Modal
       closeIcon
-      open={ props.mainStore.editTypePostModal}
-    
+      open={props.mainStore.editTypePostModal}
       onClose={() => props.mainStore.setEditTypePostModal(false)}
       onOpen={() => props.mainStore.setEditTypePostModal(true)}
     >

@@ -11,19 +11,26 @@ import {
   Select,
   Label,
 } from "semantic-ui-react";
+import { getPublicUserInfo } from "../../../api/userApi";
 import {
-  getPublicUserInfo,
-} from "../../../api/userApi";
+  GetPublicUserProfileInfo,
+  GetUserProfileInfo,
+} from "../../../utils/user.util";
 import { inject, observer } from "mobx-react";
 import CommentModal from "../../comment/commentModal";
 import PostComments from "../../comment/commentsForPost";
-import { likePost, removeLikePost, sortPost } from "../../../api/postApi";
 import Cookies from "js-cookie";
 import Response from "../../shared/response";
 import LoginModal from "../../auth/loginModal";
 import { useHistory } from "react-router-dom";
 import cssobject from "./css/UserPostComponent";
-import UserPublicInfoCard from './UserPublicInfoCard'
+import UserPublicInfoCard from "./UserPublicInfoCard";
+import {
+  likeUserPost,
+  unlikeUserPost,
+  sortUserPost,
+} from "../../../utils/post.util";
+
 function PublicUserProfile(props) {
   const [loggedUser, setLoggedUser] = useState(Cookies.getJSON("user"));
   const [loading, setLoading] = useState("false");
@@ -46,92 +53,92 @@ function PublicUserProfile(props) {
     setPropsComment(post);
     props.mainStore.setCommentModal(true);
   };
+
   const commentForPostHandle = (postid) => {
-    console.log(postid);
     setCommentsForPost(postid);
     props.mainStore.setCommentsForPost(true);
   };
+
+  const setLikePostInState = (post, user) => {
+    let newUser = props.userStore.getWatchedUser;
+    for (let i in newUser.posts) {
+      if (newUser.posts[i]._id === post._id)
+        newUser.posts[i].likes.push(user._id);
+    }
+    props.userStore.setWatchedUser(newUser);
+  };
+
   const likePostHandle = async (post, u) => {
     if (!props.mainStore.getLogStatus) {
       props.mainStore.setLoginModal(true);
       return;
     }
-    console.log("Old Post");
-    console.log(post);
-    console.log(props.userStore.getLogedUser._id);
-    let obj = { userID: props.userStore.getLogedUser._id };
-
-    let res = await likePost(post._id, obj).then((response) => {
-      if (response.status === 200) return true;
-      else return false;
-    });
-    if (res) {
-      let newUser = props.userStore.getWatchedUser;
-      for (let i in newUser.posts) {
-        if (newUser.posts[i]._id === post._id)
-          newUser.posts[i].likes.push(u._id);
-      }
-      props.userStore.setWatchedUser(newUser);
+    const responseStatus = await likeUserPost(
+      post._id,
+      props.userStore.getLogedUser._id
+    );
+    if (responseStatus) {
+      setLikePostInState(post, u);
     }
   };
-  const unlikePostHandle = async (post, u) => {
-    let obj = { userID: props.userStore.getLogedUser._id };
 
-    let res = await removeLikePost(post._id, obj).then((response) => {
-      if (response.status === 200) return true;
-      else return false;
-    });
-    if (res) {
-      let userRemove = props.userStore.getWatchedUser;
-      for (let i in userRemove.posts) {
-        if (userRemove.posts[i]._id === post._id) {
-          let index = userRemove.posts[i].likes.indexOf(loggedUser._id);
-          if (index > -1) userRemove.posts[i].likes.splice(index, 1);
-        }
+  const removeLikeFromPostState = (post) => {
+    let userRemove = props.userStore.getWatchedUser;
+    for (let i in userRemove.posts) {
+      if (userRemove.posts[i]._id === post._id) {
+        let index = userRemove.posts[i].likes.indexOf(loggedUser._id);
+        if (index > -1) userRemove.posts[i].likes.splice(index, 1);
       }
-      props.userStore.setWatchedUser(userRemove);
+    }
+    props.userStore.setWatchedUser(userRemove);
+  };
+
+  const unlikePostHandle = async (post) => {
+    const responseStatus = await unlikeUserPost(
+      post._id,
+      props.userStore.getLogedUser._id
+    );
+    if (responseStatus) {
+      removeLikeFromPostState(post);
     }
   };
+
+  const savePostsInUserState = (posts) => {
+    props.userStore.setWatchedUserPost(posts);
+  };
+
   const sortHandle = async () => {
-    console.log(sortOption);
     if (sortOption === "") return;
-    let obj = {
-      userID: props.userStore.getWatchedUser._id,
-      sortOption: sortOption,
-    };
-    console.log(obj);
-    let res = await sortPost(obj).then((response) => {
-      if (response.status === 200) return response.json();
-      return false;
-    });
-    if (res !== false) {
-      props.userStore.setWatchedUserPost(res);
+    await sortUserPost(
+      sortOption,
+      props.userStore.getWatchedUser._id,
+      savePostsInUserState
+    );
+  };
+
+  const checkIfSiteIsOurs = () => {
+    return (
+      props.mainStore.getLogStatus &&
+      props.userStore.getLogedUser._id === props.match.params.id
+    );
+  };
+
+  const fetchData = async () => {
+    if (checkIfSiteIsOurs()) {
+      history.push("/user");
+      return;
+    }
+    try {
+      const responseUserInfo = await GetPublicUserProfileInfo(props.match.params.id);
+      props.userStore.setWatchedUser(responseUserInfo);
+      setLoading("true");
+    } catch (err) {
+      setLoading("error");
+      return;
     }
   };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (
-        props.mainStore.getLogStatus &&
-        props.userStore.getLogedUser._id === props.match.params.id
-      ) {
-        history.push("/user");
-        return;
-      }
-      try {
-        let data = await getPublicUserInfo(props.match.params.id).then(
-          (response) => {
-            if (response.status === 200) return response.json();
-            return null;
-          }
-        );
-        if (data === null) throw new Error("Problem");
-        props.userStore.setWatchedUser(data);
-        setLoading("true");
-      } catch (err) {
-        setLoading("error");
-        return;
-      }
-    };
     setLoggedUser(Cookies.getJSON("user"));
     fetchData();
   }, [props.match.params.id]);
@@ -150,7 +157,7 @@ function PublicUserProfile(props) {
         <div>
           <Grid columns={1}>
             <Grid.Column style={cssobject.publicprofilegrid}>
-              <UserPublicInfoCard/>
+              <UserPublicInfoCard />
             </Grid.Column>
           </Grid>
           <Container style={cssobject.publicprofilecontainer}>
