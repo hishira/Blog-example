@@ -12,3 +12,32 @@ Create easy example of blog. User can create post, edit post and delete post. He
  - UI components - semantic-ui-react
  - Store data between components - mobx
  - Store user cookie - js-cookie
+
+## Images
+### Login & Signup
+<div style="display:flex; justify-content:space-around;">
+<img style="width:48%" src="public/login.PNG"/>
+<img style="width:48%"  src="public/signup.PNG"/>
+</div>
+
+### User site
+<div >
+<img src="public/user.PNG"/>
+</div>
+
+### Settings
+<div >
+<img src="public/settings.PNG"/>
+<div style="display:flex; justify-content:space-around;">
+<img style="width:33%" src="public/email.PNG"/>
+<img style="width:33%"  src="public/pass.PNG"/>
+<img style="width:33%"  src="public/desc.PNG"/>
+</div>
+</div>
+
+### New post and comment
+<div style="display:flex; justify-content:space-around;">
+<img style="width:48%" src="public/newpost.PNG"/>
+<img style="width:48%"  src="public/commentpost.PNG"/>
+</div>
+
